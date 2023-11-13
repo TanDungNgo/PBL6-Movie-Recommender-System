@@ -1,6 +1,10 @@
+from celery import shared_task
+
 from .models import Movie
 
-def task_caculate_movie_rating(all=False, count=None):
+@shared_task(name="task_caculate_movie_ratings")
+def task_caculate_movie_ratings(all=False, count=None):
+
     qs = Movie.objects.needs_updating()
     if all:
         qs = Movie.objects.all()
