@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Movie Detail{% endblock %}
+{% block content %}
+
+<section id="popular" class="pt-4 pb-5 bg_grey">
+  <div class="card-container">
+    <div class="card-top">
+      <div class="card-top-img">
+        <img src="{{ movie.poster }}" alt="{{ movie.title }} Poster" />
+      </div>
+      <div class="card-top-info">
+        <h4 class="mb-0"><span class="col_red">{{ object.title }}</span></h4>
+        <h5><span>{{ object.overview }}</span></h5><br><br/><br/>
+        <h5>Rating:
+          {{object.rating_avg}} ({{object.rating_count}})
+          <i class="fa fa-star align-middle"></i>
+          
+        </h5>
+        <h5>Duration:<span> {{ movie.movie_duration }}</span></h5>
+        <h5>Release Date:<span> {{ movie.release_date }}</span></h5>
+        <h5>Genres:
+          {% for genre in genres %}
+          <span style="margin-right: 20px;"> {{ genre.name }} </span>
+          {% endfor %}
+        </h5>
+        <h5>Directors:
+          {% for director in directors %}
+          <span style="margin-right: 20px;"> {{ director.name }} </span>
+          {% endfor %}
+        </h5>
+        <h5>Countries:
+          {% for country in countries %}
+          <span style="margin-right: 20px;"> {{ country.name }} </span>
+          {% endfor %}
+        </h5>
+      </div>
+    </div>
+    <div class="card-actor">
+      <h5 style="font-size: 30px; margin: 50px 0 20px 0;">Top casts</h5>
+      <div class="card-actor-info" style="display: flex; margin-bottom: 50px; justify-content: space-between;">
+        {% for cast in first_row %}
+          <div class="card-actor-item" style="display: flex;">
+            {% if cast.profile_path %}
+              <img src="https://image.tmdb.org/t/p/w185{{ cast.profile_path }}" style="height: 200px; margin-right: 10px; object-fit: cover;"/><br/>
+            {% else %}
+              <img src="{% static '/img/default-image.jpg' %}" style="height: 200px; width: 133px; margin-right: 10px; object-fit: cover;"/><br/>
+            {% endif %}
+            <div style="width: 200px;">
+              <span style="font-weight: 800; font-size: 18px;">{{ cast.name }}</span><br/>
+              <span>{{ cast.character }}</span>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      <div class="card-actor-info" style="display: flex; margin-bottom: 50px; justify-content: space-between;">
+        {% for cast in second_row %}
+          <div class="card-actor-item" style="display: flex;">
+            {% if cast.profile_path %}
+              <img src="https://image.tmdb.org/t/p/w185{{ cast.profile_path }}" style="height: 200px; margin-right: 10px; object-fit: cover;"/><br/>
+            {% else %}
+              <img src="{% static '/img/default-image.jpg' %}" style="height: 200px; width: 133px; margin-right: 10px; object-fit: cover;"/><br/>
+            {% endif %}
+            <div style="width: 200px;">
+              <span style="font-weight: 800; font-size: 18px;">{{ cast.name }}</span><br/>
+              <span>{{ cast.character }}</span>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="trend" class="pt-4 pb-5">
+  <div class="container">
+    <div class="row trend_1">
+      <div class="col-md-6 col-6">
+        <div class="trend_1l">
+          <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i> Related <span
+              class="col_red">Movies</span></h4>
+        </div>
+      </div>
+      <div class="col-md-6 col-6">
+      </div>
+    </div>
+    <div class="row trend_2 mt-4">
+      <div id="carouselExampleCaptions1" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+          <button type="button" data-bs-target="#carouselExampleCaptions1" data-bs-slide-to="0" class="active"
+            aria-label="Slide 1"></button>
+          <button type="button" data-bs-target="#carouselExampleCaptions1" data-bs-slide-to="1" aria-label="Slide 2"
+            class="" aria-current="true"></button>
+        </div>
+
+          <!-- Phần 1 -->
+          <div class="carousel-item active">
+            {% include 'movies/list.html' %} 
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="card-space"></div>
+</section>
+{% endblock %}

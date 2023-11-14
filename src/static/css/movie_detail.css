@@ -1,0 +1,43 @@
+.card-container{
+    display: flex;
+    flex-direction: column;
+    padding: 0 150px;
+}
+
+.card-top{
+    display: flex;
+}
+
+.card-top-img{
+    width: fit-content;
+}
+
+.card-top-img img{
+    height: 600px;
+}
+
+.card-top-info{
+    padding: 0 30px;
+}
+
+.card-top-info h4{
+    font-size: 52px;
+    
+}
+
+.card-top-info i{
+    color: #F3C100;
+}
+
+h5{
+    font-size: 20px;
+    margin-top: 10px;
+}
+
+span{
+    font-weight: 100;
+}
+
+.card-space{
+    border: 5px solid #27292d;
+}

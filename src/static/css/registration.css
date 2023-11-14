@@ -1,0 +1,11 @@
+.container-fluid{
+    background-image: url(../img/bgr_login.jpg);
+}
+.header{
+    background: linear-gradient(180deg,rgba(0,0,0,.5) 0,transparent);
+    border-bottom: transparent;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 13%;
+}
