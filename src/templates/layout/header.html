@@ -1,0 +1,153 @@
+{% load static %}
+
+<section id="top">
+  <div class="container">
+    <div class="row top_1">
+      <div class="col-md-3">
+        <div class="top_1l pt-1">
+          <h3 class="mb-0">
+            <a class="text-white" href="#"
+              ><i class="fa fa-video-camera col_red me-1"></i>
+              <span class="col_red">DPT</span> Movie</a
+            >
+          </h3>
+        </div>
+      </div>
+      <div class="col-md-5">
+        <div class="top_1m">
+          <div class="input-group">
+            <input
+              type="text"
+              id="searchInput"
+              class="form-control bg-black"
+              placeholder="Search Site..."
+            />
+            <span class="input-group-btn">
+              <button
+                id="searchButton"
+                class="btn btn text-white bg_red rounded-0 border-0"
+                type="button"
+              >
+                Search
+              </button>
+            </span>
+          </div>
+        </div>
+        <script>
+          document.addEventListener("DOMContentLoaded", function() {
+            const searchInput = document.getElementById("searchInput");
+            const searchButton = document.getElementById("searchButton");
+        
+            searchInput.addEventListener("keypress", function(event) {
+              if (event.key === "Enter") {
+                performSearch();
+              }
+            });
+        
+            searchButton.addEventListener("click", function() {
+              performSearch();
+            });
+        
+            function performSearch() {
+              const searchTerm = searchInput.value.trim(); 
+              if (searchTerm) {
+                window.location.href = "{#}?search=" + encodeURIComponent(searchTerm);
+              }
+            }
+          });
+        </script>
+      </div>
+  </div>
+</section>
+
+<section id="header">
+  <nav class="navbar navbar-expand-md navbar-light" id="navbar_sticky">
+    <div class="container">
+      <a class="navbar-brand text-white fw-bold" href="#"
+        ><i class="fa fa-video-camera col_red me-1"></i>
+        <span class="col_red">DPT</span> Movie</a
+      >
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mb-0">
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="#"
+              >Home</a
+            >
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">About</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Blog
+            </a>
+            <ul class="dropdown-menu drop_1" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="#">Blog</a></li>
+              <li>
+                <a class="dropdown-item" href="#"
+                  >Blog Detail</a
+                >
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Services</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contact</a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-md-3" >
+        <div class="top_1r text-end" >
+          {% if request.session.user_id %}
+            <!-- Hiển thị avata hoặc tên người dùng -->
+            <!-- Navbar Start -->
+            <div class="navbar navbar-expand bg-secondary navbar-dark sticky-top px-4 py-0" style="background-color: #191a1d!important;">
+              <div class="navbar-nav align-items-center ms-auto" >   
+                  <div class="nav-item dropdown">
+                      <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                          <img class="rounded-circle me-lg-2" src="{{ request.session.user_avatar }}" alt="" style="width: 40px; height: 40px;">
+                          <span class="d-none d-lg-inline-flex">{{ request.session.user_username }}</span>
+                      </a>
+                      <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
+                          <a href="#" class="dropdown-item"  style="font-weight: bold;">My Profile</a>
+                          {% if request.session.user_role == 'admin' %}
+                              <a href="#" class="dropdown-item" style="font-weight: bold;">Manage</a>
+                          {% endif %}
+                          <a href="#" class="dropdown-item"  style="font-weight: bold;">Settings</a>
+                          <a href="#" class="dropdown-item"  style="font-weight: bold;">Sign Out</a>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <!-- Navbar End -->
+          {% else %}
+            <!-- Hiển thị nút Sign In nếu người dùng chưa đăng nhập -->
+            <a href="#" class="button" style="height: 36px; padding: 6px 20px; border-radius: 0.1875rem; font-weight: bold;">Sign In</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    </div>
+    
+  </nav>
+</section>

@@ -1,22 +1,38 @@
-{% extends "base.html" %}
+
 {% load static %}
 
-{% block content %}
-<section id="trend" class="pt-4 pb-5">
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="icon" href="{% static 'img/logo.jpg' %}" type="image/jpg">
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/font-awesome.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/global.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/movie_detail.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/pagination.css' %}" rel="stylesheet" />
+    <link
+      href="{% static 'css/index.css' %}"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rajdhani&display=swap"
+      rel="stylesheet"
+    />
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
+
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/toastr.css' %}" media="all">
+    <script type="text/javascript" src="{% static 'js/toastr.min.js' %}"></script>
+  </head>
+<body>
+<section id="trend" class="pt-4 pb-5" style="border-top:2px solid black;">
 	<div class="container">
-		<!-- <div class="row trend_1">
-			<div class="col-md-6 col-6">
-				<div class="trend_1l">
-					<h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i> Latest <span
-							class="col_red">Movies</span></h4>
-				</div>
-			</div>
-			<div class="col-md-6 col-6">
-				<div class="trend_1r text-end">
-					<h6 class="mb-0"><a class="button" href="#"> View All</a></h6>
-				</div>
-			</div>
-		</div> -->
 		<div class="row trend_2 mt-4">
 			<div id="carouselExampleCaptions1" class="carousel slide" data-bs-ride="carousel">
 				<div class="carousel-indicators">
@@ -28,13 +44,14 @@
 				<div class="carousel-inner">
 					<div class="carousel-item active">
 						<div class="trend_2i row">
-							{% for object in object_list|slice:":4" %}
+							{% for object in object_list|slice:"1:5" %}
 							<div class="col-md-3 col-6">
 								<div class="trend_2im clearfix position-relative">
 									<div class="trend_2im1 clearfix">
 										<div class="grid">
 											<figure class="effect-jazz mb-0">
 												<img src="{% static 'img/04.jpg' %}" class="d-block w-100" alt="...">
+
 											</figure>
 										</div>
 									</div>
@@ -46,13 +63,13 @@
 								<div class="trend_2ilast bg_grey p-3 clearfix">
 									<h5><a class="col_red" href="{{ object.get_absolute_url }}"> {{object.title}}</a>
 									</h5>
-									<p class="mb-2">{{object.overview|slice:":100"}}</p>
+									<p class="mb-2">{{object.overview|slice:":90"}}</p>
 
-									{% if  object.rating_avg is not None %}
+									{% if object.rating_avg is not None %}
 									<span class="col_red">
 										{{object.rating_avg}} ({{object.rating_count}})
 										<i class="fa fa-star"></i>
-										
+
 									</span>
 									{% endif %}
 								</div>
@@ -62,7 +79,7 @@
 					</div>
 					<div class="carousel-item">
 						<div class="trend_2i row">
-							{% for object in object_list|slice:"4:8" %}
+							{% for object in object_list|slice:"5:9" %}
 							<div class="col-md-3 col-6">
 								<div class="trend_2im clearfix position-relative">
 									<div class="trend_2im1 clearfix">
@@ -81,12 +98,12 @@
 								<div class="trend_2ilast bg_grey p-3 clearfix">
 									<h5><a class="col_red" href="{{ object.get_absolute_url }}">{{ object.title }}</a>
 									</h5>
-									<p class="mb-2">{{ object.overview|slice:":100" }}</p>
-									{% if  object.rating_avg is not None %}
+									<p class="mb-2">{{ object.overview|slice:":90" }}</p>
+									{% if object.rating_avg is not None %}
 									<span class="col_red">
 										{{object.rating_avg}} ({{object.rating_count}})
 										<i class="fa fa-star"></i>
-										
+
 									</span>
 									{% endif %}
 								</div>
@@ -99,4 +116,7 @@
 		</div>
 	</div>
 </section>
-{% endblock %}
+
+</body>
+
+</html>

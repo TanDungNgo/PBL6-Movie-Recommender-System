@@ -28,7 +28,6 @@
     <script type="text/javascript" src="{% static 'js/toastr.min.js' %}"></script>
   </head>
   <body>
-    {% block content %}
     {% if messages %}
         {% for message in messages %}
                 <script type=text/javascript>
@@ -43,7 +42,8 @@
                 </script>
         {% endfor %}
     {% endif %}
-    {% endblock %}
+    {% include 'layout/header.html' %} {% block content %} {% endblock %} 
+    {% include 'layout/footer.html' %}
     <script>
       window.onscroll = function () {
         myFunction();
@@ -63,6 +63,5 @@
         }
       }
     </script>
-
   </body>
 </html>
