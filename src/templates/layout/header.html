@@ -142,7 +142,7 @@
           <!-- Navbar End -->
           {% else %}
             <!-- Hiển thị nút Sign In nếu người dùng chưa đăng nhập -->
-            <a href="#" class="button" style="height: 36px; padding: 6px 20px; border-radius: 0.1875rem; font-weight: bold;">Sign In</a>
+            <a href="{% url 'signin' %}" class="button" style="height: 36px; padding: 6px 20px; border-radius: 0.1875rem; font-weight: bold;">Sign In</a>
           {% endif %}
         </div>
       </div>

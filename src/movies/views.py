@@ -61,3 +61,19 @@ class MovieDetailView(generic.DetailView):
         return context
 
 movie_detail_view = MovieDetailView.as_view()
+
+
+class Home(generic.ListView):
+    template_name = 'dpthome/index.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Movie.objects.order_by('-release_date')[:10]
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['top_rated_movies'] = Movie.objects.order_by('-rating_avg')[:20]
+        context['latest_movies'] = self.get_queryset()
+        return context
+
+home = Home.as_view()
