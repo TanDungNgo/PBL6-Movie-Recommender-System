@@ -8,12 +8,7 @@
   <div class="card-container">
     <div class="card-top">
       <div class="card-top-img">
-        {% if poster_path %}
-        <img src="https://image.tmdb.org/t/p/w500{{ poster_path }}" alt="{{ movie.title }} Poster" />
-        {% else %}
-        <img src="{% static 'img/06.jpg' %}" class="d-block w-100" alt="...">
-        {% endif %}
-
+        <img src={{movie.poster_path}} alt="{{ movie.title }} Poster" />
       </div>
       <div class="card-top-info">
         <h4 class="mb-0"><span class="col_red">{{ object.title }}</span></h4>
