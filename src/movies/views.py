@@ -103,5 +103,25 @@ class Home(generic.ListView):
 
 home = Home.as_view()
 
+<<<<<<< HEAD
     
         
+=======
+class MovieVideoView(generic.DetailView):
+    model = Movie
+    template_name = 'movies/watch_video.html'  # Tạo một template mới cho việc xem video
+    # context -> object -> id
+    queryset = Movie.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        movie_id = self.kwargs.get('pk')
+        url_movie = f'https://api.themoviedb.org/3/movie/{movie_id}/videos?api_key={API_KEY}&language=en-US'
+        response = requests.get(url_movie)
+        response.raise_for_status()
+        data_movie = response.json()
+        context['key'] = data_movie.get("results", [])[0].get("key")
+        return context
+
+movie_video_view = MovieVideoView.as_view()
+>>>>>>> a110ff5 (watch trailer)
