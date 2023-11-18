@@ -7,3 +7,4 @@ Faker
 python-decouple
 redis
 celery
+django-htmx

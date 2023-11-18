@@ -9,7 +9,7 @@ class MovieListView(generic.ListView):
     template_name = 'movies/list.html'
     paginate_by = 10
     # context -> object_list
-    queryset = Movie.objects.all().order_by('-release_date')[:20]
+    queryset = Movie.objects.all().order_by('-rating_avg')[:20]
 
 movie_list_view = MovieListView.as_view()
 class MovieDetailView(generic.DetailView):
