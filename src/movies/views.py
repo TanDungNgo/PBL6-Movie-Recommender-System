@@ -4,9 +4,12 @@ from django.shortcuts import render
 from django.views import generic
 from django.db.models import Avg
 
+from django.conf import settings
 from .models import Movie
 import requests
 # Create your views here.
+API_KEY = settings.API_KEY
+
 class MovieListView(generic.ListView):
     template_name = 'movies/list.html'
     paginate_by = 100
@@ -50,7 +53,7 @@ class MovieDetailView(generic.DetailView):
         top_rated_movies = Movie.objects.all().order_by('-rating_avg')[:20]
 
         # Lấy danh sách diễn viên, đạo diễn
-        url_credits = f'https://api.themoviedb.org/3/movie/{movie_id}/credits?api_key=8265bd1679663a7ea12ac168da84d2e8&language=en-US'
+        url_credits = f'https://api.themoviedb.org/3/movie/{movie_id}/credits?api_key={API_KEY}&language=en-US'
         response = requests.get(url_credits)
         response.raise_for_status()
         data = response.json()
@@ -62,13 +65,12 @@ class MovieDetailView(generic.DetailView):
         second_row = casts[num_casts_per_row:]
 
         # Lấy danh sách thể loại
-        url_movie = f'https://api.themoviedb.org/3/movie/{movie_id}?api_key=8265bd1679663a7ea12ac168da84d2e8&language=en-US'
+        url_movie = f'https://api.themoviedb.org/3/movie/{movie_id}?api_key={API_KEY}&language=en-US'
         response = requests.get(url_movie)
         response.raise_for_status()
         data_movie = response.json()
         genres = data_movie.get('genres', [])
         countries = data_movie.get('production_countries', [])
-        poster_path = data_movie.get('poster_path', [])
 
         context['top_rated_movies'] = top_rated_movies
         context.update({
@@ -79,7 +81,6 @@ class MovieDetailView(generic.DetailView):
             'genres': genres,
             'countries': countries,
             'directors': directors,
-            'poster_path': poster_path,
         })
 
         return context
