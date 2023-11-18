@@ -60,6 +60,9 @@ class Movie(models.Model):
     def get_absolute_url(self):
         return f"/movies/{self.id}/"
     
+    def get_video_url(self):
+        return f"/movies/{self.id}/video/"
+    
     def __str__(self):
         if not self.release_date:
             return f"{self.title}"
@@ -82,10 +85,11 @@ class Movie(models.Model):
     def calculate_rating(self, save=True):
         rating_avg = self.calculate_ratings_avg()
         rating_count = self.calculate_ratings_count()
-        self.ratings_avg = rating_avg
+        self.rating_avg = rating_avg
         self.rating_count = rating_count
 
         self.rating_last_updated = timezone.now()
         if save:
+            print("saving...", self.rating_avg)
             self.save()
-        return self.ratings_avg
+        return self.rating_avg

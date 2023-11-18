@@ -1,7 +1,7 @@
 .card-container{
     display: flex;
     flex-direction: column;
-    padding: 0 150px;
+    padding: 0 70px;
     
 }
 
@@ -26,7 +26,7 @@
     
 }
 
-.card-top-info i{
+.card-top-info .fa-star{
     color: #F3C100;
 }
 

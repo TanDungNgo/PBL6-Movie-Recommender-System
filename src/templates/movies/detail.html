@@ -23,7 +23,7 @@
         <h5>Release Date:<span> {{ movie.release_date }}</span></h5>
         <h5>Genres:
           {% for genre in genres %}
-          <span style="margin-right: 20px;"> {{ genre.name }} </span>
+          <span style="margin-right: 20px;"> <a class="bg_red p-2 pe-4 ps-4 ms-3 text-white d-inline-block" href="#">{{genre.name}}</a> </span>
           {% endfor %}
         </h5>
         <h5>Directors:
@@ -59,10 +59,10 @@
         <div class="card-actor-item" style="display: flex;">
           {% if cast.profile_path %}
           <img src="https://image.tmdb.org/t/p/w185{{ cast.profile_path }}"
-            style="height: 200px; margin-right: 10px; object-fit: cover;" /><br />
+            style="height: 100px; margin-right: 10px; object-fit: cover;" /><br />
           {% else %}
           <img src="{% static '/img/default-image.jpg' %}"
-            style="height: 200px; width: 133px; margin-right: 10px; object-fit: cover;" /><br />
+            style="height: 100px; width: 133px; margin-right: 10px; object-fit: cover;" /><br />
           {% endif %}
           <div style="width: 200px;">
             <span style="font-weight: 800; font-size: 18px;">{{ cast.name }}</span><br />
@@ -76,10 +76,10 @@
         <div class="card-actor-item" style="display: flex;">
           {% if cast.profile_path %}
           <img src="https://image.tmdb.org/t/p/w185{{ cast.profile_path }}"
-            style="height: 200px; margin-right: 10px; object-fit: cover;" /><br />
+            style="height: 100px; margin-right: 10px; object-fit: cover;" /><br />
           {% else %}
           <img src="{% static '/img/default-image.jpg' %}"
-            style="height: 200px; width: 133px; margin-right: 10px; object-fit: cover;" /><br />
+            style="height: 100px; width: 133px; margin-right: 10px; object-fit: cover;" /><br />
           {% endif %}
           <div style="width: 200px;">
             <span style="font-weight: 800; font-size: 18px;">{{ cast.name }}</span><br />
