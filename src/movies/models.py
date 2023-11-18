@@ -43,6 +43,7 @@ class MovieManager(models.Manager):
 class Movie(models.Model):
     title = models.CharField(max_length=255, unique=True)
     overview = models.TextField()
+    poster_path = models.CharField(max_length=500, blank=True, null=True)
     release_date = models.DateField(blank=True, null=True,
                                     auto_now=False, auto_now_add=False)
     timestamp = models.DateTimeField(auto_now_add=True)

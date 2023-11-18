@@ -16,7 +16,7 @@ app.autodiscover_tasks()
 app.conf.beat_scheduler = {
     "run_movie_rating_avg_every_30": {
         'task': 'task_update_movie_ratings',
-        'schedule': 60 * 30, # 30 min,
+        'schedule': 5.0,
         'kwargs': {"all": True},
     },
 }
