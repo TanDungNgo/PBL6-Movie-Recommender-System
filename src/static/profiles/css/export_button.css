@@ -1,0 +1,23 @@
+.parent-node{
+    display: flex;
+    width: fit-content;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+.child-node{
+    width: 70px;
+    border-right: 1px solid #191C24;
+    padding: 10px;
+    text-align: center;
+    background-color: #000;
+    color: #6C7293;
+    transition: background-color 0.3s;
+}
+.child-node:last-child {
+    border-right: none;
+}
+.child-node:hover{
+    background-color: #DE1002;
+    color: #fff;
+}

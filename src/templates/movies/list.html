@@ -1,0 +1,64 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="icon" href="{% static 'movies/img/logo.jpg' %}" type="image/jpg">
+    <link href="{% static 'movies/css/bootstrap.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'movies/css/font-awesome.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'movies/css/global.css' %}" rel="stylesheet" />
+    <link href="{% static 'movies/css/detail.css' %}" rel="stylesheet" />
+    <link href="{% static 'movies/css/pagination.css' %}" rel="stylesheet" />
+    <link
+      href="{% static 'movies/css/index.css' %}"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Rajdhani&display=swap"
+      rel="stylesheet"
+    />
+    <script src="{% static 'movies/js/bootstrap.bundle.min.js' %}"></script>
+
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'movies/css/toastr.css' %}" media="all">
+    <script type="text/javascript" src="{% static 'movies/js/toastr.min.js' %}"></script>
+  </head>
+<body>
+	<section id="trend" class="pt-4 pb-5" style="border-top:2px solid black;">
+		<div class="container">
+			<div class="row trend_2 mt-4">
+				<div id="carouselExampleCaptions1" class="carousel slide" data-bs-ride="carousel">
+					<div class="carousel-indicators">
+						<button type="button" data-bs-target="#carouselExampleCaptions1" data-bs-slide-to="0" class="active" aria-label="Slide 1"></button>
+						<button type="button" data-bs-target="#carouselExampleCaptions1" data-bs-slide-to="1" aria-label="Slide 2" class="" aria-current="true"></button>
+					</div>
+					<div class="carousel-inner">
+						<div class="carousel-item active">
+							<div class="trend_2i row">
+								{% for object in object_list|slice:"1:5" %}
+									{% include 'movies/snippet/card.html' with object=object %}
+								{% endfor %}
+							</div>
+						</div>
+						<div class="carousel-item">
+							<div class="trend_2i row">
+								{% for object in object_list|slice:"16:20" %}
+									{% include 'movies/snippet/card.html' with object=object %}
+								{% endfor %}
+										</div>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</section>
+
+</body>
+
+</html>
