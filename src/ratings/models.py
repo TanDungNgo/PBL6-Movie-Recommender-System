@@ -5,6 +5,8 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.db.models import Avg
 from django.db.models.signals import post_save
 from django.utils import timezone
+
+
 # Create your models here.
 User = settings.AUTH_USER_MODEL # 'auth.User'
 

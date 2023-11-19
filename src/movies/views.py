@@ -1,3 +1,4 @@
+from typing import Any
 from django.shortcuts import render
 from django.views import generic
 from django.db.models import Avg
@@ -7,9 +8,22 @@ import requests
 # Create your views here.
 class MovieListView(generic.ListView):
     template_name = 'movies/list.html'
-    paginate_by = 10
+    paginate_by = 100
     # context -> object_list
-    queryset = Movie.objects.all().order_by('-rating_avg')[:20]
+    queryset = Movie.objects.all().order_by('-rating_avg')
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        requests = self.request
+        user = requests.user
+        if user.is_authenticated:
+            object_list = context['object_list']
+            object_ids = [x.id for x in object_list]
+            qs = user.rating_set.filter (active = True,  object_id_in=object_ids)
+            context['my_ratings'] = {"abc123": 5}
+        return context
+
+
 
 movie_list_view = MovieListView.as_view()
 class MovieDetailView(generic.DetailView):
@@ -23,7 +37,7 @@ class MovieDetailView(generic.DetailView):
         # Retrieve the movie_id from URL parameters or self.kwargs
         movie_id = self.kwargs.get('pk')  # Assuming your URL pattern uses 'pk' for the movie ID
 
-        top_rated_movies = Movie.objects.all().order_by('-rating_avg')[:10]
+        top_rated_movies = Movie.objects.all().order_by('-rating_avg')[:20]
 
         # Lấy danh sách diễn viên, đạo diễn
         url_credits = f'https://api.themoviedb.org/3/movie/{movie_id}/credits?api_key=8265bd1679663a7ea12ac168da84d2e8&language=en-US'
@@ -68,7 +82,7 @@ class Home(generic.ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        return Movie.objects.order_by('-release_date')[:10]
+        return Movie.objects.order_by('-release_date')[:20]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
