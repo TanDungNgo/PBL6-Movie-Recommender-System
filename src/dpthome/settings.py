@@ -40,9 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     # external apps
-    'allauth',
-    'allauth.account',
-    'allauth.socialaccount',
     'django_celery_beat', # scheduler
     'django_celery_results', # saves our task results
     # iternal apps
