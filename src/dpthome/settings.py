@@ -27,9 +27,13 @@ SECRET_KEY = config('SECRET_KEY', default=None)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DJANGO_DEBUG', default=0, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*', 'https://dptmovie.me', 'http://dptmovie.me']
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
 
 
+CSRF_COOKIE_DOMAIN = 'dptmovie.me'
 # Application definition
 
 INSTALLED_APPS = [
