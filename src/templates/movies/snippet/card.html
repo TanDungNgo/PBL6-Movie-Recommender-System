@@ -1,6 +1,6 @@
-{% load get_dict_val %}
+<!-- {% load get_dict_val %}
 
-{% with my_ratings|get_dict_val:object_id as current_rating %}
+{% with my_ratings|get_dict_val:object_id as current_rating %} -->
 {% block content %}
 {% load static %}
 
@@ -28,7 +28,7 @@
         </div>
 
         <select class="form-control" style="width: auto">
-          {% for choice in rating_choices %}
+          <!-- {% for choice in rating_choices %}
               {% if choice is None %}
               <option disabled selected>Pick a rating </option>
 
@@ -37,7 +37,7 @@
               selected {% endif%} 
               value="{{choice}}">{{choice}}</option>
               {% endif %}
-          {% endfor %}
+          {% endfor %} -->
         </select>
       </div>
   </div>

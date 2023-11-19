@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .models import MyUser
+from .models import Users
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.hashers import make_password
@@ -14,7 +14,7 @@ def login(request):
         # Kiểm tra xem email và password đã được nhập
         if email and password:
             try:
-                user = MyUser.objects.get(email=email)
+                user = Users.objects.get(email=email)
                 if check_password(password, user.password):
                     # Tạo một phiên làm việc tùy chỉnh
                     request.session['user_id'] = user.id
@@ -46,7 +46,7 @@ def login(request):
                 else:
                     # Đăng nhập thất bại, hiển thị thông báo lỗi
                     messages.error(request, 'Email or password is incorrect.')
-            except MyUser.DoesNotExist:
+            except Users.DoesNotExist:
                 # Đăng nhập thất bại, hiển thị thông báo lỗi
                 messages.error(request, 'Email or password is incorrect.')
         else:
@@ -75,7 +75,7 @@ def signup(request):
 
         # Nếu không có lỗi, tạo một đối tượng MyUser và lưu vào cơ sở dữ liệu
         hashed_password = make_password(password)
-        user = MyUser(username=username, email=email, password=hashed_password)
+        user = User(username=username, email=email, password=hashed_password)
         user.save()
 
         # Bạn có thể thêm mã xử lý khác ở đây, chẳng hạn như xử lý avatar và role
