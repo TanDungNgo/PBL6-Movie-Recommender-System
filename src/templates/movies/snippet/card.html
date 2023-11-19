@@ -1,6 +1,5 @@
 {% load get_dict_val %}
-
-{% with my_ratings|get_dict_val:object_id as current_rating %}
+{% with my_ratings|get_dict_val:object.id as current_rating %}
 {% block content %}
 {% load static %}
 
@@ -34,7 +33,7 @@
 
               {% else %}
               <option {% if current_rating == choice %} 
-              selected {% endif%} 
+              selected {% endif %} 
               value="{{choice}}">{{choice}}</option>
               {% endif %}
           {% endfor %}
@@ -43,5 +42,4 @@
   </div>
 </div>
 {% endblock %} 
-
-{%endwith%}
+{% endwith %}
