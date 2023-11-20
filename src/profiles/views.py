@@ -4,44 +4,38 @@ from django.contrib.auth import logout
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
 from django.http import HttpResponse, JsonResponse
+from django.contrib.auth import authenticate, login
 
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
-def login(request):
+def signin(request):
     if request.method == 'POST':
         email = request.POST['email']
         password = request.POST['password']
-        
-        # Kiểm tra xem email và password đã được nhập
+
         if email and password:
             try:
                 user = User.objects.get(email=email)
-                if check_password(password, user.password):
-                    # Tạo một phiên làm việc tùy chỉnh
+                user = authenticate(request, username=user.username, password=password)
+                if user:
+                    login(request, user)
                     request.session['user_id'] = user.id
                     request.session['user_username'] = user.username
                     request.session['user_email'] = user.email
                     request.session['user_firstname'] = user.first_name
                     request.session['user_lastname'] = user.last_name
 
-                    
                     default_avatar_path = 'https://cdn-icons-png.flaticon.com/512/4998/4998641.png'
-                    request.session['user_avatar'] = default_avatar_path  # Thay đổi đường dẫn thành ảnh mặc định của bạn
-                    # Điều hướng tới trang tương ứng
-                    messages.success(request, 'Login successfully.')
-                    
+                    request.session['user_avatar'] = default_avatar_path
+
                     return redirect('home')
-                    
                 else:
-                    # Đăng nhập thất bại, hiển thị thông báo lỗi
                     messages.error(request, 'Email or password is incorrect.')
             except User.DoesNotExist:
-                # Đăng nhập thất bại, hiển thị thông báo lỗi
                 messages.error(request, 'Email or password is incorrect.')
         else:
-            # Người dùng chưa nhập thông tin, hiển thị thông báo lỗi
             messages.error(request, 'Please enter both email and password.')
 
     return render(request, 'account/login.html')
@@ -81,7 +75,7 @@ def signup(request):
 def signout(request):
     logout(request)
     messages.success(request, 'Logout successfully.')
-    return redirect('login')  # Điều hướng sau khi đăng xuất (thay 'login' bằng URL của trang đăng nhập của bạn)
+    return redirect('signin')
 
 # @api_view(['GET', 'POST'])
 # def profile(request):

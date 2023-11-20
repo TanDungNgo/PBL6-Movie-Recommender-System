@@ -20,7 +20,7 @@ from django.urls import path, include
 from ratings import views as ratings_views
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accoutns/', include('profiles.urls')),
+    path('accounts/', include('profiles.urls')),
     path('', include('movies.urls')),
     path('rate/movie/', ratings_views.rate_movie_view)
     

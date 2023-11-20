@@ -22,4 +22,3 @@ def rate_movie_view(request):
             message = "<span class = 'bg-success text-light py-1 px-3 rounded'> Success!</div>"
 
     return HttpResponse(message, status = 200)
-
