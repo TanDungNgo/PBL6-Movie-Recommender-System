@@ -103,10 +103,6 @@ class Home(generic.ListView):
 
 home = Home.as_view()
 
-<<<<<<< HEAD
-    
-        
-=======
 class MovieVideoView(generic.DetailView):
     model = Movie
     template_name = 'movies/watch_video.html'  # Tạo một template mới cho việc xem video
@@ -124,4 +120,3 @@ class MovieVideoView(generic.DetailView):
         return context
 
 movie_video_view = MovieVideoView.as_view()
->>>>>>> a110ff5 (watch trailer)
