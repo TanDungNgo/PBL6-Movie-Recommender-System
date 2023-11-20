@@ -130,11 +130,11 @@
                       </a>
                       <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
                           <a href="#" class="dropdown-item"  style="font-weight: bold;">My Profile</a>
-                          {% if request.session.user_role == 'admin' %}
+                          {% if request.session.is_active == '1' %}
                               <a href="#" class="dropdown-item" style="font-weight: bold;">Manage</a>
                           {% endif %}
                           <a href="#" class="dropdown-item"  style="font-weight: bold;">Settings</a>
-                          <a href="#" class="dropdown-item"  style="font-weight: bold;">Sign Out</a>
+                          <a href="{% url 'signout' %}" class="dropdown-item"  style="font-weight: bold;">Sign Out</a>
                       </div>
                   </div>
               </div>
@@ -142,7 +142,7 @@
           <!-- Navbar End -->
           {% else %}
             <!-- Hiển thị nút Sign In nếu người dùng chưa đăng nhập -->
-            <a href="{% url 'account_login' %}" class="button" style="height: 36px; padding: 6px 20px; border-radius: 0.1875rem; font-weight: bold;">Sign In</a>
+            <a href="{% url 'login' %}" class="button" style="height: 36px; padding: 6px 20px; border-radius: 0.1875rem; font-weight: bold;">Sign In</a>
           {% endif %}
         </div>
       </div>

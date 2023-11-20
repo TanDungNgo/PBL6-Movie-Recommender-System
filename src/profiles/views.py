@@ -1,11 +1,14 @@
 from django.shortcuts import render, redirect
-from .models import Users
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
 from django.http import HttpResponse, JsonResponse
-from rest_framework.decorators import api_view
+
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
 def login(request):
     if request.method == 'POST':
         email = request.POST['email']
@@ -14,39 +17,27 @@ def login(request):
         # Kiểm tra xem email và password đã được nhập
         if email and password:
             try:
-                user = Users.objects.get(email=email)
+                user = User.objects.get(email=email)
                 if check_password(password, user.password):
                     # Tạo một phiên làm việc tùy chỉnh
                     request.session['user_id'] = user.id
                     request.session['user_username'] = user.username
-                    request.session['user_role'] = user.role
                     request.session['user_email'] = user.email
-                    request.session['user_firstname'] = user.firstname
-                    request.session['user_lastname'] = user.lastname
-                    request.session['user_phonenumber'] = user.phonenumber
-                    request.session['user_country'] = user.country
+                    request.session['user_firstname'] = user.first_name
+                    request.session['user_lastname'] = user.last_name
 
                     
-                    # Kiểm tra xem user có avatar không
-                    if user.avatar:
-                        request.session['user_avatar'] = user.avatar
-                    else:
-                        # Đặt URL của ảnh mặc định nếu không có avatar
-                       default_avatar_path = 'profiles/img/avatar.jpg'
-                       request.session['user_avatar'] = default_avatar_path  # Thay đổi đường dẫn thành ảnh mặc định của bạn
+                    default_avatar_path = 'https://cdn-icons-png.flaticon.com/512/4998/4998641.png'
+                    request.session['user_avatar'] = default_avatar_path  # Thay đổi đường dẫn thành ảnh mặc định của bạn
                     # Điều hướng tới trang tương ứng
                     messages.success(request, 'Login successfully.')
-                    if user.role == 'user':
-                        # Điều hướng sang trang user
-                        return redirect('home')
-                    if user.role == 'admin':
-                        # Điều hướng sang trang admin
-                       return redirect('login')
+                    
+                    return redirect('home')
                     
                 else:
                     # Đăng nhập thất bại, hiển thị thông báo lỗi
                     messages.error(request, 'Email or password is incorrect.')
-            except Users.DoesNotExist:
+            except User.DoesNotExist:
                 # Đăng nhập thất bại, hiển thị thông báo lỗi
                 messages.error(request, 'Email or password is incorrect.')
         else:
@@ -167,5 +158,3 @@ def signout(request):
 #             # Session doesn't exist, redirect to the login page
 #             messages.error(request, 'Please login')
 #             return redirect('signin')
-
-

@@ -18,9 +18,9 @@ class MovieListView(generic.ListView):
         user = requests.user
         if user.is_authenticated:
             object_list = context['object_list']
-            object_ids = [x.id for x in object_list]
-            qs = user.rating_set.filter (active = True,  object_id_in=object_ids)
-            context['my_ratings'] = {"abc123": 5}
+            object_ids = [x.id for x in object_list][:20]
+            my_ratings = user.rating_set.movies().as_object_dict(object_ids=object_ids)
+            context['my_ratings'] = my_ratings
         return context
 
 
@@ -33,6 +33,15 @@ class MovieDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        movie_requests = self.request  # Rename 'requests' to 'movie_requests'
+        user = movie_requests.user
+        if user.is_authenticated:
+            movie_object = context['object']
+            object_ids = [movie_object.id]
+            my_ratings = user.rating_set.movies().as_object_dict(object_ids=object_ids)
+            
+            context['my_ratings'] = my_ratings
+
         movies = Movie.objects.all().order_by('-rating_avg')
         # Retrieve the movie_id from URL parameters or self.kwargs
         movie_id = self.kwargs.get('pk')  # Assuming your URL pattern uses 'pk' for the movie ID

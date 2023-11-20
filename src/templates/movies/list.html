@@ -1,3 +1,4 @@
+
 {% load static %}
 
 <!DOCTYPE html>
@@ -27,8 +28,11 @@
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'movies/css/toastr.css' %}" media="all">
     <script type="text/javascript" src="{% static 'movies/js/toastr.min.js' %}"></script>
+	
   </head>
-<body>
+  
+  <body hx-headers='{"X-CSRFToken": "csrf_token"}'>
+	{% block content %}
 	<section id="trend" class="pt-4 pb-5" style="border-top:2px solid black;">
 		<div class="container">
 			<div class="row trend_2 mt-4">
@@ -40,14 +44,14 @@
 					<div class="carousel-inner">
 						<div class="carousel-item active">
 							<div class="trend_2i row">
-								{% for object in object_list|slice:"1:5" %}
+								{% for object in object_list|slice:"16:20" %}
 									{% include 'movies/snippet/card.html' with object=object %}
 								{% endfor %}
 							</div>
 						</div>
 						<div class="carousel-item">
 							<div class="trend_2i row">
-								{% for object in object_list|slice:"16:20" %}
+								{% for object in object_list|slice:"1:5" %}
 									{% include 'movies/snippet/card.html' with object=object %}
 								{% endfor %}
 										</div>
@@ -58,6 +62,7 @@
 			</div>
 		</div>
 	</section>
+	{% endblock %}
 
 </body>
 

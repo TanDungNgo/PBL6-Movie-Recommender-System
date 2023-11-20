@@ -1,0 +1,32 @@
+<form id="rateMovieForm">
+  <div class="success mb-2"></div>
+  {% csrf_token %}
+  {% if object_id %}
+      <input type="hidden" value="{{ object_id }}" name="object_id" />
+  {% endif %}
+  <select name="rating_value" class="form-control" style="width: auto">
+      {% for choice in rating_choices %}
+          <option value="{{ choice }}" {% if current_rating == choice %}selected{% endif %}>{{ choice }}</option>
+      {% endfor %}
+  </select>
+  <button type="submit">Rate</button>
+</form>
+
+<script>
+document.getElementById('rateMovieForm').addEventListener('submit', function(event) {
+  event.preventDefault();
+  var formData = new FormData(this);
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', '/rate/movie/', true);
+  xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+  xhr.onload = function () {
+      if (xhr.status >= 200 && xhr.status < 400) {
+          var response = JSON.parse(xhr.responseText);
+          alert(response.message);
+      } else {
+          alert("Error occurred. Please try again.");
+      }
+  };
+  xhr.send(formData);
+});
+</script>

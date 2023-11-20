@@ -22,6 +22,8 @@
           {{object.rating_avg}} ({{object.rating_count}})
           <i class="fa fa-star align-middle"></i>
 
+          
+
         </h5>
         <h5>Release Date:<span> {{ movie.release_date }}</span></h5>
         <h5>Genres:
@@ -39,6 +41,20 @@
           <span style="margin-right: 20px;"> {{ country.name }} </span>
           {% endfor %}
         </h5>
+
+  
+          <select class="form-control" style="width: auto">
+            {% for choice in rating_choices %}
+                {% if choice is None %}
+                  <option disabled selected>Rating Movie </option>
+                {% else %}
+                <option {% if current_rating == choice %} 
+                selected {% endif %} 
+                value="{{choice}}">{{choice}}</option>
+                {% endif %}
+            {% endfor %}
+          </select>
+        </div>
       </div>
     </div>
     <div class="card-actor">

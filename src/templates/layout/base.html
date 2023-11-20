@@ -27,7 +27,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'movies/css/toastr.css' %}" media="all">
     <script type="text/javascript" src="{% static 'movies/js/toastr.min.js' %}"></script>
   </head>
-  <body>
+  <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     {% if messages %}
         {% for message in messages %}
                 <script type=text/javascript>
@@ -44,6 +44,7 @@
     {% endif %}
     {% include 'layout/header.html' %} {% block content %} {% endblock %} 
     {% include 'layout/footer.html' %}
+
     <script>
       window.onscroll = function () {
         myFunction();
