@@ -29,7 +29,11 @@ def signin(request):
 
                     default_avatar_path = 'https://cdn-icons-png.flaticon.com/512/4998/4998641.png'
                     request.session['user_avatar'] = default_avatar_path
-
+                    
+                    messages.success(request, 'Login successfully.')
+                    if user.is_superuser:
+                       return redirect('dashboard')
+                    
                     return redirect('home')
                 else:
                     messages.error(request, 'Email or password is incorrect.')

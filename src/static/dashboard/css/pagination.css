@@ -1,0 +1,35 @@
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.pagination i{
+    padding: 13px;
+}
+
+.page {
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 0 10px;
+    background-color: #de1002;
+    color: #fff;
+    font-size: 20px;
+    text-decoration: none;
+    border-radius: 3px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s, font-size 0.3s;
+}
+
+.page:hover {
+    background-color: #27292d;
+    color: #fff;
+    font-size: 21px;
+}
+
+.card-space{
+    border: 5px solid #27292d;
+}

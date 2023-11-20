@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'profiles',
     'movies',
     'ratings',
+    'dashboard',
 ]
 SITE_ID = 1
 LOGIN_URL = '/accounts/login/'

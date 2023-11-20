@@ -1,0 +1,34 @@
+.card-container{
+    display: flex;
+    padding: 20px;
+}
+
+.card-img{
+    width: fit-content;
+}
+
+.card-img img{
+    height: 700px;
+}
+
+.card-info{
+    padding: 0 30px;
+}
+
+.card-info h4{
+    font-size: 52px;
+    
+}
+
+.card-info i{
+    color: #F3C100;
+}
+
+.card-info h5{
+    font-size: 20px;
+    margin-top: 10px;
+}
+
+.card-info span{
+    font-weight: 100;
+}

@@ -22,6 +22,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('profiles.urls')),
     path('', include('movies.urls')),
-    path('rate/movie/', ratings_views.rate_movie_view)
-    
+    path('rate/movie/', ratings_views.rate_movie_view),
+    path('dashboard/', include('dashboard.urls'))
 ]
