@@ -1,4 +1,5 @@
 from typing import Any
+from django.db import models
 from django.shortcuts import render
 from django.views import generic
 from django.db.models import Avg
@@ -100,3 +101,6 @@ class Home(generic.ListView):
         return context
 
 home = Home.as_view()
+
+    
+        

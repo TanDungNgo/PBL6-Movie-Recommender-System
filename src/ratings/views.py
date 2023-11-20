@@ -1,33 +1,25 @@
-from django.http import JsonResponse
-from django.contrib.contenttypes.models import ContentType
-from django.views.decorators.http import require_POST
+from django.http import HttpResponse
 from django.contrib.auth import get_user_model
-
+from django.contrib.contenttypes.models import ContentType
+from django.views.decorators.http import require_http_methods
 from .models import Rating
-
 User = get_user_model()
+# Create your views here.
 
-@require_POST
+@require_http_methods(['POST'])
 def rate_movie_view(request):
-    if not request.user.is_authenticated:
-        return JsonResponse({"success": False, "message": "You must log in to rate this movie."}, status=403)
-
+    if not request.htmx:
+        return HttpResponse("Not Allowed", status = 400)
     object_id = request.POST.get('object_id')
     rating_value = request.POST.get("rating_value")
+    user = request.user
+    message = "You must <a href = '/accounts/login'>login</a> to rate this"
+    if user.is_authenticated:
+        message = "<span class = 'bg-danger text-light py-1 px-3 rounded'> An error occured.</div>"
+        ctype = ContentType.objects.get(app_lable = 'movies', model='movie')
+        rating_obj = Rating.objects.create(content_type = ctype, object_id= object_id, value= rating_value, user=user)
+        if rating_obj.content_object is not None:
+            message = "<span class = 'bg-success text-light py-1 px-3 rounded'> Success!</div>"
 
-    ctype = ContentType.objects.get(app_label='movies', model='movie')
-    rating_obj, created = Rating.objects.get_or_create(
-        content_type=ctype, 
-        object_id=object_id, 
-        user=request.user,
-        defaults={'value': rating_value}
-    )
+    return HttpResponse(message, status = 200)
 
-    if created or rating_obj.value != rating_value:
-        rating_obj.value = rating_value
-        rating_obj.save()
-        message = "Rating saved!"
-    else:
-        message = "Rating updated!"
-
-    return JsonResponse({"success": True, "message": message})

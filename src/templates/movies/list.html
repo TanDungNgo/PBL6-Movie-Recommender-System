@@ -45,14 +45,16 @@
 						<div class="carousel-item active">
 							<div class="trend_2i row">
 								{% for object in object_list|slice:"16:20" %}
-									{% include 'movies/snippet/card.html' with object=object %}
+								{% include 'movies/snippet/card.html' with object=object current_rating=current_rating %}
+
 								{% endfor %}
 							</div>
 						</div>
 						<div class="carousel-item">
 							<div class="trend_2i row">
 								{% for object in object_list|slice:"1:5" %}
-									{% include 'movies/snippet/card.html' with object=object %}
+								{% include 'movies/snippet/card.html' with object=object current_rating=current_rating %}
+
 								{% endfor %}
 										</div>
 						</div>

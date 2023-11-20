@@ -25,15 +25,16 @@
     <h5><a class="col_red" href="{{ object.get_absolute_url }}"> {{ object.title }}</a></h5>
     <p class="mb-2">{{ object.overview|slice:":80" }}</p>
 
-    {% include 'ratings/snippet/rating-choices.html' with object_id=object.id current_rating=current_rating %}
-    {% if object.rating_avg is not None%}
+
+
     <div class="mb-0" style="display: flex; justify-content: space-between; align-items: center;">
       <div class="rating">
         <span class="col_red">{{ object.rating_avg }} <i class="fa fa-star"></i></span>
         <span class="rating-count">({{ object.rating_count }})</span>
       </div>
     </div>
-    {%endif%}
+    {% include 'ratings/snippet/rating-choices.html' with object_id=object.id current_rating=current_rating %}
+
   </div>
 </div>
 {% endblock %}
