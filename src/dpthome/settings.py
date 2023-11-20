@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'profiles',
     'movies',
     'ratings',
+    'admin_page',
 ]
 
 MIDDLEWARE = [

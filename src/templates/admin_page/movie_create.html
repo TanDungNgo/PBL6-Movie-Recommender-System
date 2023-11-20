@@ -1,0 +1,122 @@
+{% extends "layout/layout-admin/base-admin.html" %} 
+{% load static %} 
+{% block title %}Create Movie{% endblock %} 
+{% block content %}
+<!-- Form Start -->
+<div class="container-fluid pt-4 px-4">
+  <form
+    action="#"
+    method="POST"
+    enctype="multipart/form-data"
+    class="card-create"
+  >
+    {% csrf_token %}
+    <h1>NEW MOVIE</h1>
+    <div class="card-content">
+      <div class="card-left">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required /><br /><br />
+
+        <!-- <label for="genres">Genres:</label>
+                            <input type="text" id="genres" name="genres" required><br><br> -->
+
+        <label for="overview">Overview:</label>
+        <textarea
+          id="overview"
+          name="overview"
+          rows="3"
+          cols="50"
+          required
+        ></textarea
+        ><br /><br />
+
+        <label for="release_date">Release Date:</label>
+        <input
+          type="date"
+          id="release_date"
+          name="release_date"
+          required
+        /><br /><br />
+
+        <!-- <label for="poster">Poster:</label>
+        <div class="custom-file">
+          <label for="file-input">Upload</label>
+          <input
+            type="file"
+            id="file-input"
+            name="file-input"
+            class="input-file"
+            accept=".jpg, .jpeg, .png"
+            onchange="updateFileName()"
+          />
+          <span id="file-name">File not selected!</span>
+        </div>
+        <br /> -->
+      </div>
+
+      <div class="card-right">
+        <!-- <label for="movie_duration">Duration:</label>
+        <input
+          type="text"
+          id="movie_duration"
+          name="movie_duration"
+          required
+        /><br /><br /> -->
+
+        <img 
+          id="image" 
+          src="{% if movie.poster_path %}{{ movie.poster_path }}{% else %}{% static 'img/default-image.jpg' %}{% endif %}" 
+          style="height: 400px; width: 350px; margin-bottom: 20px; cursor: pointer; padding: 30px; justify-content: center; object-fit: cover;"
+        >
+        <input type="file" id="fileInput" accept="image/*" onchange="displayImage(event)" style="display: none;">
+        <br />
+        <script>
+          document.getElementById("image").addEventListener("click", function() {
+              document.getElementById("fileInput").click();
+          });
+
+          document.getElementById("fileInput").addEventListener("change", function(event) {
+              const input = event.target;
+              const image = document.getElementById("image");
+
+              if (input.files && input.files[0]) {
+                  const reader = new FileReader();
+                  reader.onload = function(e) {
+                      image.src = e.target.result;
+                  };
+                  reader.readAsDataURL(input.files[0]);
+              }
+          });
+        </script>
+
+        <!-- <label for="status">Status:</label>
+        <select id="status" name="status">
+          <option value="Premiered">Premiered</option>
+          <option value="About to premiere">About to premiere</option>
+          <option value="Not yet released">Not yet released</option></select
+        ><br /><br /> -->
+        <!-- <label for="cast">Cast:</label>
+                            <input type="text" id="cast" name="cast" required><br><br>
+            
+                            <label for="director">Director:</label>
+                            <input type="text" id="director" name="director" required><br><br>
+            
+                            <label for="spokenlanguage">Language:</label>
+                            <input type="text" id="spokenlanguage" name="spokenlanguage" required><br><br>
+            
+                            <label for="country">Country:</label>
+                            <input type="text" id="country" name="country" required><br><br>
+
+                            <label for="keyword">Keyword:</label>
+                            <input type="text" id="keyword" name="keyword" required><br><br>-->
+      </div>
+    </div>
+
+    <div class="card-btn">
+      <input class="btn-cancel" type="submit" value="Cancel" />
+      <input class="btn-add" type="submit" value="Add new" />
+    </div>
+  </form>
+</div>
+<!-- Form End -->
+{% endblock %}
