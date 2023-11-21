@@ -5,41 +5,39 @@
 
 <div class="col-md-3 col-6">
   <div class="trend_2im clearfix position-relative">
-      <div class="trend_2im1 clearfix">
-          <div class="grid">
-              <figure class="effect-jazz mb-0">
-                  <img src="{{object.poster_path}}" class="d-block w-100" alt="...">
-              </figure>
-          </div>
+
+    <div class="trend_2im1 clearfix">
+      <div class="grid">
+        <figure class="effect-jazz mb-0">
+          {% if object.poster_path %}
+              <img src="{{ object.poster_path }}" class="d-block w-100" alt="{{ object.title }} Poster"width="500"
+              height="234">
+          {% else %}
+              <p>No poster available.</p>
+          {% endif %}
+        </figure>
+
       </div>
-      <div class="trend_2im2 clearfix text-center position-absolute w-100 top-0">
-          <span class="fs-1"><a class="col_red" href="#"><i class="fa fa-youtube-play"></i></a></span>
-      </div>
+    </div>
+    <div class="trend_2im2 clearfix text-center position-absolute w-100 top-0">
+      <span class="fs-1"><a class="col_red" href="#"><i class="fa fa-youtube-play"></i></a></span>
+    </div>
   </div>
   <div class="trend_2ilast bg_grey p-3 clearfix">
-      <h5><a class="col_red" href="{{ object.get_absolute_url }}"> {{ object.title }}</a></h5>
-      <p class="mb-2">{{ object.overview|slice:":80" }}</p>
+    <h5><a class="col_red" href="{{ object.get_absolute_url }}"> {{ object.title }}</a></h5>
+    <p class="mb-2">{{ object.overview|slice:":80" }}</p>
 
-      <div class="mb-0" style="display: flex; justify-content: space-between; align-items: center;">
-        <div class="rating">
-          <span class="col_red">{{ object.rating_avg }} <i class="fa fa-star"></i></span>
-          <span class="rating-count">({{ object.rating_count }})</span>
-        </div>
 
-        <select class="form-control" style="width: auto">
-          {% for choice in rating_choices %}
-              {% if choice is None %}
-              <option disabled selected>Pick a rating </option>
 
-              {% else %}
-              <option {% if current_rating == choice %} 
-              selected {% endif %} 
-              value="{{choice}}">{{choice}}</option>
-              {% endif %}
-          {% endfor %}
-        </select>
+    <div class="mb-0" style="display: flex; justify-content: space-between; align-items: center;">
+      <div class="rating">
+        <span class="col_red">{{ object.rating_avg }} <i class="fa fa-star"></i></span>
+        <span class="rating-count">({{ object.rating_count }})</span>
       </div>
+    </div>
+    {% include 'ratings/snippet/rating-choices.html' with object_id=object.id current_rating=current_rating %}
+
   </div>
 </div>
-{% endblock %} 
+{% endblock %}
 {% endwith %}

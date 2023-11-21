@@ -7,3 +7,5 @@ def get_dict_val(dictionary, key, key_as_str = True):
     if key_as_str:
         key = f"{key}"
     return dictionary.get(key)
+
+

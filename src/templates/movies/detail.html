@@ -34,8 +34,19 @@
           <span style="margin-right: 20px;"> {{ country.name }} </span>
           {% endfor %}
         </h5>
-        <h6 class="mt-4"><a class="button" href="{{ object.get_video_url }}"><i class="fa fa-play-circle align-middle me-1"></i>
-          Watch Trailer</a></h6>
+        <div class="d-flex align-items-center" style="gap: 20px;">
+          <h6 class="mb-0">
+            <a class="button" href="{{ object.get_video_url }}">
+              <i class="fa fa-play-circle align-middle me-1"></i>Watch Trailer
+            </a>
+          </h6>
+          <div style="margin-top: -8px;">
+            {% include 'ratings/snippet/rating-choices.html' with object_id=object.id current_rating=current_rating %}
+          </div>
+        </div>
+
+
+     
       </div>
     </div>
     <div class="card-actor">
@@ -105,3 +116,4 @@
   <div class="card-space"></div>
 </section> -->
 {% endblock %}
+       
