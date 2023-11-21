@@ -1,7 +1,7 @@
 {% extends "layout/base.html" %}
 {% load static %}
 
-{% block title %}Movie Detail{% endblock %}
+{% block title %}{{ object.title }}{% endblock %}
 {% block content %}
 
 <section id="popular" class="pt-4 pb-5 bg_grey">
@@ -44,9 +44,6 @@
             {% include 'ratings/snippet/rating-choices.html' with object_id=object.id current_rating=current_rating %}
           </div>
         </div>
-
-
-     
       </div>
     </div>
     <div class="card-actor">

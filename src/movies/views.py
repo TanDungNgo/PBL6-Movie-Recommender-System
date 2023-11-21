@@ -9,6 +9,7 @@ User = get_user_model()
 
 from django.conf import settings
 
+from django.conf import settings
 from .models import Movie
 import requests
 # Create your views here.

@@ -29,7 +29,11 @@ def signin(request):
 
                     default_avatar_path = 'https://cdn-icons-png.flaticon.com/512/4998/4998641.png'
                     request.session['user_avatar'] = default_avatar_path
-
+                    
+                    messages.success(request, 'Login successfully.')
+                    if user.is_superuser:
+                       return redirect('dashboard')
+                    
                     return redirect('home')
                 else:
                     messages.error(request, 'Email or password is incorrect.')
@@ -67,7 +71,7 @@ def signup(request):
 
         # Chuyển hướng người dùng sau khi đăng ký thành công
         messages.success(request, 'Signup successfully.')
-        return redirect('login')  # Thay 'success_page' bằng URL bạn muốn chuyển hướng đến sau khi đăng ký
+        return redirect('signin')  # Thay 'success_page' bằng URL bạn muốn chuyển hướng đến sau khi đăng ký
 
     return render(request, 'account/signup.html')
 
@@ -151,4 +155,4 @@ def profile(request):
         else:
             # Session doesn't exist, redirect to the login page
             messages.error(request, 'Please login')
-            return redirect('login')
+            return redirect('signin')
