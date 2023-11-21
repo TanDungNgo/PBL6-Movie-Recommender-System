@@ -41,19 +41,8 @@
           <span style="margin-right: 20px;"> {{ country.name }} </span>
           {% endfor %}
         </h5>
+        {% include 'ratings/snippet/rating-choices.html' with object_id=object.id current_rating=current_rating %}
 
-  
-          <select class="form-control" style="width: auto">
-            {% for choice in rating_choices %}
-                {% if choice is None %}
-                  <option disabled selected>Rating Movie </option>
-                {% else %}
-                <option {% if current_rating == choice %} 
-                selected {% endif %} 
-                value="{{choice}}">{{choice}}</option>
-                {% endif %}
-            {% endfor %}
-          </select>
         </div>
       </div>
     </div>
@@ -66,7 +55,7 @@
           <img src="https://image.tmdb.org/t/p/w185{{ cast.profile_path }}"
             style="height: 200px; margin-right: 10px; object-fit: cover;" /><br />
           {% else %}
-          <img src="{% static '/img/default-image.jpg' %}"
+          <img src="{% static 'movies/img/default-image.jpg' %}"
             style="height: 200px; width: 133px; margin-right: 10px; object-fit: cover;" /><br />
           {% endif %}
           <div style="width: 200px;">

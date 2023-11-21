@@ -3,7 +3,9 @@ from django.db import models
 from django.shortcuts import render
 from django.views import generic
 from django.db.models import Avg
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 from .models import Movie
 import requests
 # Create your views here.
@@ -102,5 +104,17 @@ class Home(generic.ListView):
 
 home = Home.as_view()
 
+def about(request):
+    return render(request, 'dpthome/about.html')
+def blog(request):
+    return render(request, 'dpthome/blog.html')
+def blog_detail(request):
+    return render(request, 'dpthome/blog_detail.html')
+def services(request):
+    return render(request, 'dpthome/services.html')
+def contact(request):
+    return render(request, 'dpthome/contact.html')
+def search_page(request):
+    return render(request, 'dpthome/search_page.html')
     
         

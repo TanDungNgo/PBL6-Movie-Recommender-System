@@ -27,13 +27,17 @@ class RatingChoice(models.IntegerChoices):
 class RatingQuerySet(models.QuerySet):
     def avg(self):
         return self.aggregate(average=Avg('value'))['average']
-    def as_object_dict(seft, object_ids=[]):
-        qs = seft.filter (object_id_in=object_ids)
+
+    def as_object_dict(self, object_ids=[]):
+        # Correct the filter syntax here
+        qs = self.filter(object_id__in=object_ids)
         return {f"{x.object_id}": x.value for x in qs}
+
     def movies(self):
         Movie = apps.get_model('movies', 'Movie')
         ctype = ContentType.objects.get_for_model(Movie)
-        return self.filter(active=True, content_type= ctype)
+        return self.filter(active=True, content_type=ctype)
+
             
 
 class RatingManager(models.Manager):

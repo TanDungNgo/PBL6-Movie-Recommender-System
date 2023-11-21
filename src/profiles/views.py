@@ -5,7 +5,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.hashers import check_password
 from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import authenticate, login
-
+from rest_framework.decorators import api_view
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -77,78 +77,78 @@ def signout(request):
     messages.success(request, 'Logout successfully.')
     return redirect('signin')
 
-# @api_view(['GET', 'POST'])
-# def profile(request):
-#     if request.method == 'POST':
-#         # Kiểm tra xem người dùng đã đăng nhập chưa
-#         if 'user_id' in request.session and 'user_email' in request.session:
-#             # Thu thập dữ liệu từ yêu cầu POST
-#             user_id = request.session['user_id']
-#             user = MyUser.objects.get(id=user_id)
+@api_view(['GET', 'POST'])
+def profile(request):
+    if request.method == 'POST':
+        # Kiểm tra xem người dùng đã đăng nhập chưa
+        if 'user_id' in request.session and 'user_email' in request.session:
+            # Thu thập dữ liệu từ yêu cầu POST
+            user_id = request.session['user_id']
+            user = User.objects.get(id=user_id)
 
-#             # Lấy dữ liệu hiện tại của người dùng
-#             current_username = user.username
+            # Lấy dữ liệu hiện tại của người dùng
+            current_username = user.username
 
-#             # Lấy giá trị từ yêu cầu POST hoặc sử dụng giá trị hiện tại nếu không có thay đổi
-#             firstname = request.POST.get('firstname', user.firstname)
-#             lastname = request.POST.get('lastname', user.lastname)
-#             phonenumber = request.POST.get('phonenumber', user.phonenumber)
-#             country = request.POST.get('country', user.country)
-#             new_username = request.POST.get('username', current_username)
-#             email = request.POST.get('email', user.email)
+            # Lấy giá trị từ yêu cầu POST hoặc sử dụng giá trị hiện tại nếu không có thay đổi
+            firstname = request.POST.get('firstname', user.firstname)
+            lastname = request.POST.get('lastname', user.lastname)
+            phonenumber = request.POST.get('phonenumber', user.phonenumber)
+            country = request.POST.get('country', user.country)
+            new_username = request.POST.get('username', current_username)
+            email = request.POST.get('email', user.email)
 
-#             try:
-#                 # Cập nhật thông tin người dùng trong cơ sở dữ liệu
-#                 user.firstname = firstname
-#                 user.lastname = lastname
-#                 user.phonenumber = phonenumber
-#                 user.country = country
-#                 user.username = new_username
-#                 user.email = email
+            try:
+                # Cập nhật thông tin người dùng trong cơ sở dữ liệu
+                user.firstname = firstname
+                user.lastname = lastname
+                user.phonenumber = phonenumber
+                user.country = country
+                user.username = new_username
+                user.email = email
 
-#                 user.save()
+                user.save()
 
-#                 # Cập nhật session data
-#                 request.session['user_username'] = new_username
-#                 request.session['user_email'] = email
-#                 request.session['user_firstname'] = firstname
-#                 request.session['user_lastname'] = lastname
-#                 request.session['user_phonenumber'] = phonenumber
-#                 request.session['user_country'] = country
+                # Cập nhật session data
+                request.session['user_username'] = new_username
+                request.session['user_email'] = email
+                request.session['user_firstname'] = firstname
+                request.session['user_lastname'] = lastname
+                request.session['user_phonenumber'] = phonenumber
+                request.session['user_country'] = country
 
-#                 # Trả về dữ liệu đã cập nhật cho phía client
-#                 user_data = {
-#                     'username': new_username,
-#                     'email': email,
-#                     'firstname': firstname,
-#                     'lastname': lastname,
-#                     'phonenumber': phonenumber,
-#                     'country': country,
-#                 }
+                # Trả về dữ liệu đã cập nhật cho phía client
+                user_data = {
+                    'username': new_username,
+                    'email': email,
+                    'firstname': firstname,
+                    'lastname': lastname,
+                    'phonenumber': phonenumber,
+                    'country': country,
+                }
 
-#                 return JsonResponse(user_data)
-#             except MyUser.DoesNotExist:
-#                 return HttpResponse("User not found")
-#         else:
-#             # Người dùng chưa đăng nhập, xử lý lỗi tại đây
-#             messages.error(request, 'Please login')
-#             return redirect('signin')
-#     else:
-#         # Nếu phương thức là GET, thực hiện logic hiển thị thông tin người dùng
-#         if 'user_id' in request.session and 'user_email' in request.session:
-#             # Fetch user information from the session
-#             user_session_data = {
-#                 'id': request.session['user_id'],
-#                 'role': request.session.get('user_role'),
-#                 'email': request.session.get('user_email'),
-#                 'firstname': request.session.get('user_firstname'),
-#                 'lastname': request.session.get('user_lastname'),
-#                 'phonenumber': request.session.get('user_phonenumber'),
-#                 'country': request.session.get('user_country'),
-#             }
+                return JsonResponse(user_data)
+            except User.DoesNotExist:
+                return HttpResponse("User not found")
+        else:
+            # Người dùng chưa đăng nhập, xử lý lỗi tại đây
+            messages.error(request, 'Please login')
+            return redirect('login')
+    else:
+        # Nếu phương thức là GET, thực hiện logic hiển thị thông tin người dùng
+        if 'user_id' in request.session and 'user_email' in request.session:
+            # Fetch user information from the session
+            user_session_data = {
+                'id': request.session['user_id'],
+                'role': request.session.get('user_role'),
+                'email': request.session.get('user_email'),
+                'firstname': request.session.get('user_firstname'),
+                'lastname': request.session.get('user_lastname'),
+                'phonenumber': request.session.get('user_phonenumber'),
+                'country': request.session.get('user_country'),
+            }
 
-#             return render(request, 'profile.html', user_session_data)
-#         else:
-#             # Session doesn't exist, redirect to the login page
-#             messages.error(request, 'Please login')
-#             return redirect('signin')
+            return render(request, 'account/profile.html', user_session_data)
+        else:
+            # Session doesn't exist, redirect to the login page
+            messages.error(request, 'Please login')
+            return redirect('login')
