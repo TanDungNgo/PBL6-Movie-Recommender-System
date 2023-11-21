@@ -1,0 +1,245 @@
+{% extends "layout/base.html" %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+
+{% load static %}
+
+<body >
+    
+    <div class="container" style="color: #6c757d; max-width: 1320px;" >
+        <div class="row">
+            <div class="col-12">
+                <!-- Page title -->
+                <div class="my-5">
+                    <h4 class="mb-0" style="font-size: 30px; color: white;" ><i class="col_red me-1" ></i> My <span
+                        class="col_red">Profile</span></h4> <hr style="color: gray">
+                </div>
+                <!-- Form START -->
+                <form method="post" enctype="multipart/form-data" class="file-upload" style="font-weight: bold;">
+                    <div class="row mb-5 gx-5" >
+                        <!-- Contact detail -->
+                        <div class="col-xxl-8 mb-5 mb-xxl-0"  style="background-color: #191a1d; border-radius: 0.25rem!important;">
+                            <div class="bg-secondary-soft px-4 py-5 rounded">
+                                <div class="row g-3">
+                                    <h4 class="mb-4 mt-0" style="color: #de1002;">Contact detail</h4>
+                                    <!-- User name -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">User Name </label>
+                                        <input type="text" class="form-control" id="username-input" placeholder="" aria-label="User name"
+                                            value="{{ request.session.user_username }} " style="background-color: #010102; border-color: black;">
+                                    </div>
+                                    <!-- Email -->
+                                    <div class="col-md-6">
+                                        <label for="inputEmail4" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="email-input"
+                                            value="{{ request.session.user_email }}" style="background-color: #010102; border-color: black;">
+                                    </div>
+                                    <!-- First Name -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">First Name</label>
+                                        <input  id="firstname-input" type="text" class="form-control" placeholder="" aria-label="First name"
+                                            value="{{ request.session.user_firstname }}" style="background-color: #010102; border-color: black;">
+                                    </div>
+
+                                    <!-- Last Name -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Last Name</label>
+                                        <input  id="lastname-input" type="text" class="form-control" placeholder="" aria-label="Last name"
+                                            value="{{ request.session.user_lastname }}" style="background-color: #010102; border-color: black;">
+                                    </div>
+
+                                    <!-- Phone number -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Phone number</label>
+                                        <input id="phonenumber-input" type="text" class="form-control" placeholder="" aria-label="Phone number"
+                                            value="{{ request.session.user_phonenumber }}" style="background-color: #010102; border-color: black;">
+                                    </div>
+
+                                    <!-- Country -->
+                                    <div class="col-md-6">
+                                        <label class="form-label">Country</label>
+                                        <input id="country-input" type="text" class="form-control" placeholder="" aria-label="Country"
+                                            value="{{ request.session.user_country }}" style="background-color: #010102; border-color: black;">
+                                    </div>
+
+
+                                </div> <!-- Row END -->
+                            </div>
+                        </div>
+                        <!-- Upload profile -->
+                        <div class="col-xxl-4" >
+                            <div class="bg-secondary-soft px-4 py-5 rounded"  style="background-color: #191a1d; ">
+                                <div class="row g-3">
+                                    <h4 class="mb-4 mt-0" style="color: #de1002;">Upload avatar</h4>
+                                    <div class="text-center">
+                                        <!-- Image upload -->
+                                        <!-- Hiển thị hình ảnh avatar -->
+                                        <img id="avatar-image" src="{{ request.session.user_avatar }}" class="img-fluid"
+                                             alt="Avatar" style="width: 300px; height: 300px; object-fit: cover;">
+
+                                        <!-- Button -->
+                                        <input type="file" id="avatar-input" style="display: none;">
+                                        <label for="avatar-input" class="btn btn-success-soft btn-block"
+                                            style="color: #28a745; background-color: rgba(40, 167, 69, 0.1); margin-top: 20px;">Upload</label>
+
+                                        <button type="button" id="remove-button" class="btn btn-danger-soft"
+                                            style="color: #dc3545; background-color: rgba(220, 53, 69, 0.1); margin-top: 20px;">Remove</button>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- Row END -->
+
+                    <!-- Social media detail -->
+                    <div class="row mb-5 gx-5">
+                        <div class="col-xxl-6 mb-5 mb-xxl-0"  style="background-color: #191a1d; border-radius: 0.25rem!important;">
+                            <div class="bg-secondary-soft px-4 py-5 rounded" >
+                                <div class="row g-3">
+                                    <h4 class="mb-4 mt-0" style="color: #de1002;">Social media detail</h4>
+                                    <!-- Facebook -->
+                                    <div class="col-md-6">
+                                        <label class="form-label"><i
+                                                class="fab fa fa-facebook me-2 text-facebook"></i>Facebook </label>
+                                        <input type="text" class="form-control" placeholder="" aria-label="Facebook"
+                                            value="http://www.facebook.com" style="background-color: #010102; border-color: black;">
+                                    </div>
+                                    <!-- Twitter -->
+                                    <div class="col-md-6">
+                                        <label class="form-label"><i
+                                                class="fab fa-fw fa fa-twitter text-twitter me-2"></i>Twitter </label>
+                                        <input type="text" class="form-control" placeholder="" aria-label="Twitter"
+                                            value="http://www.twitter.com" style="background-color: #010102; border-color: black;">
+                                    </div>
+                                    <!-- Linkedin -->
+                                    <div class="col-md-6">
+                                        <label class="form-label"><i
+                                                class="fab fa-fw fa fa-linkedin text-linkedin me-2"></i>Linkedin </label>
+                                        <input type="text" class="form-control" placeholder="" aria-label="Linkedin"
+                                            value="http://www.linkedin.com" style="background-color: #010102; border-color: black;">
+                                    </div>
+                                    <!-- Instragram -->
+                                    <div class="col-md-6">
+                                        <label class="form-label"><i
+                                                class="fab fa-fw fa fa-instagram text-instagram me-2"></i>Instagram </label>
+                                        <input type="text" class="form-control" placeholder="" aria-label="Instragram"
+                                            value="http://www.instragram.com" style="background-color: #010102; border-color: black;">
+                                    </div>
+                                    
+                                </div> <!-- Row END -->
+                            </div>
+                        </div>
+
+                        <!-- change password -->
+                        <div class="col-xxl-6">
+                            <div class="bg-secondary-soft px-4 py-5 rounded"  style="background-color: #191a1d;">
+                                <div class="row g-3"    style="margin-top: -40px;" >
+                                    <h4 class="my-4" style="color: #de1002;">Change Password</h4>
+                                    <!-- Old password -->
+                                    <div class="col-md-6">
+                                        <label for="exampleInputPassword1" class="form-label">Old password </label>
+                                        <input type="password" class="form-control" id="exampleInputPassword1" style="background-color: #010102; border-color: black;">
+                                    </div>
+                                    <!-- New password -->
+                                    <div class="col-md-6">
+                                        <label for="exampleInputPassword2" class="form-label">New password </label>
+                                        <input type="password" class="form-control" id="exampleInputPassword2" style="background-color: #010102; border-color: black;">
+                                    </div>
+                                    <!-- Confirm password -->
+                                    <div class="col-md-12">
+                                        <label for="exampleInputPassword3" class="form-label">Confirm Password </label>
+                                        <input type="password" class="form-control" id="exampleInputPassword3" style="background-color: #010102; border-color: black;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> <!-- Row END -->
+                    <!-- button -->
+                    <div class="gap-3 d-md-flex justify-content-md-end text-center">
+                        <button type="button" class="btn btn-danger btn-lg" style="background-color: #de1002; border-color: black;">Cancel profile</button>
+                        <button id = "update-profile-button" type="button" class="btn btn-primary btn-lg">Update profile</button>
+                    </div>
+                </form> <!-- Form END -->
+            </div>
+        </div>
+        <hr style="color: gray">
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        var originalImageSrc = "{{ request.session.user_avatar }}"; // Lấy URL ảnh gốc từ session
+        var currentImageSrc = originalImageSrc; // Lưu URL ảnh hiện tại
+
+        $(document).ready(function () {
+            $("#avatar-input").change(function () {
+                var input = this;
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        // Hiển thị ảnh mới
+                        $("#avatar-image").attr("src", e.target.result);
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            });
+        });
+        $(document).ready(function () {
+            // Sự kiện khi nút "Remove" được nhấn
+            $("#remove-button").click(function () {
+                // Đặt src của thẻ <img> thành ảnh gốc
+                currentImageSrc = originalImageSrc;
+                $("#avatar-image").attr("src", currentImageSrc);
+            });
+        });
+
+        $(document).ready(function() {
+    // Gán sự kiện cho nút "Update profile"
+    $('#update-profile-button').click(function() {
+        // Thu thập dữ liệu từ các trường form
+        var firstname = $('#firstname-input').val();
+        var lastname = $('#lastname-input').val();
+        var username = $('#username-input').val();
+        var email = $('#email-input').val();
+        var country = $('#country-input').val();
+        var phonenumber = $('#phonenumber-input').val();
+        var avatar = $('#avatar-input').val();
+        
+
+        // Gửi dữ liệu lên máy chủ thông qua AJAX
+        $.ajax({
+            url: '/profile/',  // Đường dẫn đến trang "http://127.0.0.1:8000/profile/"
+            type: 'POST',
+            data: {
+                firstname: firstname,
+                lastname: lastname,
+                username: username,
+                email: email,
+                country: country,
+                phonenumber: phonenumber,
+                avatar: avatar,
+                // Các trường dữ liệu khác
+            },
+            success: function(data) {
+                // Xử lý kết quả thành công từ máy chủ
+                // Cập nhật dữ liệu trên trang web
+                $('#firstname-input').val(data.firstname);
+                $('#lastname-input').val(data.lastname);
+                $('#username-input').val(data.username);
+                $('#email-input').val(data.email);
+                $('#country-input').val(data.country);
+                $('#phonenumber-input').val(data.phonenumber);
+                $('#avatar-input').val(data.avatar);
+                // Cập nhật các trường dữ liệu khác
+            },
+            error: function(error) {
+                console.log('Lỗi khi cập nhật thông tin: ' + error);
+            }
+        });
+    });
+});
+
+        
+    </script>
+</body>
+
+
+{% endblock %}

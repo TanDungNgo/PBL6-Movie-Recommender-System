@@ -29,6 +29,7 @@ class RatingQuerySet(models.QuerySet):
         return self.aggregate(average=Avg('value'))['average']
 
     def as_object_dict(self, object_ids=[]):
+        # Correct the filter syntax here
         qs = self.filter(object_id__in=object_ids)
         return {f"{x.object_id}": x.value for x in qs}
 
