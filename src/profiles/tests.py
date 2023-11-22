@@ -1,5 +1,6 @@
-from django.test import LiveServerTestCase
 from selenium import webdriver
+from django.test import LiveServerTestCase
+
 from selenium.webdriver.common.keys import Keys
 import time
 from selenium.webdriver.support.ui import WebDriverWait
@@ -8,7 +9,12 @@ from selenium.webdriver.common.by import By
 
 class LoginFormTest(LiveServerTestCase):
     def test_login_success(self):
-        driver = webdriver.Chrome()
+        # Đường dẫn đến ChromeDriver
+        chromedriver_path = 'D:/Download/chromedriver-win64 (2)/chromedriver-win64/chromedriver.exe'
+
+        # Khởi tạo driver Chrome với tùy chọn Service
+        chrome_service = webdriver.chrome.service.Service(chromedriver_path)
+        driver = webdriver.Chrome(service=chrome_service)
         # Navigate to the login page
         driver.get('http://127.0.0.1:8000/accounts/login/')
 
@@ -19,7 +25,7 @@ class LoginFormTest(LiveServerTestCase):
 
         # Perform actions on the form
         time.sleep(2)
-        email_input.send_keys('dung@gmail.com')
+        email_input.send_keys('trang@gmail.com')
         time.sleep(2)
         password_input.send_keys('123456789')
         time.sleep(2)
@@ -56,7 +62,12 @@ class LoginFormTest(LiveServerTestCase):
         driver.quit()
 
     def test_invalid_email(self):
-        driver = webdriver.Chrome()
+        # Đường dẫn đến ChromeDriver
+        chromedriver_path = 'D:/Download/chromedriver-win64 (2)/chromedriver-win64/chromedriver.exe'
+
+        # Khởi tạo driver Chrome với tùy chọn Service
+        chrome_service = webdriver.chrome.service.Service(chromedriver_path)
+        driver = webdriver.Chrome(service=chrome_service)
         # Navigate to the login page
         driver.get('http://127.0.0.1:8000/accounts/login/')
 
@@ -67,7 +78,7 @@ class LoginFormTest(LiveServerTestCase):
 
         # Perform actions on the form
         time.sleep(2)
-        email_input.send_keys('tandung@gmail.com')
+        email_input.send_keys('huyentrang@gmail.com')
         time.sleep(2)
         password_input.send_keys('123456789')
         time.sleep(2)
@@ -100,9 +111,13 @@ class LoginFormTest(LiveServerTestCase):
         time.sleep(4)
         # Close the browser
         driver.quit()
-
     def test_invalid_password(self):
-        driver = webdriver.Chrome()
+        # Đường dẫn đến ChromeDriver
+        chromedriver_path = 'D:/Download/chromedriver-win64 (2)/chromedriver-win64/chromedriver.exe'
+
+        # Khởi tạo driver Chrome với tùy chọn Service
+        chrome_service = webdriver.chrome.service.Service(chromedriver_path)
+        driver = webdriver.Chrome(service=chrome_service)
         # Navigate to the login page
         driver.get('http://127.0.0.1:8000/accounts/login/')
 
@@ -113,7 +128,7 @@ class LoginFormTest(LiveServerTestCase):
 
         # Perform actions on the form
         time.sleep(2)
-        email_input.send_keys('dung@gmail.com')
+        email_input.send_keys('trang@gmail.com')
         time.sleep(2)
         password_input.send_keys('123456')
         time.sleep(2)
@@ -148,7 +163,12 @@ class LoginFormTest(LiveServerTestCase):
         driver.quit()
     
     def test_invalid_email_password(self):
-        driver = webdriver.Chrome()
+        # Đường dẫn đến ChromeDriver
+        chromedriver_path = 'D:/Download/chromedriver-win64 (2)/chromedriver-win64/chromedriver.exe'
+
+        # Khởi tạo driver Chrome với tùy chọn Service
+        chrome_service = webdriver.chrome.service.Service(chromedriver_path)
+        driver = webdriver.Chrome(service=chrome_service)
         # Navigate to the login page
         driver.get('http://127.0.0.1:8000/accounts/login/')
 
@@ -159,7 +179,7 @@ class LoginFormTest(LiveServerTestCase):
 
         # Perform actions on the form
         time.sleep(2)
-        email_input.send_keys('tandung@gmail.com')
+        email_input.send_keys('huyentrang@gmail.com')
         time.sleep(2)
         password_input.send_keys('123456')
         time.sleep(2)
@@ -194,7 +214,12 @@ class LoginFormTest(LiveServerTestCase):
         driver.quit()
 
     def test_empty_email(self):
-        driver = webdriver.Chrome()
+       # Đường dẫn đến ChromeDriver
+        chromedriver_path = 'D:/Download/chromedriver-win64 (2)/chromedriver-win64/chromedriver.exe'
+
+        # Khởi tạo driver Chrome với tùy chọn Service
+        chrome_service = webdriver.chrome.service.Service(chromedriver_path)
+        driver = webdriver.Chrome(service=chrome_service)
         # Navigate to the login page
         driver.get('http://127.0.0.1:8000/accounts/login/')
 
@@ -240,7 +265,12 @@ class LoginFormTest(LiveServerTestCase):
         driver.quit()
 
     def test_empty_password(self):
-        driver = webdriver.Chrome()
+        # Đường dẫn đến ChromeDriver
+        chromedriver_path = 'D:/Download/chromedriver-win64 (2)/chromedriver-win64/chromedriver.exe'
+
+        # Khởi tạo driver Chrome với tùy chọn Service
+        chrome_service = webdriver.chrome.service.Service(chromedriver_path)
+        driver = webdriver.Chrome(service=chrome_service)
         # Navigate to the login page
         driver.get('http://127.0.0.1:8000/accounts/login/')
 
@@ -251,7 +281,7 @@ class LoginFormTest(LiveServerTestCase):
 
         # Perform actions on the form
         time.sleep(2)
-        email_input.send_keys('dung@gmail.com')
+        email_input.send_keys('trang@gmail.com')
         time.sleep(2)
         password_input.send_keys('')
         time.sleep(2)
@@ -286,7 +316,12 @@ class LoginFormTest(LiveServerTestCase):
         driver.quit()
     
     def test_empty_email_password(self):
-        driver = webdriver.Chrome()
+        # Đường dẫn đến ChromeDriver
+        chromedriver_path = 'D:/Download/chromedriver-win64 (2)/chromedriver-win64/chromedriver.exe'
+
+        # Khởi tạo driver Chrome với tùy chọn Service
+        chrome_service = webdriver.chrome.service.Service(chromedriver_path)
+        driver = webdriver.Chrome(service=chrome_service)
         # Navigate to the login page
         driver.get('http://127.0.0.1:8000/accounts/login/')
 
