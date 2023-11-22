@@ -3,7 +3,48 @@
 
 {% block title %}{{ object.title }}{% endblock %}
 {% block content %}
-<iframe width="800" height="450" src="https://www.youtube.com/embed/{{key}}" 
-    frameborder="0" allowfullscreen>
-</iframe>
+<div class="card-container" >
+    <div class="trend_1l" style="margin-bottom: 30px; margin-top: 20px;">
+        <h2 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i> Watch  <span
+                class="col_red">Trailer</span></h2>
+    </div>
+    <div class="card-top" style="display:flex;  justify-content: space-between;">
+        <div class="card-top-video">
+            <iframe width="800" height="450" src="https://www.youtube.com/embed/{{key}}" frameborder="0"
+                allowfullscreen>
+            </iframe>
+        </div>
+        <div class="card-top-info" style="background-color: #121212;">
+            <div class="card-top-img" >
+                <img src={{movie.poster_path}} alt="{{ movie.title }} Poster" style="width: 150px; height: 200px; " />
+            </div>
+            <div class="mb-0"><span class="col_red" style="font-size: 24px;">{{ object.title }}</span></div>
+            <div><span>{{ object.overview|truncatewords:50 }}</span></div>
+            <div>Rating:
+                {{object.rating_avg}} ({{object.rating_count}})
+                <i class="fa fa-star align-middle"></i>
+            </div>
+            <div>
+                {% include 'ratings/snippet/rating-choices.html' with object_id=object.id current_rating=current_rating %}
+              </div>
+        </div>
+    </div>
+    <div class="trend_1l" style="margin-bottom: 30px; margin-top: 20px; display: flex; align-items: center; gap: 10px;">
+        <span style="width: 5px; height: 30px; border-radius: 0.25rem; background-color: #de1002"></span>
+        <hgroup style="flex: 1;">
+            <h3 class="mb-0">Featured <span class="col_red">Videos</span></h3>
+        </hgroup>
+    </div>
+
+    
+    
+    
+    
+    
+        
+
+
+
+</div>
+
 {% endblock %}

@@ -10,8 +10,8 @@
       <div class="grid">
         <figure class="effect-jazz mb-0">
           {% if object.poster_path %}
-              <img src="{{ object.poster_path }}" class="d-block w-100" alt="{{ object.title }} Poster"width="500"
-              height="234">
+              <img src="{{ object.poster_path }}" class="d-block w-100" alt="{{ object.title }} Poster"width="520"
+              height="250" style="object-fit: cover;" >
           {% else %}
               <p>No poster available.</p>
           {% endif %}
@@ -20,7 +20,7 @@
       </div>
     </div>
     <div class="trend_2im2 clearfix text-center position-absolute w-100 top-0">
-      <span class="fs-1"><a class="col_red" href="#"><i class="fa fa-youtube-play"></i></a></span>
+      <span class="fs-1"><a class="col_red" href="{{ object.get_video_url }}"><i class="fa fa-youtube-play"></i></a></span>
     </div>
   </div>
   <div class="trend_2ilast bg_grey p-3 clearfix">
