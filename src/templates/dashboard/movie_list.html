@@ -1,0 +1,74 @@
+{% extends "layout/layout-admin/base-admin.html" %}
+{% load static %}
+{% block title %}List Movies{% endblock %}
+{% block content %}
+<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<div class="container-fluid pt-4 px-4">
+  <div class="row g-4">
+    <div class="col-12">
+      <div class="bg-secondary rounded h-100 p-4">
+        <div class="parent-node">
+          <a href="#" class="child-node">Copy</a>
+          <a href="#" class="child-node">CSV</a>
+          <a href="{% url 'export_movies' %}" class="child-node">Excel</a>
+          <a href="#" class="child-node">Print</a>
+        </div>
+        <div class="table-responsive">
+          <table id="example" class="table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Overview</th>
+                    <!-- <th scope="col">Duration</th> -->
+                    <th scope="col">Release Date</th>
+                    <!-- <th scope="col">Status</th> -->
+                    <th scope="col">Poster</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for movie in movies %}
+                  <tr>
+                    <td scope="col">
+                      <a href="{% url 'movie_detail_admin' movie.id %}" style="color: #6C7293;">{{ movie.id }}</a>
+                    </td>
+                    <td scope="col" style="max-width: 150px">
+                      <a href="{% url 'movie_detail_admin' movie.id %}" style="color: #6C7293;">{{ movie.title }}</a>
+                    </td>
+                    <td scope="col" style="max-width: 280px">
+                      <a href="{% url 'movie_detail_admin' movie.id %}" style="color: #6C7293;">{{ movie.overview|truncatechars:80 }}</a>
+                    </td>
+                    <!-- <td scope="col">
+                      <a href="#" style="color: #6C7293;">{{ movie.movie_duration }}</a>
+                    </td> -->
+                    <td scope="col">
+                      <a href="{% url 'movie_detail_admin' movie.id %}" style="color: #6C7293;">{{ movie.release_date }}</a>
+                    </td>
+                    <!-- <td scope="col">
+                      <a href="#" style="color: #6C7293;">{{ movie.status }}</a>
+                    </td> -->
+                    <td scope="col">
+                      <div style="width: 150px">
+                        <img src="{{ movie.poster_path }}" style="height: 100px; " />
+                      </div>
+                    </td>
+                    <td>
+                      <a href="{% url 'movie_edit' movie.id %}">
+                          <i class="fa fa-edit" style="margin-left: 10px; font-size: 20px; cursor: pointer; color: green"></i>
+                      </a>
+                      <a href="#">
+                        <i class="fa fa-trash-alt" style="margin-left: 10px; font-size: 20px; cursor: pointer;"></i>
+                      </a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+            </tbody>
+          </table>                 
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="{% static 'dashboard/js/dataTable.js' %}"></script>
+{% endblock %}

@@ -1,7 +1,13 @@
-from typing import Any
+
 from django.shortcuts import render
 from django.views import generic
 from django.db.models import Avg
+from django.contrib.auth import get_user_model
+
+
+User = get_user_model()
+
+from django.conf import settings
 
 from django.conf import settings
 from .models import Movie
@@ -21,9 +27,9 @@ class MovieListView(generic.ListView):
         user = requests.user
         if user.is_authenticated:
             object_list = context['object_list']
-            object_ids = [x.id for x in object_list]
-            qs = user.rating_set.filter (active = True,  object_id_in=object_ids)
-            context['my_ratings'] = {f"{x.object_id}": x.value for x in qs}
+            object_ids = [x.id for x in object_list][:20]
+            my_ratings = user.rating_set.movies().as_object_dict(object_ids=object_ids)
+            context['my_ratings'] = my_ratings
         return context
 
 
@@ -36,6 +42,15 @@ class MovieDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        movie_requests = self.request  # Rename 'requests' to 'movie_requests'
+        user = movie_requests.user
+        if user.is_authenticated:
+            movie_object = context['object']
+            object_ids = [movie_object.id]
+            my_ratings = user.rating_set.movies().as_object_dict(object_ids=object_ids)
+            
+            context['my_ratings'] = my_ratings
+
         movies = Movie.objects.all().order_by('-rating_avg')
         # Retrieve the movie_id from URL parameters or self.kwargs
         movie_id = self.kwargs.get('pk')  # Assuming your URL pattern uses 'pk' for the movie ID
@@ -77,22 +92,6 @@ class MovieDetailView(generic.DetailView):
 
 movie_detail_view = MovieDetailView.as_view()
 
-
-class Home(generic.ListView):
-    template_name = 'dpthome/index.html'
-    paginate_by = 10
-
-    def get_queryset(self):
-        return Movie.objects.order_by('-release_date')[:20]
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['top_rated_movies'] = Movie.objects.order_by('-rating_avg')[:20]
-        context['latest_movies'] = self.get_queryset()
-        return context
-
-home = Home.as_view()
-
 class MovieVideoView(generic.DetailView):
     model = Movie
     template_name = 'movies/watch_video.html'  # Tạo một template mới cho việc xem video
@@ -111,3 +110,4 @@ class MovieVideoView(generic.DetailView):
         return context
 
 movie_video_view = MovieVideoView.as_view()
+

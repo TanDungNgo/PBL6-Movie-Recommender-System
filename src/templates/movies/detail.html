@@ -1,7 +1,7 @@
 {% extends "layout/base.html" %}
 {% load static %}
 
-{% block title %}Movie Detail{% endblock %}
+{% block title %}{{ object.title }}{% endblock %}
 {% block content %}
 
 <section id="popular" class="pt-4 pb-5 bg_grey">
@@ -34,8 +34,16 @@
           <span style="margin-right: 20px;"> {{ country.name }} </span>
           {% endfor %}
         </h5>
-        <h6 class="mt-4"><a class="button" href="{{ object.get_video_url }}"><i class="fa fa-play-circle align-middle me-1"></i>
-          Watch Trailer</a></h6>
+        <div class="d-flex align-items-center" style="gap: 20px;">
+          <h6 class="mb-0">
+            <a class="button" href="{{ object.get_video_url }}">
+              <i class="fa fa-play-circle align-middle me-1"></i>Watch Trailer
+            </a>
+          </h6>
+          <div style="margin-top: -8px;">
+            {% include 'ratings/snippet/rating-choices.html' with object_id=object.id current_rating=current_rating %}
+          </div>
+        </div>
       </div>
     </div>
     <div class="card-actor">
@@ -47,7 +55,7 @@
           <img src="https://image.tmdb.org/t/p/w185{{ cast.profile_path }}"
             style="height: 100px; margin-right: 10px; object-fit: cover;" /><br />
           {% else %}
-          <img src="{% static '/img/default-image.jpg' %}"
+          <img src="{% static 'movies/img/default-image.jpg' %}"
             style="height: 100px; width: 133px; margin-right: 10px; object-fit: cover;" /><br />
           {% endif %}
           <div style="width: 200px;">
@@ -64,7 +72,7 @@
           <img src="https://image.tmdb.org/t/p/w185{{ cast.profile_path }}"
             style="height: 100px; margin-right: 10px; object-fit: cover;" /><br />
           {% else %}
-          <img src="{% static '/img/default-image.jpg' %}"
+          <img src="{% static 'movies/img/default-image.jpg' %}"
             style="height: 100px; width: 133px; margin-right: 10px; object-fit: cover;" /><br />
           {% endif %}
           <div style="width: 200px;">
@@ -82,7 +90,7 @@
   <div class="container">
     <div class="row trend_1">
       <div class="col-md-6 col-6">
-        <div class="trend_1l" style="margin-bottom: -30px;">
+        <div class="trend_1l" >
           <h4 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i> TopRated <span
               class="col_red">Movies</span></h4>
         </div>
@@ -105,3 +113,4 @@
   <div class="card-space"></div>
 </section> -->
 {% endblock %}
+       

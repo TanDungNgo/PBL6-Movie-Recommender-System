@@ -9,3 +9,6 @@ redis
 celery
 django-htmx
 selenium
+openpyxl
+djangorestframework
+
