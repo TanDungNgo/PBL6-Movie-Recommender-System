@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['*', 'https://dptmovie.me', 'http://dptmovie.me']
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 USE_X_FORWARDED_HOST = True
 
+CSRF_COOKIE_SECURE = True
 
 CSRF_COOKIE_DOMAIN = 'dptmovie.me'
 # Application definition

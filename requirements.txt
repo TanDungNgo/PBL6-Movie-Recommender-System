@@ -8,9 +8,7 @@ python-decouple
 redis
 celery
 django-htmx
-
-djangorestframework
-
+selenium
 openpyxl
 djangorestframework
 
