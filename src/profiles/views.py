@@ -62,7 +62,15 @@ def signup(request):
         if messages.get_messages(request):
             return render(request, 'account/signup.html')
 
-        # Nếu không có lỗi, tạo một đối tượng MyUser và lưu vào cơ sở dữ liệu
+        # Kiểm tra xem username hoặc email đã tồn tại trong cơ sở dữ liệu chưa
+        if User.objects.filter(username=username).exists():
+            messages.error(request, 'Username already exists.')
+            return render(request, 'account/signup.html')
+        if User.objects.filter(email=email).exists():
+            messages.error(request, 'Email already exists.')
+            return render(request, 'account/signup.html')
+
+        # Nếu không có lỗi và username, email đều chưa tồn tại, tiến hành tạo người dùng mới
         hashed_password = make_password(password)
         user = User(username=username, email=email, password=hashed_password)
         user.save()
@@ -71,7 +79,7 @@ def signup(request):
 
         # Chuyển hướng người dùng sau khi đăng ký thành công
         messages.success(request, 'Signup successfully.')
-        return redirect('signin')  # Thay 'success_page' bằng URL bạn muốn chuyển hướng đến sau khi đăng ký
+        return redirect('signin')  # Thay 'signin' bằng URL bạn muốn chuyển hướng đến sau khi đăng ký
 
     return render(request, 'account/signup.html')
 
