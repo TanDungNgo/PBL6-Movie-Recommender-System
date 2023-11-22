@@ -1,0 +1,9 @@
+{% extends "layout/base.html" %}
+{% load static %}
+
+{% block title %}{{ object.title }}{% endblock %}
+{% block content %}
+<iframe width="800" height="450" src="https://www.youtube.com/embed/{{key}}" 
+    frameborder="0" allowfullscreen>
+</iframe>
+{% endblock %}

@@ -9,3 +9,5 @@ redis
 celery
 django-htmx
 openpyxl
+djangorestframework
+

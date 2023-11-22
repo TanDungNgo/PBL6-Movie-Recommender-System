@@ -1,19 +1,14 @@
 {% extends "layout/base.html" %}
 {% load static %}
 
-{% block title %}Movie Detail{% endblock %}
+{% block title %}{{ object.title }}{% endblock %}
 {% block content %}
 
 <section id="popular" class="pt-4 pb-5 bg_grey">
   <div class="card-container">
     <div class="card-top">
       <div class="card-top-img">
-        {% if poster_path %}
-        <img src="https://image.tmdb.org/t/p/w500{{ poster_path }}" alt="{{ movie.title }} Poster" />
-        {% else %}
-        <img src="{% static 'img/06.jpg' %}" class="d-block w-100" alt="...">
-        {% endif %}
-
+        <img src={{movie.poster_path}} alt="{{ movie.title }} Poster" />
       </div>
       <div class="card-top-info">
         <h4 class="mb-0"><span class="col_red">{{ object.title }}</span></h4>
@@ -22,13 +17,11 @@
           {{object.rating_avg}} ({{object.rating_count}})
           <i class="fa fa-star align-middle"></i>
 
-          
-
         </h5>
         <h5>Release Date:<span> {{ movie.release_date }}</span></h5>
         <h5>Genres:
           {% for genre in genres %}
-          <span style="margin-right: 20px;"> {{ genre.name }} </span>
+          <span style="margin-right: 20px;"> <a class="bg_red p-2 pe-4 ps-4 ms-3 text-white d-inline-block" href="#">{{genre.name}}</a> </span>
           {% endfor %}
         </h5>
         <h5>Directors:
@@ -41,19 +34,15 @@
           <span style="margin-right: 20px;"> {{ country.name }} </span>
           {% endfor %}
         </h5>
-
-  
-          <select class="form-control" style="width: auto">
-            {% for choice in rating_choices %}
-                {% if choice is None %}
-                  <option disabled selected>Rating Movie </option>
-                {% else %}
-                <option {% if current_rating == choice %} 
-                selected {% endif %} 
-                value="{{choice}}">{{choice}}</option>
-                {% endif %}
-            {% endfor %}
-          </select>
+        <div class="d-flex align-items-center" style="gap: 20px;">
+          <h6 class="mb-0">
+            <a class="button" href="{{ object.get_video_url }}">
+              <i class="fa fa-play-circle align-middle me-1"></i>Watch Trailer
+            </a>
+          </h6>
+          <div style="margin-top: -8px;">
+            {% include 'ratings/snippet/rating-choices.html' with object_id=object.id current_rating=current_rating %}
+          </div>
         </div>
       </div>
     </div>
@@ -64,10 +53,10 @@
         <div class="card-actor-item" style="display: flex;">
           {% if cast.profile_path %}
           <img src="https://image.tmdb.org/t/p/w185{{ cast.profile_path }}"
-            style="height: 200px; margin-right: 10px; object-fit: cover;" /><br />
+            style="height: 100px; margin-right: 10px; object-fit: cover;" /><br />
           {% else %}
           <img src="{% static '/img/default-image.jpg' %}"
-            style="height: 200px; width: 133px; margin-right: 10px; object-fit: cover;" /><br />
+            style="height: 100px; width: 133px; margin-right: 10px; object-fit: cover;" /><br />
           {% endif %}
           <div style="width: 200px;">
             <span style="font-weight: 800; font-size: 18px;">{{ cast.name }}</span><br />
@@ -81,10 +70,10 @@
         <div class="card-actor-item" style="display: flex;">
           {% if cast.profile_path %}
           <img src="https://image.tmdb.org/t/p/w185{{ cast.profile_path }}"
-            style="height: 200px; margin-right: 10px; object-fit: cover;" /><br />
+            style="height: 100px; margin-right: 10px; object-fit: cover;" /><br />
           {% else %}
           <img src="{% static '/img/default-image.jpg' %}"
-            style="height: 200px; width: 133px; margin-right: 10px; object-fit: cover;" /><br />
+            style="height: 100px; width: 133px; margin-right: 10px; object-fit: cover;" /><br />
           {% endif %}
           <div style="width: 200px;">
             <span style="font-weight: 800; font-size: 18px;">{{ cast.name }}</span><br />
@@ -124,3 +113,4 @@
   <div class="card-space"></div>
 </section> -->
 {% endblock %}
+       
