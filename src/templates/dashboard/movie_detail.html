@@ -1,0 +1,44 @@
+{% extends "layout/layout-admin/base-admin.html" %}
+{% load static %}
+{% block title %}Movie Detail{% endblock %}
+{% block content %}
+<div class="container-fluid pt-4 px-4">
+  <div class="row g-4">                        
+      <div class="col-12" >
+          <div class="bg-secondary rounded h-100 p-4">
+            <button onclick="goBack()" style="border: none; background-color: #191C24;">
+              <i class="fa fa-arrow-left" style="color: #de1002; font-size: 19px;"></i>
+            </button>
+            <script>
+              function goBack() {
+                window.history.back();
+              }
+            </script>
+            <div class="card-container">
+              <div class="card-img">
+                <img src="{{ movie.poster_path }}" alt="{{ movie.title }} Poster" />
+              </div>
+              <div class="card-info">
+                <h4 class="mb-0"><span class="col_red">{{ movie.title }}</span></h4>
+                <h5><span>{{ movie.overview }}</span></h5><br><br><br>
+                <h5>Rating:
+                  <i class="fa fa-star align-middle"></i>
+                  <i class="fa fa-star align-middle"></i>
+                  <i class="fa fa-star align-middle"></i>
+                  <i class="fa fa-star align-middle"></i>
+                  <i class="fa fa-star align-middle"></i>
+                </h5>
+                <h5>Duration:<span> {{ movie.movie_duration }}</span></h5>
+                <h5>Release Date:<span> {{ movie.release_date }}</span></h5>
+                <h5>Genre:<span> Emotional</span></h5>
+                <h5>Actor:<span> Nicolas Cage, Emma Stone, Ryan Reynolds, Catherine Keener,
+                    Cloris Leachman, Clark Duke, Chris Sanders, Randy Thom</span></h5>
+                <h5>Director:<span> Kirk DeMicco, Chris Sanders</span></h5>
+                <h5>Country:<span> United States</span></h5>
+              </div>
+            </div>
+          </div>
+      </div>
+  </div>
+</div>
+{% endblock %}

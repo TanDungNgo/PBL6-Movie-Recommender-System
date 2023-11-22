@@ -24,7 +24,7 @@
         <textarea
           id="overview"
           name="overview"
-          rows="3"
+          rows="8"
           cols="50"
           required
         ></textarea
@@ -37,7 +37,6 @@
           name="release_date"
           required
         /><br /><br />
-
         <!-- <label for="poster">Poster:</label>
         <div class="custom-file">
           <label for="file-input">Upload</label>
@@ -65,8 +64,8 @@
 
         <img 
           id="image" 
-          src="{% if movie.poster_path %}{{ movie.poster_path }}{% else %}{% static 'img/default-image.jpg' %}{% endif %}" 
-          style="height: 400px; width: 350px; margin-bottom: 20px; cursor: pointer; padding: 30px; justify-content: center; object-fit: cover;"
+          src="{% if movie.poster_path %}{{ movie.poster_path }}{% else %}{% static 'dashboard/img/default-image.jpg' %}{% endif %}" 
+          style="height: 520px; width: 400px; margin-bottom: 20px; cursor: pointer; padding: 30px; justify-content: center; object-fit: cover;"
         >
         <input type="file" id="fileInput" accept="image/*" onchange="displayImage(event)" style="display: none;">
         <br />
@@ -88,7 +87,6 @@
               }
           });
         </script>
-
         <!-- <label for="status">Status:</label>
         <select id="status" name="status">
           <option value="Premiered">Premiered</option>
@@ -111,7 +109,6 @@
                             <input type="text" id="keyword" name="keyword" required><br><br>-->
       </div>
     </div>
-
     <div class="card-btn">
       <input class="btn-cancel" type="submit" value="Cancel" />
       <input class="btn-add" type="submit" value="Add new" />

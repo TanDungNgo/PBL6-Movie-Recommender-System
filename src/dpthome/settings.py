@@ -51,7 +51,10 @@ INSTALLED_APPS = [
     'profiles',
     'movies',
     'ratings',
+
     'dptpage',
+
+
     'dashboard',
 ]
 SITE_ID = 1
