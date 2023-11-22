@@ -9,7 +9,7 @@
                 <div class="parent-node">
                     <a href="#" class="child-node">Copy</a>
                     <a href="#" class="child-node">CSV</a>
-                    <a href="#" class="child-node">Excel</a>
+                    <a href="{% url 'export_movies' %}" class="child-node">Excel</a>
                     <a href="#" class="child-node">Print</a>
                 </div>
                 <div class="table-responsive">
@@ -27,7 +27,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for user in user_list %}
+                            {% for user in users %}
                             <tr>
                                 <td>
                                     <a style="color: #6C7293;">{{ user.id }}</a>
@@ -66,5 +66,5 @@
         </div>
     </div>
 </div>
-<script src="{% static 'js/dataTable.js' %}"></script>
+<script src="{% static 'dashboard/js/dataTable.js' %}"></script>
 {% endblock %}

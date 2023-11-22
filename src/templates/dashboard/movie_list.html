@@ -10,7 +10,7 @@
         <div class="parent-node">
           <a href="#" class="child-node">Copy</a>
           <a href="#" class="child-node">CSV</a>
-          <a href="#" class="child-node">Excel</a>
+          <a href="{% url 'export_movies' %}" class="child-node">Excel</a>
           <a href="#" class="child-node">Print</a>
         </div>
         <div class="table-responsive">
@@ -31,19 +31,19 @@
                 {% for movie in movies %}
                   <tr>
                     <td scope="col">
-                      <a href="#" style="color: #6C7293;">{{ movie.id }}</a>
+                      <a href="{% url 'movie_detail_admin' movie.id %}" style="color: #6C7293;">{{ movie.id }}</a>
                     </td>
                     <td scope="col" style="max-width: 150px">
-                      <a href="#" style="color: #6C7293;">{{ movie.title }}</a>
+                      <a href="{% url 'movie_detail_admin' movie.id %}" style="color: #6C7293;">{{ movie.title }}</a>
                     </td>
                     <td scope="col" style="max-width: 280px">
-                      <a href="#" style="color: #6C7293;">{{ movie.overview|truncatechars:80 }}</a>
+                      <a href="{% url 'movie_detail_admin' movie.id %}" style="color: #6C7293;">{{ movie.overview|truncatechars:80 }}</a>
                     </td>
                     <!-- <td scope="col">
                       <a href="#" style="color: #6C7293;">{{ movie.movie_duration }}</a>
                     </td> -->
                     <td scope="col">
-                      <a href="#" style="color: #6C7293;">{{ movie.release_date }}</a>
+                      <a href="{% url 'movie_detail_admin' movie.id %}" style="color: #6C7293;">{{ movie.release_date }}</a>
                     </td>
                     <!-- <td scope="col">
                       <a href="#" style="color: #6C7293;">{{ movie.status }}</a>
@@ -54,7 +54,7 @@
                       </div>
                     </td>
                     <td>
-                      <a href="#">
+                      <a href="{% url 'movie_edit' movie.id %}">
                           <i class="fa fa-edit" style="margin-left: 10px; font-size: 20px; cursor: pointer; color: green"></i>
                       </a>
                       <a href="#">
@@ -70,5 +70,5 @@
     </div>
   </div>
 </div>
-<script src="{% static 'js/dataTable.js' %}"></script>
+<script src="{% static 'dashboard/js/dataTable.js' %}"></script>
 {% endblock %}
