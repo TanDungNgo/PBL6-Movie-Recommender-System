@@ -16,7 +16,7 @@ class LoginFormTest(LiveServerTestCase):
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
         driver = webdriver.Chrome(service=chrome_service)
         # Navigate to the login page
-        driver.get('http://127.0.0.1:8000/accounts/login/')
+        driver.get('http://127.0.0.1:8000/accounts/signin/')
 
         # Find the email, password, and submit elements
         email_input = driver.find_element('name', 'email')
@@ -69,7 +69,7 @@ class LoginFormTest(LiveServerTestCase):
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
         driver = webdriver.Chrome(service=chrome_service)
         # Navigate to the login page
-        driver.get('http://127.0.0.1:8000/accounts/login/')
+        driver.get('http://127.0.0.1:8000/accounts/signin/')
 
         # Find the email, password, and submit elements
         email_input = driver.find_element('name', 'email')
@@ -119,7 +119,7 @@ class LoginFormTest(LiveServerTestCase):
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
         driver = webdriver.Chrome(service=chrome_service)
         # Navigate to the login page
-        driver.get('http://127.0.0.1:8000/accounts/login/')
+        driver.get('http://127.0.0.1:8000/accounts/signin/')
 
         # Find the email, password, and submit elements
         email_input = driver.find_element('name', 'email')
@@ -170,7 +170,7 @@ class LoginFormTest(LiveServerTestCase):
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
         driver = webdriver.Chrome(service=chrome_service)
         # Navigate to the login page
-        driver.get('http://127.0.0.1:8000/accounts/login/')
+        driver.get('http://127.0.0.1:8000/accounts/signin/')
 
         # Find the email, password, and submit elements
         email_input = driver.find_element('name', 'email')
@@ -221,7 +221,7 @@ class LoginFormTest(LiveServerTestCase):
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
         driver = webdriver.Chrome(service=chrome_service)
         # Navigate to the login page
-        driver.get('http://127.0.0.1:8000/accounts/login/')
+        driver.get('http://127.0.0.1:8000/accounts/signin/')
 
         # Find the email, password, and submit elements
         email_input = driver.find_element('name', 'email')
@@ -272,7 +272,7 @@ class LoginFormTest(LiveServerTestCase):
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
         driver = webdriver.Chrome(service=chrome_service)
         # Navigate to the login page
-        driver.get('http://127.0.0.1:8000/accounts/login/')
+        driver.get('http://127.0.0.1:8000/accounts/signin/')
 
         # Find the email, password, and submit elements
         email_input = driver.find_element('name', 'email')
@@ -323,7 +323,7 @@ class LoginFormTest(LiveServerTestCase):
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
         driver = webdriver.Chrome(service=chrome_service)
         # Navigate to the login page
-        driver.get('http://127.0.0.1:8000/accounts/login/')
+        driver.get('http://127.0.0.1:8000/accounts/signin/')
 
         # Find the email, password, and submit elements
         email_input = driver.find_element('name', 'email')
