@@ -159,3 +159,11 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_ROOT = DATA_DIR / 'local-cdn' / 'media'
+
+LANGUAGE_CODE = 'en-us'
+
+TIME_ZONE = 'Asia/Saigon'
+
+USE_I18N = True
+
+USE_TZ = True
