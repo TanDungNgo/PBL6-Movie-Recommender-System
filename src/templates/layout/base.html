@@ -31,18 +31,23 @@
   </head>
   <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     {% if messages %}
-        {% for message in messages %}
-                <script type=text/javascript>
-                    $.toast({
-                        heading: 'Success',
-                        text: '{{ message }}',
-                        showHideTransition: 'slide',
-                        icon: 'success',
-                        position: 'top-right', 
-                        loaderBg: '#05BD11',
-                    })
-                </script>
-        {% endfor %}
+    {% for message in messages %}
+        <script type="text/javascript">
+            if ('{{ message.tags }}' == 'error') {
+                var loaderBgColor = '#FF0000';
+            } else {
+                var loaderBgColor = '#05BD11';
+            }
+            $.toast({
+                heading: '{{ message.tags }}',
+                text: '{{ message }}',
+                showHideTransition: 'slide',
+                icon: '{{ message.tags }}',
+                position: 'top-right', 
+                loaderBg: loaderBgColor,
+            });
+        </script>
+    {% endfor %}
     {% endif %}
     {% include 'layout/header.html' %} {% block content %} {% endblock %} 
     {% include 'layout/footer.html' %}
