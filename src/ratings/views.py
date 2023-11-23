@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.contrib.contenttypes.models import ContentType
 from django.views.decorators.http import require_http_methods
-
+from django.contrib import messages
 
 from .models import Rating
 
@@ -17,8 +17,10 @@ def rate_movie_view(request):
     message = "You must <a href='/accounts/login'>login</a> to rate this."
     if user.is_authenticated:
         message = "<span class='bg-danger text-light py-1 px-3 rounded'>An error occured.</div>"
+        # messages.error(request, 'An error occured.')
         ctype = ContentType.objects.get(app_label='movies', model='movie')
         rating_obj = Rating.objects.create(content_type=ctype, object_id=object_id, value=rating_value, user=user)
         if rating_obj.content_object is not None:
             message = "<span class='bg-success text-light py-1 px-3 rounded'>Rating saved!</div>"
-    return HttpResponse(message, status=200)
+            # messages.success(request, 'Rating saved!')
+    return HttpResponse(message,messages,status=200)

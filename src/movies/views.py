@@ -102,12 +102,22 @@ class MovieVideoView(generic.DetailView):
         context = super().get_context_data(**kwargs)
         movie_id = self.kwargs.get('pk')
         url_movie = f'https://api.themoviedb.org/3/movie/{movie_id}/videos?api_key={API_KEY}&language=en-US'
-        response = requests.get(url_movie)
-        response.raise_for_status()
-        data_movie = response.json()
-        if data_movie.get("results", []):
-            context['key'] = data_movie.get("results", [])[0].get("key")
+        
+        try:
+            response = requests.get(url_movie)
+            response.raise_for_status()
+            data_movie = response.json()
+            
+            results = data_movie.get("results", [])
+            
+            if results:
+                keys = [result.get("key") for result in results]
+                context['keys'] = keys
+                print(keys)
+        except requests.exceptions.RequestException as e:
+            context['error'] = str(e)
+            
         return context
 
-movie_video_view = MovieVideoView.as_view()
 
+movie_video_view = MovieVideoView.as_view()
