@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views import generic
 from movies.models import Movie
@@ -18,8 +19,11 @@ from io import BytesIO
 User = get_user_model()
 class DashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateView):
     template_name = 'dashboard/dashboard.html'
-    total_movies = Movie.objects.count()
-    # total_users = User.objects.filter(role='user').count()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_movies'] = Movie.objects.count()
+        context['total_users'] = User.objects.count()
+        return context
 
     def test_func(self):
         # Check if the user is a superuser
@@ -31,27 +35,23 @@ def create_movie(request):
     if request.method == 'POST':
         title = request.POST['title']
         overview = request.POST['overview']
-        movie_duration = request.POST['movie_duration']
         release_date = request.POST['release_date']
-        status = request.POST['status']
         
         if 'file-input' in request.FILES:
-            poster = request.FILES['file-input']
+            poster_path = request.FILES['file-input']
         else:
-            poster = None
+            poster_path = None
 
         movie = Movie(
             title=title,
             overview=overview,
-            movie_duration=movie_duration,
             release_date=release_date,
-            status=status,
-            poster=poster
+            poster_path=poster_path
         )
         movie.save()
 
-        messages.success(request, 'Phim đã được tạo thành công!')
-        return redirect('/admin/movie_list/') 
+        messages.success(request, 'Create successful!')
+        return redirect('/dashboard/movie_list/') 
     return render(request, 'dashboard/movie_create.html') 
 
 def movie_list(request):
@@ -87,21 +87,53 @@ def user_list(request):
     return render(request, 'dashboard/user_list.html', {'users': users})
     
 def movie_edit(request, movie_id):
-    current_movie = Movie.objects.get(pk=movie_id)
+    current_movie = get_object_or_404(Movie, id=movie_id)
 
     date_object = current_movie.release_date
     date_str = date_object.strftime("%b. %d, %Y")
     date_object = datetime.strptime(date_str, "%b. %d, %Y").strftime("%Y-%m-%d")
 
+    if request.method == 'POST':
+        title = request.POST['title']
+        overview = request.POST['overview']
+        release_date = request.POST['release_date']
+
+        if 'file-input' in request.FILES:
+            poster_path = request.FILES['file-input']
+        else:
+            poster_path = current_movie.poster_path  # Giữ nguyên đường dẫn poster nếu không có sự thay đổi
+
+        # Cập nhật thông tin bộ phim
+        current_movie.title = title
+        current_movie.overview = overview
+        current_movie.release_date = release_date
+        current_movie.poster_path = poster_path
+        current_movie.save()
+
+        messages.success(request, 'Update successful!')
+        return redirect('/dashboard/movie_list/') 
+
     return render(request, 'dashboard/movie_edit.html',{'movie': current_movie, 'date_object': date_object})
 
 def delete_user(request, user_id):
-    row = User.objects.get(pk=user_id)
-    row.delete()
+    try:
+        row = User.objects.get(pk=user_id)
+        row.delete()
+        messages.success(request, 'User deleted successfully!')
+    except Movie.DoesNotExist:
+        messages.error(request, 'User does not exist')
+
+    return redirect('user_list')
 
 def delete_movie(request, movie_id):
-    row = Movie.objects.get(pk=movie_id)
-    row.delete()
+    try:
+        row = Movie.objects.get(pk=movie_id)
+        row.delete()
+        messages.success(request, 'Movie deleted successfully!')
+    except Movie.DoesNotExist:
+        messages.error(request, 'Movie does not exist')
+
+    return redirect('movie_list')
 
 def print_to_pdf(request, model, fields, filename, search_query=None):
     response = HttpResponse(content_type='application/pdf')
@@ -198,3 +230,28 @@ def print_movies(request):
 def movie_detail_admin(request, movie_id):
     current_movie = Movie.objects.get(pk=movie_id)
     return render(request, 'dashboard/movie_detail.html', {'movie': current_movie})
+
+def update_movie(request, movie_id):
+    movie = get_object_or_404(Movie, id=movie_id)
+
+    if request.method == 'POST':
+        title = request.POST['title']
+        overview = request.POST['overview']
+        release_date = request.POST['release_date']
+
+        if 'file-input' in request.FILES:
+            poster_path = request.FILES['file-input']
+        else:
+            poster_path = movie.poster_path  # Giữ nguyên đường dẫn poster nếu không có sự thay đổi
+
+        # Cập nhật thông tin bộ phim
+        movie.title = title
+        movie.overview = overview
+        movie.release_date = release_date
+        movie.poster_path = poster_path
+        movie.save()
+
+        messages.success(request, 'Update successful!')
+        return redirect('/dashboard/movie_list/') 
+
+    return render(request, 'dashboard/movie_update.html', {'movie': movie})
