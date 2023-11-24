@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views import generic
 from movies.models import Movie
@@ -57,11 +57,31 @@ def user_list(request):
     return render(request, 'dashboard/user_list.html', {'users': users})
     
 def movie_edit(request, movie_id):
-    current_movie = Movie.objects.get(pk=movie_id)
+    current_movie = get_object_or_404(Movie, id=movie_id)
 
     date_object = current_movie.release_date
     date_str = date_object.strftime("%b. %d, %Y")
     date_object = datetime.strptime(date_str, "%b. %d, %Y").strftime("%Y-%m-%d")
+
+    if request.method == 'POST':
+        title = request.POST['title']
+        overview = request.POST['overview']
+        release_date = request.POST['release_date']
+
+        if 'file-input' in request.FILES:
+            poster_path = request.FILES['file-input']
+        else:
+            poster_path = current_movie.poster_path  # Giữ nguyên đường dẫn poster nếu không có sự thay đổi
+
+        # Cập nhật thông tin bộ phim
+        current_movie.title = title
+        current_movie.overview = overview
+        current_movie.release_date = release_date
+        current_movie.poster_path = poster_path
+        current_movie.save()
+
+        messages.success(request, 'Update successful!')
+        return redirect('/dashboard/movie_list/') 
 
     return render(request, 'dashboard/movie_edit.html',{'movie': current_movie, 'date_object': date_object})
 
@@ -112,3 +132,28 @@ def export_movies(request):
 def movie_detail_admin(request, movie_id):
     current_movie = Movie.objects.get(pk=movie_id)
     return render(request, 'dashboard/movie_detail.html', {'movie': current_movie})
+
+def update_movie(request, movie_id):
+    movie = get_object_or_404(Movie, id=movie_id)
+
+    if request.method == 'POST':
+        title = request.POST['title']
+        overview = request.POST['overview']
+        release_date = request.POST['release_date']
+
+        if 'file-input' in request.FILES:
+            poster_path = request.FILES['file-input']
+        else:
+            poster_path = movie.poster_path  # Giữ nguyên đường dẫn poster nếu không có sự thay đổi
+
+        # Cập nhật thông tin bộ phim
+        movie.title = title
+        movie.overview = overview
+        movie.release_date = release_date
+        movie.poster_path = poster_path
+        movie.save()
+
+        messages.success(request, 'Update successful!')
+        return redirect('/dashboard/movie_list/') 
+
+    return render(request, 'dashboard/movie_update.html', {'movie': movie})
