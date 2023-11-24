@@ -14,7 +14,7 @@ def rate_movie_view(request):
     if object_id is None or rating_value is None:
         return HttpResponse("Skipping", status = 200)
     user = request.user
-    message = "You must <a href='/accounts/login'>login</a> to rate this."
+    message = "<span class='bg-danger text-light py-1 px-3 rounded'>You must <a href='/accounts/login'>login</a> to rate this.</div>"
     if user.is_authenticated:
         message = "<span class='bg-danger text-light py-1 px-3 rounded'>An error occured.</div>"
         # messages.error(request, 'An error occured.')
