@@ -13,8 +13,11 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 class DashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateView):
     template_name = 'dashboard/dashboard.html'
-    total_movies = Movie.objects.count()
-    # total_users = User.objects.filter(role='user').count()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_movies'] = Movie.objects.count()
+        context['total_users'] = User.objects.count()
+        return context
 
     def test_func(self):
         # Check if the user is a superuser
@@ -26,27 +29,23 @@ def create_movie(request):
     if request.method == 'POST':
         title = request.POST['title']
         overview = request.POST['overview']
-        movie_duration = request.POST['movie_duration']
         release_date = request.POST['release_date']
-        status = request.POST['status']
         
         if 'file-input' in request.FILES:
-            poster = request.FILES['file-input']
+            poster_path = request.FILES['file-input']
         else:
-            poster = None
+            poster_path = None
 
         movie = Movie(
             title=title,
             overview=overview,
-            movie_duration=movie_duration,
             release_date=release_date,
-            status=status,
-            poster=poster
+            poster_path=poster_path
         )
         movie.save()
 
-        messages.success(request, 'Phim đã được tạo thành công!')
-        return redirect('/admin/movie_list/') 
+        messages.success(request, 'Create successful!')
+        return redirect('/dashboard/movie_list/') 
     return render(request, 'dashboard/movie_create.html') 
 
 def movie_list(request):
@@ -67,12 +66,24 @@ def movie_edit(request, movie_id):
     return render(request, 'dashboard/movie_edit.html',{'movie': current_movie, 'date_object': date_object})
 
 def delete_user(request, user_id):
-    row = User.objects.get(pk=user_id)
-    row.delete()
+    try:
+        row = User.objects.get(pk=user_id)
+        row.delete()
+        messages.success(request, 'User deleted successfully!')
+    except Movie.DoesNotExist:
+        messages.error(request, 'User does not exist')
+
+    return redirect('user_list')
 
 def delete_movie(request, movie_id):
-    row = Movie.objects.get(pk=movie_id)
-    row.delete()
+    try:
+        row = Movie.objects.get(pk=movie_id)
+        row.delete()
+        messages.success(request, 'Movie deleted successfully!')
+    except Movie.DoesNotExist:
+        messages.error(request, 'Movie does not exist')
+
+    return redirect('movie_list')
 
 def export_to_excel(request, model, fields, filename):
     data = model.objects.all()
