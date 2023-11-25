@@ -130,8 +130,8 @@
                       </a>
                       <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
                           <a href="{% url 'profile' %}" class="dropdown-item"  style="font-weight: bold;">My Profile</a>
-                          {% if request.session.is_active == '1' %}
-                              <a href="#" class="dropdown-item" style="font-weight: bold;">Manage</a>
+                          {% if request.user.is_superuser %}
+                              <a href= "{% url 'dashboard' %}" class="dropdown-item" style="font-weight: bold;">Manage</a>
                           {% endif %}
                           <a href="#" class="dropdown-item"  style="font-weight: bold;">Settings</a>
                           <a href="{% url 'signout' %}" class="dropdown-item"  style="font-weight: bold;">Sign Out</a>
