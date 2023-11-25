@@ -19,7 +19,7 @@ class MovieListView(generic.ListView):
     template_name = 'movies/list.html'
     paginate_by = 100
     # context -> object_list
-    queryset = Movie.objects.all().order_by('-rating_avg')
+    queryset = Movie.objects.all().order_by('-score')
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)

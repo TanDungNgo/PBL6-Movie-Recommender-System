@@ -7,6 +7,7 @@ from movies.models import Movie
 from django.contrib.contenttypes.models import ContentType
 from .models import Rating, RatingChoice
 from django.db.models import Avg, Count
+import decimal 
 
 from django.utils import timezone
 User = get_user_model()
@@ -51,10 +52,12 @@ def  task_update_movie_ratings(object_id = None):
         object_id = agg_rate['object_id']
         rating_avg = agg_rate['average']
         rating_count = agg_rate['count']
+        score = decimal.Decimal(rating_avg * rating_count * 1.0)
         qs = Movie.objects.filter(id = object_id)
         qs.update(
             rating_avg = rating_avg,
             rating_count = rating_count,
+            score = score,
             rating_last_updated = timezone.now()
         )
     total_time = time.time() - start_time
