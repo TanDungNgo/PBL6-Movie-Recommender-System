@@ -1,0 +1,80 @@
+{% extends "layout/base.html" %}
+{% load static %}
+
+{% block title %}Find{% endblock %}
+{% block content %}
+<style>
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .step-links {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .step-links a {
+    text-decoration: none;
+    color: #de1002;
+    border: 1px solid #de1002;
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  .step-links a:hover {
+    background-color: #de1002;
+    color: #fff;
+  }
+
+  .current {
+    margin: 0 10px;
+    font-weight: bold;
+  }
+</style>
+<section id="trend" class="pt-4 pb-5">
+    <div class="container">
+      <div class="row trend_2 mt-4">
+        <h2>Search results for: <span class="col_red" id="searchResult"> </span></h2>
+      </div>
+      <div class="row trend_2 mt-4">
+        {% for object in object_list %}
+        {% include 'movies/snippet/card.html' with object=object current_rating=current_rating %}
+        {% endfor %}
+      </div>
+      <div class="pagination">
+        <span class="step-links">
+          {% if object_list.has_previous %}
+            <a href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">&laquo; first</a>
+            <a href="?page={{ object_list.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">previous</a>
+          {% endif %}
+      
+          <span class="current">
+            Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.
+          </span>
+      
+          {% if object_list.has_next %}
+            <a href="?page={{ object_list.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">next</a>
+            <a href="?page={{ object_list.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">last &raquo;</a>
+          {% endif %}
+        </span>
+      </div>  
+    </div>
+</section>
+<section>
+  <div class="card-space"></div>
+</section>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const searchResult = document.getElementById("searchResult");
+    const searchParams = new URLSearchParams(window.location.search);
+    const searchTerm = searchParams.get("search");
+
+    if (searchTerm) {
+      searchResult.textContent = '"' + searchTerm + '"';
+    }
+  });
+</script>
+{% endblock %}

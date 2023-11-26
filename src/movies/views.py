@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.views import generic
 from django.db.models import Avg
 from django.contrib.auth import get_user_model
-
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 User = get_user_model()
 
@@ -54,11 +54,11 @@ class MovieDetailView(generic.DetailView):
         movies = Movie.objects.all().order_by('-rating_avg')
         # Retrieve the movie_id from URL parameters or self.kwargs
         movie_id = self.kwargs.get('pk')  # Assuming your URL pattern uses 'pk' for the movie ID
-
+        movie = Movie.objects.get(pk=movie_id)
         top_rated_movies = Movie.objects.all().order_by('-rating_avg')[:20]
 
         # Lấy danh sách diễn viên, đạo diễn
-        url_credits = f'https://api.themoviedb.org/3/movie/{movie_id}/credits?api_key={API_KEY}&language=en-US'
+        url_credits = f'https://api.themoviedb.org/3/movie/{movie.tmdb_id}/credits?api_key={API_KEY}&language=en-US'
         response = requests.get(url_credits)
         response.raise_for_status()
         data = response.json()
@@ -70,7 +70,7 @@ class MovieDetailView(generic.DetailView):
         second_row = casts[num_casts_per_row:]
 
         # Lấy danh sách thể loại
-        url_movie = f'https://api.themoviedb.org/3/movie/{movie_id}?api_key={API_KEY}&language=en-US'
+        url_movie = f'https://api.themoviedb.org/3/movie/{movie.tmdb_id}?api_key={API_KEY}&language=en-US'
         response = requests.get(url_movie)
         response.raise_for_status()
         data_movie = response.json()
@@ -101,7 +101,8 @@ class MovieVideoView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         movie_id = self.kwargs.get('pk')
-        url_movie = f'https://api.themoviedb.org/3/movie/{movie_id}/videos?api_key={API_KEY}&language=en-US'
+        movie = Movie.objects.get(pk=movie_id)
+        url_movie = f'https://api.themoviedb.org/3/movie/{movie.tmdb_id}/videos?api_key={API_KEY}&language=en-US'
         
         try:
             response = requests.get(url_movie)
@@ -113,7 +114,6 @@ class MovieVideoView(generic.DetailView):
             if results:
                 keys = [result.get("key") for result in results]
                 context['keys'] = keys
-                print(keys)
         except requests.exceptions.RequestException as e:
             context['error'] = str(e)
             
@@ -121,3 +121,24 @@ class MovieVideoView(generic.DetailView):
 
 
 movie_video_view = MovieVideoView.as_view()
+
+def movie_find_view(request):
+    context = {}
+    search = request.GET.get('search','')
+    movies = Movie.objects.search(search)
+
+    movies_per_page = 12
+    paginator = Paginator(movies, movies_per_page)
+    if 'page' in request.GET and request.GET['page']:
+        page = request.GET['page']
+    else:
+        page = 1
+    
+    try:
+        movies = paginator.page(page)
+    except PageNotAnInteger:
+        movies = paginator.page(1)
+    except EmptyPage:
+        movies = paginator.page(paginator.num_pages)
+    context['object_list'] = movies
+    return render(request, "movies/find.html", context)
