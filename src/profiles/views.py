@@ -96,75 +96,67 @@ def signout(request):
 @api_view(['GET', 'POST'])
 def profile(request):
     if request.method == 'POST':
-        # Kiểm tra xem người dùng đã đăng nhập chưa
-        if 'user_id' in request.session and 'user_email' in request.session:
-            # Thu thập dữ liệu từ yêu cầu POST
-            user_id = request.session['user_id']
-            user = User.objects.get(id=user_id)
-
-            # Lấy dữ liệu hiện tại của người dùng
-            current_username = user.username
-
-            # Lấy giá trị từ yêu cầu POST hoặc sử dụng giá trị hiện tại nếu không có thay đổi
-            firstname = request.POST.get('firstname', user.firstname)
-            lastname = request.POST.get('lastname', user.lastname)
-            phonenumber = request.POST.get('phonenumber', user.phonenumber)
-            country = request.POST.get('country', user.country)
-            new_username = request.POST.get('username', current_username)
-            email = request.POST.get('email', user.email)
-
+        if 'user_id' in request.session:
             try:
-                # Cập nhật thông tin người dùng trong cơ sở dữ liệu
-                user.firstname = firstname
-                user.lastname = lastname
-                user.phonenumber = phonenumber
-                user.country = country
-                user.username = new_username
-                user.email = email
+                user_id = request.session['user_id']
+                user = User.objects.get(id=user_id)
 
+                first_name = request.POST.get('first_name', user.first_name)
+                last_name = request.POST.get('last_name', user.last_name)
+                username = request.POST.get('username', user.username)
+                email = request.POST.get('email', user.email)
+
+                # Check if the username already exists
+                if User.objects.exclude(id=user_id).filter(username=username).exists():
+                    messages.error(request, 'Username already exists. Please choose a different one.')
+                    return redirect('profile')
+                
+                # Check if the email already exists
+                if User.objects.exclude(id=user_id).filter(email=email).exists():
+                    messages.error(request, 'Email already exists. Please use a different one.')
+                    return redirect('profile')
+
+                # Validate input data here (e.g., email format, phone number format)
+
+                user.first_name = first_name
+                user.last_name = last_name
+                user.username = username
+                user.email = email
                 user.save()
 
-                # Cập nhật session data
-                request.session['user_username'] = new_username
-                request.session['user_email'] = email
-                request.session['user_firstname'] = firstname
-                request.session['user_lastname'] = lastname
-                request.session['user_phonenumber'] = phonenumber
-                request.session['user_country'] = country
+                request.session.update({
+                    'user_username': username,
+                    'user_email': email,
+                    'user_first_name': first_name,
+                    'user_last_name': last_name,
+                })
 
-                # Trả về dữ liệu đã cập nhật cho phía client
                 user_data = {
-                    'username': new_username,
+                    'username': username,
                     'email': email,
-                    'firstname': firstname,
-                    'lastname': lastname,
-                    'phonenumber': phonenumber,
-                    'country': country,
+                    'first_name': first_name,
+                    'last_name': last_name,
                 }
 
-                return JsonResponse(user_data)
+                messages.success(request, 'Successfully updated')
+                return redirect('profile')
+
             except User.DoesNotExist:
-                return HttpResponse("User not found")
+                messages.error(request, 'User not found')
+                return HttpResponse(status=404)
         else:
-            # Người dùng chưa đăng nhập, xử lý lỗi tại đây
             messages.error(request, 'Please login')
             return redirect('login')
     else:
-        # Nếu phương thức là GET, thực hiện logic hiển thị thông tin người dùng
-        if 'user_id' in request.session and 'user_email' in request.session:
-            # Fetch user information from the session
+        if 'user_id' in request.session:
             user_session_data = {
                 'id': request.session['user_id'],
-                'role': request.session.get('user_role'),
                 'email': request.session.get('user_email'),
-                'firstname': request.session.get('user_firstname'),
-                'lastname': request.session.get('user_lastname'),
-                'phonenumber': request.session.get('user_phonenumber'),
-                'country': request.session.get('user_country'),
+                'first_name': request.session.get('user_first_name'),
+                'last_name': request.session.get('user_last_name'),
             }
 
             return render(request, 'account/profile.html', user_session_data)
         else:
-            # Session doesn't exist, redirect to the login page
             messages.error(request, 'Please login')
             return redirect('signin')
