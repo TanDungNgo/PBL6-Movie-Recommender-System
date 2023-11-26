@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+src/data/similarity.pkl
+src/data/movie_list.pkl
+src/data/credits.csv
