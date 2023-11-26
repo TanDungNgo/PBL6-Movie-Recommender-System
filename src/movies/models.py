@@ -42,6 +42,15 @@ class MovieManager(models.Manager):
     
     def needs_updating(self):
         return self.get_queryset().needs_updating()
+    
+    def search(self, query):
+        lookup = (
+            Q(title__icontains=query) |
+            Q(overview__icontains=query) |
+            Q(title__iexact=query) |
+            Q(overview__iexact=query)
+        )
+        return self.get_queryset().filter(lookup).distinct()
 
 class Movie(models.Model):
     title = models.CharField(max_length=255, unique=True)
