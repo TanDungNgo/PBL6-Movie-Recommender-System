@@ -15,7 +15,8 @@
                         class="col_red">Profile</span></h4> <hr style="color: gray">
                 </div>
                 <!-- Form START -->
-                <form method="post" enctype="multipart/form-data" class="file-upload" style="font-weight: bold;">
+                <form method="post"   enctype="multipart/form-data" class="file-upload" style="font-weight: bold;">
+                    {% csrf_token %}
                     <div class="row mb-5 gx-5" >
                         <!-- Contact detail -->
                         <div class="col-xxl-8 mb-5 mb-xxl-0"  style="background-color: #191a1d; border-radius: 0.25rem!important;">
@@ -25,42 +26,42 @@
                                     <!-- User name -->
                                     <div class="col-md-6">
                                         <label class="form-label">User Name </label>
-                                        <input type="text" class="form-control" id="username-input" placeholder="" aria-label="User name"
+                                        <input type="text" class="form-control" id="username-input" name="username" placeholder="" aria-label="User name"
                                             value="{{ request.session.user_username }} " style="background-color: #010102; border-color: black;">
                                     </div>
                                     <!-- Email -->
                                     <div class="col-md-6">
                                         <label for="inputEmail4" class="form-label">Email</label>
-                                        <input type="email" class="form-control" id="email-input"
+                                        <input type="email" class="form-control" id="email-input" name="email"
                                             value="{{ request.session.user_email }}" style="background-color: #010102; border-color: black;">
                                     </div>
                                     <!-- First Name -->
                                     <div class="col-md-6">
                                         <label class="form-label">First Name</label>
-                                        <input  id="firstname-input" type="text" class="form-control" placeholder="" aria-label="First name"
+                                        <input id="first-name-input" type="text" name="first_name" class="form-control" placeholder="" aria-label="First name"
                                             value="{{ request.session.user_firstname }}" style="background-color: #010102; border-color: black;">
                                     </div>
 
                                     <!-- Last Name -->
                                     <div class="col-md-6">
                                         <label class="form-label">Last Name</label>
-                                        <input  id="lastname-input" type="text" class="form-control" placeholder="" aria-label="Last name"
+                                        <input id="last-name-input" type="text" name="last_name" class="form-control" placeholder="" aria-label="Last name"
                                             value="{{ request.session.user_lastname }}" style="background-color: #010102; border-color: black;">
                                     </div>
 
                                     <!-- Phone number -->
-                                    <div class="col-md-6">
+                                    <!-- <div class="col-md-6">
                                         <label class="form-label">Phone number</label>
-                                        <input id="phonenumber-input" type="text" class="form-control" placeholder="" aria-label="Phone number"
+                                        <input id="phonenumber-input" name="phonenumber" type="text" class="form-control" placeholder="" aria-label="Phone number"
                                             value="{{ request.session.user_phonenumber }}" style="background-color: #010102; border-color: black;">
-                                    </div>
+                                    </div> -->
 
                                     <!-- Country -->
-                                    <div class="col-md-6">
+                                    <!-- <div class="col-md-6">
                                         <label class="form-label">Country</label>
-                                        <input id="country-input" type="text" class="form-control" placeholder="" aria-label="Country"
+                                        <input id="country-input" name="country" type="text" class="form-control" placeholder="" aria-label="Country"
                                             value="{{ request.session.user_country }}" style="background-color: #010102; border-color: black;">
-                                    </div>
+                                    </div> -->
 
 
                                 </div> <!-- Row END -->
@@ -157,7 +158,7 @@
                     <!-- button -->
                     <div class="gap-3 d-md-flex justify-content-md-end text-center">
                         <button type="button" class="btn btn-danger btn-lg" style="background-color: #de1002; border-color: black;">Cancel profile</button>
-                        <button id = "update-profile-button" type="button" class="btn btn-primary btn-lg">Update profile</button>
+                        <button id = "update-profile-button" type="submit" class="btn btn-primary btn-lg">Update profile</button>
                     </div>
                 </form> <!-- Form END -->
             </div>
@@ -195,8 +196,8 @@
     // Gán sự kiện cho nút "Update profile"
     $('#update-profile-button').click(function() {
         // Thu thập dữ liệu từ các trường form
-        var firstname = $('#firstname-input').val();
-        var lastname = $('#lastname-input').val();
+        var first_name = $('#first_name-input').val();
+        var last_name = $('#last_name-input').val();
         var username = $('#username-input').val();
         var email = $('#email-input').val();
         var country = $('#country-input').val();
@@ -209,8 +210,8 @@
             url: '/profile/',  // Đường dẫn đến trang "http://127.0.0.1:8000/profile/"
             type: 'POST',
             data: {
-                firstname: firstname,
-                lastname: lastname,
+                first_name: first_name,
+                last_name: last_name,
                 username: username,
                 email: email,
                 country: country,
@@ -221,12 +222,11 @@
             success: function(data) {
                 // Xử lý kết quả thành công từ máy chủ
                 // Cập nhật dữ liệu trên trang web
-                $('#firstname-input').val(data.firstname);
-                $('#lastname-input').val(data.lastname);
+                $('#first_name-input').val(data.first_name);
+                $('#last_name-input').val(data.last_name);
                 $('#username-input').val(data.username);
                 $('#email-input').val(data.email);
-                $('#country-input').val(data.country);
-                $('#phonenumber-input').val(data.phonenumber);
+                
                 $('#avatar-input').val(data.avatar);
                 // Cập nhật các trường dữ liệu khác
             },
