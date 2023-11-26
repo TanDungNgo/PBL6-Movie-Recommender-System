@@ -14,7 +14,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 from reportlab.platypus import Table, TableStyle
 from io import BytesIO
-
+from datetime import datetime
 # Create your views here.
 User = get_user_model()
 class DashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateView):
@@ -35,24 +35,36 @@ def create_movie(request):
     if request.method == 'POST':
         title = request.POST['title']
         overview = request.POST['overview']
-        release_date = request.POST['release_date']
-        
-        if 'file-input' in request.FILES:
-            poster_path = request.FILES['file-input']
+        release_date_str = request.POST['release_date']
+
+        # Kiểm tra dữ liệu và thông báo lỗi nếu cần
+        if not title:
+            messages.error(request, 'Title is required.')
+        if not overview:
+            messages.error(request, 'Overview is required.')
+        if not release_date_str:
+            messages.error(request, 'Release Date is required.')
         else:
-            poster_path = None
 
-        movie = Movie(
-            title=title,
-            overview=overview,
-            release_date=release_date,
-            poster_path=poster_path
-        )
-        movie.save()
+            try:
+                # Chuyển đổi chuỗi ngày tháng nhập vào thành đối tượng datetime
+                release_date = datetime.strptime(release_date_str, '%m/%d/%Y')
+            except ValueError:
+                messages.error(request, 'Invalid date format. Please use MM/DD/YYYY format.')
 
-        messages.success(request, 'Create successful!')
-        return redirect('/dashboard/movie_list/') 
-    return render(request, 'dashboard/movie_create.html') 
+        if all([title, overview]) and 'release_date' in locals():
+            poster_path = request.FILES.get('file-input')
+            movie = Movie(
+                title=title,
+                overview=overview,
+                release_date=release_date,
+                poster_path=poster_path
+            )
+            movie.save()
+
+            messages.success(request, 'Create successful!')
+            return redirect('/dashboard/movie_list/')
+    return render(request, 'dashboard/movie_create.html')
 
 def movie_list(request):
     # all_movies = Movie.objects.all()
