@@ -58,6 +58,7 @@ INSTALLED_APPS = [
 
     'dashboard',
     'exports',
+    'suggestions',
 ]
 SITE_ID = 1
 LOGIN_URL = '/accounts/login/'

@@ -11,4 +11,4 @@ django-htmx
 selenium
 openpyxl
 djangorestframework
-
+reportlab

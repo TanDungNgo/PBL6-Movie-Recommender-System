@@ -5,6 +5,9 @@ from django.db.models.query import QuerySet
 from ratings.models import Rating
 from django.utils import timezone
 import datetime
+from django.db.models.signals import post_save, post_delete
+from . import tasks as movies_tasks
+
 # Create your models here.
 RATING_CALC_TIME_IN_DAYS = 3 # days
 
@@ -54,7 +57,8 @@ class Movie(models.Model):
     rating_avg = models.DecimalField(decimal_places=2, max_digits=5,
                                         blank=True, null=True) # 5.00, 0.00
     score = models.FloatField(blank=True, null=True)
-    
+    tmdb_id = models.IntegerField(blank=True, null=True)
+    idx = models.IntegerField(help_text='Position IDs for ML', blank=True, null=True)
     objects = MovieManager()
 
     def get_absolute_url(self):
@@ -93,3 +97,15 @@ class Movie(models.Model):
             print("saving...", self.rating_avg)
             self.save()
         return self.rating_avg
+
+def movie_post_save(sender, instance, created, *args, **kwargs):
+    if created and instance.id:
+        movies_tasks.update_movie_position_embedding_idx()
+
+post_save.connect(movie_post_save, sender=Movie)
+
+def movie_post_delete(*args, **kwargs):
+    movies_tasks.update_movie_position_embedding_idx()
+
+
+post_delete.connect(movie_post_delete, sender=Movie)
