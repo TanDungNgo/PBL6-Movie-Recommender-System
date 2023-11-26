@@ -7,6 +7,8 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib.auth import authenticate, login
 from rest_framework.decorators import api_view
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import update_session_auth_hash
 
 User = get_user_model()
 
@@ -106,6 +108,10 @@ def profile(request):
                 username = request.POST.get('username', user.username)
                 email = request.POST.get('email', user.email)
 
+                old_password = request.POST.get('old_password')
+                new_password = request.POST.get('new_password')
+                confirm_password = request.POST.get('confirm_password')
+
                 # Check if the username already exists
                 if User.objects.exclude(id=user_id).filter(username=username).exists():
                     messages.error(request, 'Username already exists. Please choose a different one.')
@@ -116,8 +122,24 @@ def profile(request):
                     messages.error(request, 'Email already exists. Please use a different one.')
                     return redirect('profile')
 
-                # Validate input data here (e.g., email format, phone number format)
+                # Lấy mật khẩu hiện tại của người dùng từ database
+                current_password = User.objects.get(id=user_id).password
 
+                # So sánh mật khẩu cũ
+                if not check_password(old_password, current_password):
+                    messages.error(request, 'Old password is incorrect.')
+                    return redirect('profile')
+
+                # Kiểm tra xác nhận mật khẩu mới
+                if new_password != confirm_password:
+                    messages.error(request, 'New password and confirm password do not match.')
+                    return redirect('profile')
+
+                # Cập nhật mật khẩu mới
+                user = User.objects.get(id=user_id)
+                user.set_password(new_password)
+
+                # Validate input data here (e.g., email format, phone number format)
                 user.first_name = first_name
                 user.last_name = last_name
                 user.username = username
@@ -137,6 +159,9 @@ def profile(request):
                     'first_name': first_name,
                     'last_name': last_name,
                 }
+
+                # Cập nhật session auth hash để tránh logout người dùng sau khi thay đổi mật khẩu
+                update_session_auth_hash(request, user)
 
                 messages.success(request, 'Successfully updated')
                 return redirect('profile')
@@ -160,3 +185,37 @@ def profile(request):
         else:
             messages.error(request, 'Please login')
             return redirect('signin')
+
+@login_required
+def change_password(request):
+    if request.method == 'POST':
+        user_id = request.user.id  # Lấy id của người dùng từ request
+        old_password = request.POST.get('old_password')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        # Lấy mật khẩu hiện tại của người dùng từ database
+        current_password = User.objects.get(id=user_id).password
+
+        # So sánh mật khẩu cũ
+        if not check_password(old_password, current_password):
+            messages.error(request, 'Old password is incorrect.')
+            return redirect('profile')
+
+        # Kiểm tra xác nhận mật khẩu mới
+        if new_password != confirm_password:
+            messages.error(request, 'New password and confirm password do not match.')
+            return redirect('profile')
+
+        # Cập nhật mật khẩu mới
+        user = User.objects.get(id=user_id)
+        user.set_password(new_password)
+        user.save()
+
+        # Cập nhật session auth hash để tránh logout người dùng sau khi thay đổi mật khẩu
+        update_session_auth_hash(request, user)
+
+        messages.success(request, 'Password updated successfully.')
+        return redirect('profile')
+
+    return render(request, 'account/profile.html')
