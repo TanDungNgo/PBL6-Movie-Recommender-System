@@ -122,20 +122,17 @@ def profile(request):
                     messages.error(request, 'Email already exists. Please use a different one.')
                     return redirect('profile')
 
-                # Lấy mật khẩu hiện tại của người dùng từ database
+                # Change password
                 current_password = User.objects.get(id=user_id).password
 
-                # So sánh mật khẩu cũ
                 if not check_password(old_password, current_password):
                     messages.error(request, 'Old password is incorrect.')
                     return redirect('profile')
 
-                # Kiểm tra xác nhận mật khẩu mới
                 if new_password != confirm_password:
                     messages.error(request, 'New password and confirm password do not match.')
                     return redirect('profile')
 
-                # Cập nhật mật khẩu mới
                 user = User.objects.get(id=user_id)
                 user.set_password(new_password)
 
@@ -160,10 +157,9 @@ def profile(request):
                     'last_name': last_name,
                 }
 
-                # Cập nhật session auth hash để tránh logout người dùng sau khi thay đổi mật khẩu
                 update_session_auth_hash(request, user)
 
-                messages.success(request, 'Successfully updated')
+                messages.success(request, 'Successfully updated.')
                 return redirect('profile')
 
             except User.DoesNotExist:
@@ -186,36 +182,3 @@ def profile(request):
             messages.error(request, 'Please login')
             return redirect('signin')
 
-@login_required
-def change_password(request):
-    if request.method == 'POST':
-        user_id = request.user.id  # Lấy id của người dùng từ request
-        old_password = request.POST.get('old_password')
-        new_password = request.POST.get('new_password')
-        confirm_password = request.POST.get('confirm_password')
-
-        # Lấy mật khẩu hiện tại của người dùng từ database
-        current_password = User.objects.get(id=user_id).password
-
-        # So sánh mật khẩu cũ
-        if not check_password(old_password, current_password):
-            messages.error(request, 'Old password is incorrect.')
-            return redirect('profile')
-
-        # Kiểm tra xác nhận mật khẩu mới
-        if new_password != confirm_password:
-            messages.error(request, 'New password and confirm password do not match.')
-            return redirect('profile')
-
-        # Cập nhật mật khẩu mới
-        user = User.objects.get(id=user_id)
-        user.set_password(new_password)
-        user.save()
-
-        # Cập nhật session auth hash để tránh logout người dùng sau khi thay đổi mật khẩu
-        update_session_auth_hash(request, user)
-
-        messages.success(request, 'Password updated successfully.')
-        return redirect('profile')
-
-    return render(request, 'account/profile.html')
