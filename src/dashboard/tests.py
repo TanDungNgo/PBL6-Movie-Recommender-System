@@ -538,7 +538,7 @@ class MovieDeleteTest(LiveServerTestCase):
         delete_buttons = driver.find_elements(By.CLASS_NAME, 'delete-movie')
         if delete_buttons:
             delete_buttons[0].click()  # Click the first delete button
-            time.sleep(4)  # Wait for the SweetAlert dialog to appear
+            time.sleep(2)  # Wait for the SweetAlert dialog to appear
 
             # Locate the 'No' button in the SweetAlert dialog
             no_button = driver.find_element(By.XPATH, "//button[contains(@class, 'swal2-cancel')]")
