@@ -4,9 +4,9 @@ from django.contrib import admin
 from .models import Movie
 
 class MovieAdmin(admin.ModelAdmin):
-    list_display = ['__str__', 'rating_count', 'rating_avg',
+    list_display = ['__str__', 'idx','rating_count', 'rating_avg', 'score',
                     'rating_last_updated']
-    readonly_fields = ['rating_avg', 'rating_count']
+    readonly_fields = ['idx','rating_avg', 'rating_count']
     search_fields = ['title']
 
 admin.site.register(Movie, MovieAdmin) 

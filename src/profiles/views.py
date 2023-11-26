@@ -26,6 +26,10 @@ def signin(request):
                     request.session['user_email'] = user.email
                     request.session['user_firstname'] = user.first_name
                     request.session['user_lastname'] = user.last_name
+                    if user.is_superuser:
+                        request.session['user_role'] = 'admin'
+                    else:
+                        request.session['user_role'] = 'user'
 
                     default_avatar_path = 'https://cdn-icons-png.flaticon.com/512/4998/4998641.png'
                     request.session['user_avatar'] = default_avatar_path
