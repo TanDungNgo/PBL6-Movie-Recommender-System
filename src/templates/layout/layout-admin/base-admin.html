@@ -45,18 +45,23 @@
 </head>
   <body>
     {% if messages %}
-        {% for message in messages %}
-                <script type=text/javascript>
-                    $.toast({
-                        heading: 'Success',
-                        text: '{{ message }}',
-                        showHideTransition: 'slide',
-                        icon: 'success',
-                        position: 'top-right', 
-                        loaderBg: '#05BD11'
-                    })
-                </script>
-        {% endfor %}
+    {% for message in messages %}
+        <script type="text/javascript">
+            if ('{{ message.tags }}' == 'error') {
+                var loaderBgColor = '#FF0000';
+            } else {
+                var loaderBgColor = '#05BD11';
+            }
+            $.toast({
+                heading: '{{ message.tags }}',
+                text: '{{ message }}',
+                showHideTransition: 'slide',
+                icon: '{{ message.tags }}',
+                position: 'top-right', 
+                loaderBg: loaderBgColor,
+            });
+        </script>
+    {% endfor %}
     {% endif %}
     <div class="container-fluid position-relative d-flex p-0">
       <!-- Spinner Start -->
@@ -81,6 +86,26 @@
       <!-- Back to Top -->
       <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
     </div>
+
+    <script>
+      window.onscroll = function () {
+        myFunction();
+      };
+    
+      var navbar_sticky = document.getElementById("navbar_sticky");
+      var sticky = navbar_sticky.offsetTop;
+      var navbar_height = document.querySelector(".navbar").offsetHeight;
+    
+      function myFunction() {
+        if (window.pageYOffset >= sticky + navbar_height) {
+          navbar_sticky.classList.add("sticky");
+          document.body.style.paddingTop = navbar_height + "px";
+        } else {
+          navbar_sticky.classList.remove("sticky");
+          document.body.style.paddingTop = "0";
+        }
+      }
+    </script>
   </body>
     <!-- JavaScript Libraries -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
