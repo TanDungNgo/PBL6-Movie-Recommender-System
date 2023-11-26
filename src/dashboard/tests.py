@@ -401,3 +401,167 @@ class MovieCreateTest(LiveServerTestCase):
         time.sleep(2)
         driver.quit()
 
+
+class MovieDeleteTest(LiveServerTestCase):
+    def test_delete_movie_success(self):
+        # Đường dẫn đến ChromeDriver
+        chromedriver_path = 'D:/Download/chromedriver-win64 (2)/chromedriver-win64/chromedriver.exe'
+
+        # Khởi tạo driver Chrome với tùy chọn Service
+        chrome_service = webdriver.chrome.service.Service(chromedriver_path)
+        driver = webdriver.Chrome(service=chrome_service)
+        # Navigate to the login page (if login is required)
+        driver.get('http://127.0.0.1:8000/accounts/login/')
+        # Find the email, password, and submit elements
+        email_input = driver.find_element('name', 'email')
+        password_input = driver.find_element('name', 'password')
+        submit_button = driver.find_element('id', 'submit')
+
+        # Perform actions on the form
+        time.sleep(2)
+        email_input.send_keys('trang@gmail.com')
+        time.sleep(2)
+        password_input.send_keys('123456789')
+        time.sleep(2)
+        
+
+        csrf_input = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, 
+                                            'input[name="csrfmiddlewaretoken"]')))
+        if csrf_input:
+            csrf_token = csrf_input.get_attribute('value')
+            # Add the CSRF token to the headers
+            headers = {'X-CSRFToken': csrf_token}
+            # Set the CSRF token in the cookie for future requests
+            driver.add_cookie({'name': 'csrftoken', 'value': csrf_token, 'path': '/'})
+        else:
+            print("CSRF token not found")
+
+        # Submit the form with the CSRF token in the headers
+        submit_button.click()
+
+        # Perform assertions or additional test logic if needed
+        self.assertEqual(driver.current_url, 'http://127.0.0.1:8000/dashboard/', 'Login succeessfully')
+        success_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-success']")
+        success_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(success_message_locator))
+        expected_success_text = "Login successfully."
+        assert expected_success_text in success_message.text
+
+        # Wait for the page to load (you may need to adjust the sleep duration)
+        time.sleep(4)
+        
+        
+        driver.get('http://127.0.0.1:8000/dashboard/movie_list/')
+
+        # Đợi cho trang danh sách phim được tải (bạn có thể điều chỉnh thời gian chờ)
+        time.sleep(2)
+
+        delete_buttons = driver.find_elements(By.CLASS_NAME, 'delete-movie')
+        if delete_buttons:
+            delete_buttons[0].click()  # Click the first delete button
+            time.sleep(4)  # Wait for the SweetAlert dialog to appear
+
+            # Confirm the deletion in the SweetAlert dialog
+            confirm_button = driver.find_element(By.XPATH, "//button[contains(@class, 'swal2-confirm')]")
+            confirm_button.click()  # Click 'Yes' to confirm deletion
+
+            # [Add logic to verify successful deletion here...]
+
+        else:
+            print("No delete button found")
+        
+        self.assertEqual(driver.current_url, 'http://127.0.0.1:8000/dashboard/movie_list/', 'Movie deleted successfully!')
+        success_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-success']")
+        success_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(success_message_locator))
+        expected_success_text = "Movie deleted successfully!"
+        assert expected_success_text in success_message.text
+
+        # Wait for the page to load (you may need to adjust the sleep duration)
+        time.sleep(4)
+
+        driver.quit()
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
+class MovieDeleteTest(LiveServerTestCase):
+    def test_delete_movie_faild(self):
+        # Đường dẫn đến ChromeDriver
+        chromedriver_path = 'D:/Download/chromedriver-win64 (2)/chromedriver-win64/chromedriver.exe'
+
+        # Khởi tạo driver Chrome với tùy chọn Service
+        chrome_service = webdriver.chrome.service.Service(chromedriver_path)
+        driver = webdriver.Chrome(service=chrome_service)
+        # Navigate to the login page (if login is required)
+        driver.get('http://127.0.0.1:8000/accounts/login/')
+        # Find the email, password, and submit elements
+        email_input = driver.find_element('name', 'email')
+        password_input = driver.find_element('name', 'password')
+        submit_button = driver.find_element('id', 'submit')
+
+        # Perform actions on the form
+        time.sleep(2)
+        email_input.send_keys('trang@gmail.com')
+        time.sleep(2)
+        password_input.send_keys('123456789')
+        time.sleep(2)
+        
+
+        csrf_input = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, 
+                                            'input[name="csrfmiddlewaretoken"]')))
+        if csrf_input:
+            csrf_token = csrf_input.get_attribute('value')
+            # Add the CSRF token to the headers
+            headers = {'X-CSRFToken': csrf_token}
+            # Set the CSRF token in the cookie for future requests
+            driver.add_cookie({'name': 'csrftoken', 'value': csrf_token, 'path': '/'})
+        else:
+            print("CSRF token not found")
+
+        # Submit the form with the CSRF token in the headers
+        submit_button.click()
+
+        # Perform assertions or additional test logic if needed
+        self.assertEqual(driver.current_url, 'http://127.0.0.1:8000/dashboard/', 'Login succeessfully')
+        success_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-success']")
+        success_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(success_message_locator))
+        expected_success_text = "Login successfully."
+        assert expected_success_text in success_message.text
+
+        # Wait for the page to load (you may need to adjust the sleep duration)
+        time.sleep(4)
+        
+        
+        driver.get('http://127.0.0.1:8000/dashboard/movie_list/')
+
+        # Đợi cho trang danh sách phim được tải (bạn có thể điều chỉnh thời gian chờ)
+        time.sleep(2)
+
+        delete_buttons = driver.find_elements(By.CLASS_NAME, 'delete-movie')
+        if delete_buttons:
+            delete_buttons[0].click()  # Click the first delete button
+            time.sleep(4)  # Wait for the SweetAlert dialog to appear
+
+            # Locate the 'No' button in the SweetAlert dialog
+            no_button = driver.find_element(By.XPATH, "//button[contains(@class, 'swal2-cancel')]")
+            no_button.click()  # Click 'No' to cancel deletion
+
+            # [Add logic to verify that the movie was not deleted here...]
+
+        else:
+            print("No delete button found")
+
+        # Verify that the current URL is still the movie list page, indicating no redirection occurred
+        self.assertEqual(driver.current_url, 'http://127.0.0.1:8000/dashboard/movie_list/', 'Still on movie list page after canceling deletion')
+
+        # Optionally, verify that the success message for deletion did NOT appear
+        try:
+            success_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-success']")
+            success_message = WebDriverWait(driver, 4).until(EC.visibility_of_element_located(success_message_locator))
+            assert False, "Deletion success message appeared when it shouldn't have"
+        except TimeoutException:
+            # If the success message did not appear, this is the expected behavior
+            pass
+        # Wait for the page to load (you may need to adjust the sleep duration)
+        time.sleep(4)
+
+        driver.quit()
+
