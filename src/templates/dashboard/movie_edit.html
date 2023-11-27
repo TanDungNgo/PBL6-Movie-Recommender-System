@@ -15,7 +15,7 @@
     <div class="card-content">
       <div class="card-left" style="width: 58%;">
         <label for="title">Title:</label>
-        <input type="text" id="title" name="title" value="{{ movie.title }}" required /><br /><br />
+        <input type="text" id="title" name="title" value="{{ movie.title }}" /><br /><br />
 
         <label for="overview">Overview:</label>
         <textarea
@@ -23,7 +23,6 @@
           name="overview"
           rows="5"
           cols="50"
-          required
         >{{ movie.overview }}</textarea
         ><br /><br />
 
@@ -33,7 +32,6 @@
           id="release_date"
           name="release_date"
           value="{{ date_object }}"
-          required
         /><br /><br />
 
         <label for="poster_path">URL Poster:</label>
@@ -43,7 +41,6 @@
           name="poster_path"
           value="{{ movie.poster_path }}"
           placeholder="https://"
-          required
         /><br /><br />
       </div>
 
@@ -53,7 +50,7 @@
           src="{{ movie.poster_path }}" 
           style="height: 520px; width: 370px; margin-bottom: 20px; cursor: pointer; padding: 30px; justify-content: center; object-fit: cover;"
         >
-        <input type="file" id="fileInput" accept="image/*" onchange="displayImage(event)" style="display: none;">
+        <input type="file" id="fileInput" accept="image/*" style="display: none;">
         <br />
       </div>
       <script>
@@ -73,7 +70,7 @@
     </div>
     <div class="card-btn">
       <input class="btn-cancel" type="submit" value="Cancel" />
-      <input class="btn-add" type="submit" value="Save" style="margin-right: 0px;"/>
+      <input class="btn-add" type="submit" id="submit_button" value="Save" style="margin-right: 0px;"/>
     </div>
   </form>
   <script src="{% static 'dashboard/js/movie_edit.js' %}"></script>

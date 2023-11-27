@@ -104,7 +104,7 @@ def movie_edit(request, movie_id):
 
     date_object = current_movie.release_date
     date_str = date_object.strftime("%b. %d, %Y")
-    date_object = datetime.strptime(date_str, "%b. %d, %Y").strftime("%Y-%m-%d")
+    date_object = datetime.strptime(date_str, "%b. %d, %Y").strftime("%m/%d/%Y")
 
     if request.method == 'POST':
         title = request.POST['title']
@@ -112,20 +112,32 @@ def movie_edit(request, movie_id):
         release_date = request.POST['release_date']
         poster_path = request.POST['poster_path']
 
-        # if 'file-input' in request.FILES:
-        #     poster_path = request.FILES['file-input']
-        # else:
-        #     poster_path = current_movie.poster_path
+        # Kiểm tra dữ liệu và thông báo lỗi nếu cần
+        if not title:
+            messages.error(request, 'Title is required.')
+        if not overview:
+            messages.error(request, 'Overview is required.')
+        if not release_date:
+            messages.error(request, 'Release Date is required.')
+        else:
+            try:
+                # Chuyển đổi chuỗi ngày tháng nhập vào thành đối tượng datetime
+                release_date = datetime.strptime(release_date, '%m/%d/%Y')
+            except ValueError:
+                messages.error(request, 'Invalid date format. Please use MM/DD/YYYY format.')
+        if not poster_path:
+            messages.error(request, 'Poster path is required.')
 
-        # Cập nhật thông tin bộ phim
-        current_movie.title = title
-        current_movie.overview = overview
-        current_movie.release_date = release_date
-        current_movie.poster_path = poster_path
-        current_movie.save()
+        
+        if not messages.get_messages(request):
+            current_movie.title = title
+            current_movie.overview = overview
+            current_movie.release_date = release_date
+            current_movie.poster_path = poster_path
+            current_movie.save()
 
-        messages.success(request, 'Update successful!')
-        return redirect('/dashboard/movie_list/') 
+            messages.success(request, 'Update successful!')
+            return redirect('/dashboard/movie_list/') 
 
     return render(request, 'dashboard/movie_edit.html',{'movie': current_movie, 'date_object': date_object})
 
@@ -244,28 +256,3 @@ def print_movies(request):
 def movie_detail_admin(request, movie_id):
     current_movie = Movie.objects.get(pk=movie_id)
     return render(request, 'dashboard/movie_detail.html', {'movie': current_movie})
-
-def update_movie(request, movie_id):
-    movie = get_object_or_404(Movie, id=movie_id)
-
-    if request.method == 'POST':
-        title = request.POST['title']
-        overview = request.POST['overview']
-        release_date = request.POST['release_date']
-
-        if 'file-input' in request.FILES:
-            poster_path = request.FILES['file-input']
-        else:
-            poster_path = movie.poster_path  # Giữ nguyên đường dẫn poster nếu không có sự thay đổi
-
-        # Cập nhật thông tin bộ phim
-        movie.title = title
-        movie.overview = overview
-        movie.release_date = release_date
-        movie.poster_path = poster_path
-        movie.save()
-
-        messages.success(request, 'Update successful!')
-        return redirect('/dashboard/movie_list/') 
-
-    return render(request, 'dashboard/movie_update.html', {'movie': movie})

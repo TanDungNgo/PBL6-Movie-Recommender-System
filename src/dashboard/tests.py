@@ -644,3 +644,502 @@ class MovieDeleteTest(LiveServerTestCase):
 
         driver.quit()
 
+class MovieEditTest(LiveServerTestCase):
+    def test_edit_movie_success(self):
+        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+
+        chrome_service = webdriver.chrome.service.Service(chromedriver_path)
+        driver = webdriver.Chrome(service=chrome_service)
+        # Navigate to the login page (if login is required)
+        driver.get('http://127.0.0.1:8000/accounts/login/')
+        # Find the email, password, and submit elements
+        email_input = driver.find_element('name', 'email')
+        password_input = driver.find_element('name', 'password')
+        submit_button = driver.find_element('id', 'submit')
+
+        # Perform actions on the form
+        time.sleep(2)
+        email_input.send_keys('phuong@gmail.com')
+        time.sleep(2)
+        password_input.send_keys('123456789')
+        time.sleep(2)
+        
+
+        csrf_input = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, 
+                                            'input[name="csrfmiddlewaretoken"]')))
+        if csrf_input:
+            csrf_token = csrf_input.get_attribute('value')
+            # Add the CSRF token to the headers
+            headers = {'X-CSRFToken': csrf_token}
+            # Set the CSRF token in the cookie for future requests
+            driver.add_cookie({'name': 'csrftoken', 'value': csrf_token, 'path': '/'})
+        else:
+            print("CSRF token not found")
+
+        # Submit the form with the CSRF token in the headers
+        submit_button.click()
+
+        # Perform assertions or additional test logic if needed
+        self.assertEqual(driver.current_url, 'http://127.0.0.1:8000/dashboard/', 'Login succeessfully')
+        success_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-success']")
+        success_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(success_message_locator))
+        expected_success_text = "Login successfully."
+        assert expected_success_text in success_message.text
+
+        # Wait for the page to load (you may need to adjust the sleep duration)
+        time.sleep(4)
+
+        driver.get('http://127.0.0.1:8000/dashboard/movie_list/')
+
+        time.sleep(2)
+
+        edit_button = driver.find_elements('name', 'edit_btn')
+        if edit_button:
+            edit_button[1].click()  # Click the first delete button
+            time.sleep(2)  # Wait for the SweetAlert dialog to appear
+        else:
+            print("No edit button found")
+
+        # Find and interact with the form elements to create a new movie
+        title_input = driver.find_element('name', 'title')
+        overview_input = driver.find_element('name', 'overview')
+        release_date_input = driver.find_element('name', 'release_date')
+        poster_path_input = driver.find_element('name', 'poster_path')
+        submit_button = driver.find_element('id', 'submit_button')
+
+        time.sleep(2)
+        poster_path_input.clear()
+        time.sleep(2)
+        poster_path_input.send_keys('https://m.media-amazon.com/images/I/61R-TCEvkBS._AC_UF894,1000_QL80_.jpg')
+        time.sleep(2)
+
+        driver.execute_script("arguments[0].scrollIntoView(true);", submit_button)
+        time.sleep(2)
+
+        submit_button.click()
+
+        self.assertEqual(driver.current_url, 'http://127.0.0.1:8000/dashboard/movie_list/', 'Update successful!')
+        success_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-success']")
+        success_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(success_message_locator))
+        expected_success_text = "Update successful!"
+        assert expected_success_text in success_message.text
+        
+        time.sleep(4)
+        driver.quit()
+
+    def test_edit_movie_empty_title(self):
+        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+
+        chrome_service = webdriver.chrome.service.Service(chromedriver_path)
+        driver = webdriver.Chrome(service=chrome_service)
+        # Navigate to the login page (if login is required)
+        driver.get('http://127.0.0.1:8000/accounts/login/')
+        # Find the email, password, and submit elements
+        email_input = driver.find_element('name', 'email')
+        password_input = driver.find_element('name', 'password')
+        submit_button = driver.find_element('id', 'submit')
+
+        # Perform actions on the form
+        time.sleep(2)
+        email_input.send_keys('phuong@gmail.com')
+        time.sleep(2)
+        password_input.send_keys('123456789')
+        time.sleep(2)
+        
+
+        csrf_input = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, 
+                                            'input[name="csrfmiddlewaretoken"]')))
+        if csrf_input:
+            csrf_token = csrf_input.get_attribute('value')
+            # Add the CSRF token to the headers
+            headers = {'X-CSRFToken': csrf_token}
+            # Set the CSRF token in the cookie for future requests
+            driver.add_cookie({'name': 'csrftoken', 'value': csrf_token, 'path': '/'})
+        else:
+            print("CSRF token not found")
+
+        # Submit the form with the CSRF token in the headers
+        submit_button.click()
+
+        # Perform assertions or additional test logic if needed
+        self.assertEqual(driver.current_url, 'http://127.0.0.1:8000/dashboard/', 'Login succeessfully')
+        success_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-success']")
+        success_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(success_message_locator))
+        expected_success_text = "Login successfully."
+        assert expected_success_text in success_message.text
+
+        # Wait for the page to load (you may need to adjust the sleep duration)
+        time.sleep(4)
+        
+        driver.get('http://127.0.0.1:8000/dashboard/movie_list/')
+
+        time.sleep(2)
+
+        edit_button = driver.find_elements('name', 'edit_btn')
+        if edit_button:
+            edit_button[1].click()  # Click the first delete button
+            time.sleep(2)  # Wait for the SweetAlert dialog to appear
+        else:
+            print("No edit button found")
+
+
+        # Find and interact with the form elements to create a new movie
+        title_input = driver.find_element('name', 'title')
+        overview_input = driver.find_element('name', 'overview')
+        release_date_input = driver.find_element('name', 'release_date')
+        poster_path_input = driver.find_element('name', 'poster_path')
+        submit_button = driver.find_element('id', 'submit_button')
+
+        time.sleep(2)
+        title_input.clear()
+        time.sleep(2)
+        
+        driver.execute_script("arguments[0].scrollIntoView(true);", submit_button)
+        time.sleep(2)
+
+        submit_button.click()
+
+        error_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-error']")
+        error_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(error_message_locator))
+
+        # Assert that the error message contains the expected text
+        expected_error_text = "Title is required."
+        assert expected_error_text in error_message.text
+
+        time.sleep(4)
+        driver.quit()
+
+    def test_edit_movie_empty_overview(self):
+        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+
+        chrome_service = webdriver.chrome.service.Service(chromedriver_path)
+        driver = webdriver.Chrome(service=chrome_service)
+        # Navigate to the login page (if login is required)
+        driver.get('http://127.0.0.1:8000/accounts/login/')
+        # Find the email, password, and submit elements
+        email_input = driver.find_element('name', 'email')
+        password_input = driver.find_element('name', 'password')
+        submit_button = driver.find_element('id', 'submit')
+
+        # Perform actions on the form
+        time.sleep(2)
+        email_input.send_keys('phuong@gmail.com')
+        time.sleep(2)
+        password_input.send_keys('123456789')
+        time.sleep(2)
+        
+
+        csrf_input = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, 
+                                            'input[name="csrfmiddlewaretoken"]')))
+        if csrf_input:
+            csrf_token = csrf_input.get_attribute('value')
+            # Add the CSRF token to the headers
+            headers = {'X-CSRFToken': csrf_token}
+            # Set the CSRF token in the cookie for future requests
+            driver.add_cookie({'name': 'csrftoken', 'value': csrf_token, 'path': '/'})
+        else:
+            print("CSRF token not found")
+
+        # Submit the form with the CSRF token in the headers
+        submit_button.click()
+
+        # Perform assertions or additional test logic if needed
+        self.assertEqual(driver.current_url, 'http://127.0.0.1:8000/dashboard/', 'Login succeessfully')
+        success_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-success']")
+        success_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(success_message_locator))
+        expected_success_text = "Login successfully."
+        assert expected_success_text in success_message.text
+
+        # Wait for the page to load (you may need to adjust the sleep duration)
+        time.sleep(4)
+        
+        driver.get('http://127.0.0.1:8000/dashboard/movie_list/')
+
+        time.sleep(2)
+
+        edit_button = driver.find_elements('name', 'edit_btn')
+        if edit_button:
+            edit_button[1].click()  # Click the first delete button
+            time.sleep(2)  # Wait for the SweetAlert dialog to appear
+        else:
+            print("No edit button found")
+
+
+        # Find and interact with the form elements to create a new movie
+        title_input = driver.find_element('name', 'title')
+        overview_input = driver.find_element('name', 'overview')
+        release_date_input = driver.find_element('name', 'release_date')
+        poster_path_input = driver.find_element('name', 'poster_path')
+        submit_button = driver.find_element('id', 'submit_button')
+
+        time.sleep(2)
+        overview_input.clear()
+        time.sleep(2)
+
+        driver.execute_script("arguments[0].scrollIntoView(true);", submit_button)
+        time.sleep(2)
+
+        submit_button.click()
+
+        error_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-error']")
+        error_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(error_message_locator))
+
+        # Assert that the error message contains the expected text
+        expected_error_text = "Overview is required."
+        assert expected_error_text in error_message.text
+
+        time.sleep(4)
+        driver.quit()
+    
+    def test_edit_movie_empty_release_date(self):
+        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+
+        chrome_service = webdriver.chrome.service.Service(chromedriver_path)
+        driver = webdriver.Chrome(service=chrome_service)
+        # Navigate to the login page (if login is required)
+        driver.get('http://127.0.0.1:8000/accounts/login/')
+        # Find the email, password, and submit elements
+        email_input = driver.find_element('name', 'email')
+        password_input = driver.find_element('name', 'password')
+        submit_button = driver.find_element('id', 'submit')
+
+        # Perform actions on the form
+        time.sleep(2)
+        email_input.send_keys('phuong@gmail.com')
+        time.sleep(2)
+        password_input.send_keys('123456789')
+        time.sleep(2)
+        
+
+        csrf_input = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, 
+                                            'input[name="csrfmiddlewaretoken"]')))
+        if csrf_input:
+            csrf_token = csrf_input.get_attribute('value')
+            # Add the CSRF token to the headers
+            headers = {'X-CSRFToken': csrf_token}
+            # Set the CSRF token in the cookie for future requests
+            driver.add_cookie({'name': 'csrftoken', 'value': csrf_token, 'path': '/'})
+        else:
+            print("CSRF token not found")
+
+        # Submit the form with the CSRF token in the headers
+        submit_button.click()
+
+        # Perform assertions or additional test logic if needed
+        self.assertEqual(driver.current_url, 'http://127.0.0.1:8000/dashboard/', 'Login succeessfully')
+        success_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-success']")
+        success_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(success_message_locator))
+        expected_success_text = "Login successfully."
+        assert expected_success_text in success_message.text
+
+        # Wait for the page to load (you may need to adjust the sleep duration)
+        time.sleep(4)
+        
+        driver.get('http://127.0.0.1:8000/dashboard/movie_list/')
+
+        time.sleep(2)
+
+        edit_button = driver.find_elements('name', 'edit_btn')
+        if edit_button:
+            edit_button[1].click()  # Click the first delete button
+            time.sleep(2)  # Wait for the SweetAlert dialog to appear
+        else:
+            print("No edit button found")
+
+
+        # Find and interact with the form elements to create a new movie
+        title_input = driver.find_element('name', 'title')
+        overview_input = driver.find_element('name', 'overview')
+        release_date_input = driver.find_element('name', 'release_date')
+        poster_path_input = driver.find_element('name', 'poster_path')
+        submit_button = driver.find_element('id', 'submit_button')
+
+        time.sleep(2)
+        release_date_input.clear()
+        time.sleep(2)
+
+        driver.execute_script("arguments[0].scrollIntoView(true);", submit_button)
+        time.sleep(2)
+
+        submit_button.click()
+
+        error_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-error']")
+        error_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(error_message_locator))
+
+        # Assert that the error message contains the expected text
+        expected_error_text = "Release Date is required."
+        assert expected_error_text in error_message.text
+
+        time.sleep(4)
+        driver.quit()
+
+    def test_edit_movie_empty_poster_path(self):
+        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+
+        chrome_service = webdriver.chrome.service.Service(chromedriver_path)
+        driver = webdriver.Chrome(service=chrome_service)
+        # Navigate to the login page (if login is required)
+        driver.get('http://127.0.0.1:8000/accounts/login/')
+        # Find the email, password, and submit elements
+        email_input = driver.find_element('name', 'email')
+        password_input = driver.find_element('name', 'password')
+        submit_button = driver.find_element('id', 'submit')
+
+        # Perform actions on the form
+        time.sleep(2)
+        email_input.send_keys('phuong@gmail.com')
+        time.sleep(2)
+        password_input.send_keys('123456789')
+        time.sleep(2)
+        
+
+        csrf_input = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, 
+                                            'input[name="csrfmiddlewaretoken"]')))
+        if csrf_input:
+            csrf_token = csrf_input.get_attribute('value')
+            # Add the CSRF token to the headers
+            headers = {'X-CSRFToken': csrf_token}
+            # Set the CSRF token in the cookie for future requests
+            driver.add_cookie({'name': 'csrftoken', 'value': csrf_token, 'path': '/'})
+        else:
+            print("CSRF token not found")
+
+        # Submit the form with the CSRF token in the headers
+        submit_button.click()
+
+        # Perform assertions or additional test logic if needed
+        self.assertEqual(driver.current_url, 'http://127.0.0.1:8000/dashboard/', 'Login succeessfully')
+        success_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-success']")
+        success_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(success_message_locator))
+        expected_success_text = "Login successfully."
+        assert expected_success_text in success_message.text
+
+        # Wait for the page to load (you may need to adjust the sleep duration)
+        time.sleep(4)
+        
+        driver.get('http://127.0.0.1:8000/dashboard/movie_list/')
+
+        time.sleep(2)
+
+        edit_button = driver.find_elements('name', 'edit_btn')
+        if edit_button:
+            edit_button[1].click()  # Click the first delete button
+            time.sleep(2)  # Wait for the SweetAlert dialog to appear
+        else:
+            print("No edit button found")
+
+        # Find and interact with the form elements to create a new movie
+        title_input = driver.find_element('name', 'title')
+        overview_input = driver.find_element('name', 'overview')
+        release_date_input = driver.find_element('name', 'release_date')
+        poster_path_input = driver.find_element('name', 'poster_path')
+        submit_button = driver.find_element('id', 'submit_button')
+
+        time.sleep(2)
+        poster_path_input.clear()
+        time.sleep(2)
+
+        driver.execute_script("arguments[0].scrollIntoView(true);", submit_button)
+        time.sleep(2)
+
+        submit_button.click()
+
+        error_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-error']")
+        error_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(error_message_locator))
+
+        # Assert that the error message contains the expected text
+        expected_error_text = "Poster path is required."
+        assert expected_error_text in error_message.text
+
+        time.sleep(4)
+        driver.quit()
+
+    def test_edit_movie_wrong_format_release_date(self):
+        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+
+        chrome_service = webdriver.chrome.service.Service(chromedriver_path)
+        driver = webdriver.Chrome(service=chrome_service)
+        # Navigate to the login page (if login is required)
+        driver.get('http://127.0.0.1:8000/accounts/login/')
+        # Find the email, password, and submit elements
+        email_input = driver.find_element('name', 'email')
+        password_input = driver.find_element('name', 'password')
+        submit_button = driver.find_element('id', 'submit')
+
+        # Perform actions on the form
+        time.sleep(2)
+        email_input.send_keys('phuong@gmail.com')
+        time.sleep(2)
+        password_input.send_keys('123456789')
+        time.sleep(2)
+        
+
+        csrf_input = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, 
+                                            'input[name="csrfmiddlewaretoken"]')))
+        if csrf_input:
+            csrf_token = csrf_input.get_attribute('value')
+            # Add the CSRF token to the headers
+            headers = {'X-CSRFToken': csrf_token}
+            # Set the CSRF token in the cookie for future requests
+            driver.add_cookie({'name': 'csrftoken', 'value': csrf_token, 'path': '/'})
+        else:
+            print("CSRF token not found")
+
+        # Submit the form with the CSRF token in the headers
+        submit_button.click()
+
+        # Perform assertions or additional test logic if needed
+        self.assertEqual(driver.current_url, 'http://127.0.0.1:8000/dashboard/', 'Login succeessfully')
+        success_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-success']")
+        success_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(success_message_locator))
+        expected_success_text = "Login successfully."
+        assert expected_success_text in success_message.text
+
+        # Wait for the page to load (you may need to adjust the sleep duration)
+        time.sleep(4)
+        
+        driver.get('http://127.0.0.1:8000/dashboard/movie_list/')
+
+        time.sleep(2)
+
+        edit_button = driver.find_elements('name', 'edit_btn')
+        if edit_button:
+            edit_button[1].click()  # Click the first delete button
+            time.sleep(2)  # Wait for the SweetAlert dialog to appear
+        else:
+            print("No edit button found")
+
+
+        # Find and interact with the form elements to create a new movie
+        title_input = driver.find_element('name', 'title')
+        overview_input = driver.find_element('name', 'overview')
+        release_date_input = driver.find_element('name', 'release_date')
+        poster_path_input = driver.find_element('name', 'poster_path')
+        submit_button = driver.find_element('id', 'submit_button')
+
+        time.sleep(2)
+        release_date_input.clear()
+        time.sleep(2)
+        release_date_input.send_keys('23/20/2023')
+        time.sleep(2)
+
+        driver.execute_script("arguments[0].scrollIntoView(true);", submit_button)
+        time.sleep(2)
+
+        submit_button.click()
+
+        error_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-error']")
+        error_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(error_message_locator))
+
+        # Assert that the error message contains the expected text
+        expected_error_text = "Invalid date format. Please use MM/DD/YYYY format."
+        assert expected_error_text in error_message.text
+
+        time.sleep(4)
+        driver.quit()
