@@ -13,7 +13,7 @@
     {% csrf_token %}
     <h1>NEW MOVIE</h1>
     <div class="card-content">
-      <div class="card-left">
+      <div class="card-left" style="width: 60%;">
         <label for="title">Title:</label>
         <input type="text" id="title" name="title"  /><br /><br />
 
@@ -24,7 +24,7 @@
         <textarea
           id="overview"
           name="overview"
-          rows="8"
+          rows="4"
           cols="50"
           
         ></textarea
@@ -32,55 +32,31 @@
 
         <label for="release_date">Release Date:</label>
         <input type="text" id="release_date" name="release_date" placeholder="MM/DD/YYYY" /><br /><br />
-        
-        <!-- <label for="poster">Poster:</label>
-        <div class="custom-file">
-          <label for="file-input">Upload</label>
-          <input
-            type="file"
-            id="file-input"
-            name="file-input"
-            class="input-file"
-            accept=".jpg, .jpeg, .png"
-            onchange="updateFileName()"
-          />
-          <span id="file-name">File not selected!</span>
-        </div>
-        <br /> -->
+
+        <label for="poster_path">URL Poster:</label>
+        <input type="text" id="poster_path" name="poster_path" placeholder="https://" /><br /><br />
       </div>
 
-      <div class="card-right">
-        <!-- <label for="movie_duration">Duration:</label>
-        <input
-          type="text"
-          id="movie_duration"
-          name="movie_duration"
-          required
-        /><br /><br /> -->
-
+      <div class="card-right" style="width: 40%; text-align: center;">
         <img 
           id="image" 
           src="{% if movie.poster_path %}{{ movie.poster_path }}{% else %}{% static 'dashboard/img/default-image.jpg' %}{% endif %}" 
-          style="height: 520px; width: 400px; margin-bottom: 20px; cursor: pointer; padding: 30px; justify-content: center; object-fit: cover;"
+          style="height: 535px; width: 380px; margin-bottom: 20px; cursor: pointer; padding: 30px; justify-content: center; object-fit: cover;"
         >
-        <input type="file" name="image" id="fileInput" accept="image/*" onchange="displayImage(event)" style="display: none;">
+        <input type="file" name="image" id="fileInput" accept="image/*" style="display: none;">
         <br />
         <script>
-          document.getElementById("image").addEventListener("click", function() {
-              document.getElementById("fileInput").click();
-          });
-
-          document.getElementById("fileInput").addEventListener("change", function(event) {
-              const input = event.target;
-              const image = document.getElementById("image");
-
-              if (input.files && input.files[0]) {
-                  const reader = new FileReader();
-                  reader.onload = function(e) {
-                      image.src = e.target.result;
-                  };
-                  reader.readAsDataURL(input.files[0]);
-              }
+          var posterPathInput = document.getElementById('poster_path');
+          var imageElement = document.getElementById('image');
+      
+          posterPathInput.addEventListener('input', function() {
+            var posterPath = posterPathInput.value;
+      
+            if (posterPath.trim() === '') {
+              imageElement.src = '{% static "dashboard/img/default-image.jpg" %}';
+            } else {
+              imageElement.src = posterPath;
+            }
           });
         </script>
         <!-- <label for="status">Status:</label>
@@ -89,20 +65,6 @@
           <option value="About to premiere">About to premiere</option>
           <option value="Not yet released">Not yet released</option></select
         ><br /><br /> -->
-        <!-- <label for="cast">Cast:</label>
-                            <input type="text" id="cast" name="cast" required><br><br>
-            
-                            <label for="director">Director:</label>
-                            <input type="text" id="director" name="director" required><br><br>
-            
-                            <label for="spokenlanguage">Language:</label>
-                            <input type="text" id="spokenlanguage" name="spokenlanguage" required><br><br>
-            
-                            <label for="country">Country:</label>
-                            <input type="text" id="country" name="country" required><br><br>
-
-                            <label for="keyword">Keyword:</label>
-                            <input type="text" id="keyword" name="keyword" required><br><br>-->
       </div>
     </div>
     <div class="card-btn">

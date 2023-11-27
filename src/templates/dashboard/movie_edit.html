@@ -21,7 +21,7 @@
         <textarea
           id="overview"
           name="overview"
-          rows="8"
+          rows="5"
           cols="50"
           required
         >{{ movie.overview }}</textarea
@@ -29,10 +29,20 @@
 
         <label for="release_date">Release Date:</label>
         <input
-          type="date"
+          type="text"
           id="release_date"
           name="release_date"
           value="{{ date_object }}"
+          required
+        /><br /><br />
+
+        <label for="poster_path">URL Poster:</label>
+        <input
+          type="text"
+          id="poster_path"
+          name="poster_path"
+          value="{{ movie.poster_path }}"
+          placeholder="https://"
           required
         /><br /><br />
       </div>
@@ -41,11 +51,25 @@
         <img 
           id="image" 
           src="{{ movie.poster_path }}" 
-          style="height: 520px; margin-bottom: 20px; cursor: pointer; padding: 30px; justify-content: center;"
+          style="height: 520px; width: 370px; margin-bottom: 20px; cursor: pointer; padding: 30px; justify-content: center; object-fit: cover;"
         >
         <input type="file" id="fileInput" accept="image/*" onchange="displayImage(event)" style="display: none;">
         <br />
       </div>
+      <script>
+        var posterPathInput = document.getElementById('poster_path');
+        var imageElement = document.getElementById('image');
+    
+        posterPathInput.addEventListener('input', function() {
+          var posterPath = posterPathInput.value;
+    
+          if (posterPath.trim() === '') {
+            imageElement.src = '{% static "dashboard/img/default-image.jpg" %}';
+          } else {
+            imageElement.src = posterPath;
+          }
+        });
+      </script>
     </div>
     <div class="card-btn">
       <input class="btn-cancel" type="submit" value="Cancel" />
