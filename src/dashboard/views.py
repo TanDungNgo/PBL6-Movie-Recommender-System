@@ -36,6 +36,7 @@ def create_movie(request):
         title = request.POST['title']
         overview = request.POST['overview']
         release_date_str = request.POST['release_date']
+        poster_path = request.POST['poster_path']
 
         # Kiểm tra dữ liệu và thông báo lỗi nếu cần
         if not title:
@@ -44,6 +45,8 @@ def create_movie(request):
             messages.error(request, 'Overview is required.')
         if not release_date_str:
             messages.error(request, 'Release Date is required.')
+        if not poster_path:
+            messages.error(request, 'Poster path is required.')
         else:
             try:
                 # Chuyển đổi chuỗi ngày tháng nhập vào thành đối tượng datetime
@@ -51,8 +54,7 @@ def create_movie(request):
             except ValueError:
                 messages.error(request, 'Invalid date format. Please use MM/DD/YYYY format.')
 
-        if all([title, overview]) and 'release_date' in locals():
-            poster_path = request.FILES.get('file-input')
+        if all([title, overview, poster_path]) and 'release_date' in locals():
             movie = Movie(
                 title=title,
                 overview=overview,
@@ -108,11 +110,12 @@ def movie_edit(request, movie_id):
         title = request.POST['title']
         overview = request.POST['overview']
         release_date = request.POST['release_date']
+        poster_path = request.POST['poster_path']
 
-        if 'file-input' in request.FILES:
-            poster_path = request.FILES['file-input']
-        else:
-            poster_path = current_movie.poster_path  # Giữ nguyên đường dẫn poster nếu không có sự thay đổi
+        # if 'file-input' in request.FILES:
+        #     poster_path = request.FILES['file-input']
+        # else:
+        #     poster_path = current_movie.poster_path
 
         # Cập nhật thông tin bộ phim
         current_movie.title = title
