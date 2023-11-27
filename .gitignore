@@ -130,3 +130,4 @@ dmypy.json
 src/data/similarity.pkl
 src/data/movie_list.pkl
 src/data/credits.csv
+src/data/model/neural_collaborative_filtering.h5
