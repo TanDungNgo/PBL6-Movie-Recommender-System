@@ -45,7 +45,6 @@ def create_movie(request):
         if not release_date_str:
             messages.error(request, 'Release Date is required.')
         else:
-
             try:
                 # Chuyển đổi chuỗi ngày tháng nhập vào thành đối tượng datetime
                 release_date = datetime.strptime(release_date_str, '%m/%d/%Y')
