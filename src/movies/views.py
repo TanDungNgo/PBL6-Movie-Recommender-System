@@ -55,7 +55,8 @@ class MovieDetailView(generic.DetailView):
         # Retrieve the movie_id from URL parameters or self.kwargs
         movie_id = self.kwargs.get('pk')  # Assuming your URL pattern uses 'pk' for the movie ID
         movie = Movie.objects.get(pk=movie_id)
-        top_rated_movies = Movie.objects.all().order_by('-rating_avg')[:20]
+        top_rated_movies = Movie.objects.all().order_by('-score')[:20]
+        related_movies = Movie.objects.filter(title__icontains=movie.title).exclude(id=movie.id)[:20]
 
         # Lấy danh sách diễn viên, đạo diễn
         url_credits = f'https://api.themoviedb.org/3/movie/{movie.tmdb_id}/credits?api_key={API_KEY}&language=en-US'
@@ -78,6 +79,7 @@ class MovieDetailView(generic.DetailView):
         countries = data_movie.get('production_countries', [])
 
         context['top_rated_movies'] = top_rated_movies
+        context['related_movies'] = related_movies
         context.update({
             'movie_id': movie_id,
             'casts': casts,
@@ -87,6 +89,9 @@ class MovieDetailView(generic.DetailView):
             'countries': countries,
             'directors': directors,
         })
+
+        reviews = movie.reviews.all()
+        context['reviews'] = reviews
 
         return context
 

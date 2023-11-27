@@ -28,7 +28,7 @@ def export_dataset(dataset, fname='dataset.csv', type=ExportDataType.RATINGS):
 def generate_rating_dataset(app_label='movies', model='movie', to_csv=True):
     ctype = ContentType.objects.get(app_label=app_label, model=model)
     qs = Rating.objects.filter(active=True, content_type=ctype)
-    qs = qs.annotate(userId=F('user__id'), movieId=F('object_id'), rating=F('value'))
+    qs = qs.annotate(userId=F('user_id'), movieId=F('object_id'), rating=F('value'))
     dataset = qs.values('userId', 'movieId', 'rating')
     if to_csv:
         export_dataset(dataset=dataset, fname='ratings.csv', type=ExportDataType.RATINGS)
