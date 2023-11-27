@@ -52,13 +52,11 @@ INSTALLED_APPS = [
     'profiles',
     'movies',
     'ratings',
-
     'dptpage',
-
-
     'dashboard',
     'exports',
     'suggestions',
+    'reviews',
 ]
 SITE_ID = 1
 LOGIN_URL = '/accounts/login/'

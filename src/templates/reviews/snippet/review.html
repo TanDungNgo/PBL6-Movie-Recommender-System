@@ -1,0 +1,50 @@
+<script src="https://unpkg.com/htmx.org@1.9.8" integrity="sha384-rgjA7mptc2ETQqXoYC3/zJvkU7K/aP44Y+z7xQuJiVnB/422P/Ak+F/AqFR7E4Wr" crossorigin="anonymous"></script>
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+    <form id="reviewForm" hx-post="/review/movie/" hx-trigger="submit" hx-target="find .success"> 
+      <div class="success mb-2"></div>
+        {% if object_id %}
+        <input type="hidden" value="{{ object_id }}" name="object_id" />
+        {% endif %}
+        <textarea name="content" rows="4"
+        placeholder="Enter your review here..."
+        style="width: 100%; padding: 10px; margin-bottom: 10px;"
+        ></textarea>
+        <button class="button" type="submit">Submit Review</button>
+    </form>
+
+    <h5 style="font-size: 30px; margin: 50px 0 20px 0;">Top reviews</h5>
+    <div class="card-review-info" style="display: flex; margin-bottom: 50px; flex-direction: column;">
+      {% for review in reviews %}
+          <div class="card-review-item" style="display: flex; border: 1px solid #ddd; padding: 10px; border-radius: 8px; margin-bottom: 20px;">
+              <img src="https://cdn-icons-png.flaticon.com/512/4998/4998641.png" alt="" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+              <div style="width: 100%;">
+                  <span style="font-weight: 800; font-size: 18px;">{{ review.user }}</span><br />
+                  <span>{{ review.content }}</span><br />
+                  <span style="color: #888;">{{ review.timestamp }}</span>
+              </div>
+          </div>
+      {% endfor %}
+    </div>  
+</body>
+<script>
+    document.addEventListener('htmx:afterSwap', function (event) {
+        if (event.detail.target.matches('.success')) {
+            var content = document.querySelector('textarea[name="content"]').value;
+            if (content) {
+                var username = '{{ request.session.user_username }}';
+                var timestamp = Date.now();
+                document.querySelector('textarea[name="content"]').value = '';
+                var newReviewHtml = `
+                    <div class="card-review-item" style="display: flex; border: 1px solid #ddd; padding: 10px; border-radius: 8px; margin-bottom: 20px;">
+                        <img src="https://cdn-icons-png.flaticon.com/512/4998/4998641.png" alt="" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
+                        <div style="width: 100%;">
+                            <span style="font-weight: 800; font-size: 18px;">${username}</span><br />
+                            <span>${content}</span><br />
+                            <span style="color: #888;">${timestamp}</span>
+                        </div>
+                    </div>`;
+                document.querySelector('.card-review-info').insertAdjacentHTML('beforebegin', newReviewHtml);
+            }
+        }   
+    });
+</script>

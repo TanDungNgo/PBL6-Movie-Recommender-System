@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 from ratings import views as ratings_views
+from reviews import views as reviews_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('profiles.urls')),
@@ -26,4 +27,5 @@ urlpatterns = [
     path('rate/movie/', ratings_views.rate_movie_view),
     path('dashboard/', include('dashboard.urls')),
     path('suggestions/', include('suggestions.urls')),
+    path('review/movie/', reviews_views.add_review, name='add_review'),
 ]

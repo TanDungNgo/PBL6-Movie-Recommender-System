@@ -16,7 +16,7 @@ class Home(generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['top_rated_movies'] = Movie.objects.order_by('-rating_avg')[:20]
+        context['top_rated_movies'] = Movie.objects.order_by('-score')[:20]
         context['latest_movies'] = self.get_queryset()
         return context
 

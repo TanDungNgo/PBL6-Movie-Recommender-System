@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 
 from movies.models import Movie
 from suggestions.models import Suggestion
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 def suggestion_view(request):
     context = {}
@@ -15,7 +16,20 @@ def suggestion_view(request):
     if suggestion_qs.exists():
         movie_ids = suggestion_qs.order_by("-value").values_list('object_id', flat=True)
         qs = Movie.objects.by_id_order(movie_ids)
-        context['object_list'] = qs[:max_movies]
+        movies  = qs[:max_movies]
     else:
-        context['object_list'] = Movie.objects.all().order_by("?")[:max_movies]
+        movies = Movie.objects.all().order_by("?")[:max_movies]
+    movies_per_page = 12
+    paginator = Paginator(movies, movies_per_page)
+    if 'page' in request.GET and request.GET['page']:
+        page = request.GET['page']
+    else:
+        page = 1
+    try:
+        movies = paginator.page(page)
+    except PageNotAnInteger:
+        movies = paginator.page(1)
+    except EmptyPage:
+        movies = paginator.page(paginator.num_pages)
+    context['object_list'] = movies
     return render(request, "movies/suggestion.html", context)

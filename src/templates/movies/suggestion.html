@@ -3,122 +3,64 @@
 
 {% block title %}Suggestion{% endblock %}
 {% block content %}
+<style>
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
 
+  .step-links {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .step-links a {
+    text-decoration: none;
+    color: #de1002;
+    border: 1px solid #de1002;
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  .step-links a:hover {
+    background-color: #de1002;
+    color: #fff;
+  }
+
+  .current {
+    margin: 0 10px;
+    font-weight: bold;
+  }
+</style>
 <section id="trend" class="pt-4 pb-5">
     <div class="container">
       <div class="row trend_2 mt-4">
-        <h5>Movies <span class="col_red" id="searchResult"> </span></h5>
+        <h2>Suggest Movies <span class="col_red" id="searchResult"> </span></h2>
       </div>
       <div class="row trend_2 mt-4">
-
-        <div class="col-md-3 col-6 mb-4">
-          <div class="trend_2im clearfix position-relative">
-            <div class="trend_2im1 clearfix">
-              <div class="grid">
-                <figure class="effect-jazz mb-0">
-                  <img src="#" height="200" class="d-block w-100" alt="...">
-                </figure>
-              </div>
-            </div>
-            <div class="trend_2im2 clearfix text-center position-absolute w-100 top-0">
-              <span class="fs-1"><a class="col_red" href="#"><i class="fa fa-youtube-play"></i></a></span>
-            </div>
-          </div>
-          <div class="trend_2ilast bg_grey p-3 clearfix">
-            <h5><a class="col_red" href="#" id="showModal"></a></h5>
-            <p class="mb-2">The Croods is a 2013 animation film written, directed, and produced</p>
-            <span class="col_red">
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-            </span>
-            <p class="mb-0">1 Views</p>
-          </div>
-        </div>
-
-        <div class="col-md-3 col-6 mb-4">
-            <div class="trend_2im clearfix position-relative">
-              <div class="trend_2im1 clearfix">
-                <div class="grid">
-                  <figure class="effect-jazz mb-0">
-                    <img src="#" height="200" class="d-block w-100" alt="...">
-                  </figure>
-                </div>
-              </div>
-              <div class="trend_2im2 clearfix text-center position-absolute w-100 top-0">
-                <span class="fs-1"><a class="col_red" href="#"><i class="fa fa-youtube-play"></i></a></span>
-              </div>
-            </div>
-            <div class="trend_2ilast bg_grey p-3 clearfix">
-              <h5><a class="col_red" href="#" id="showModal"></a></h5>
-              <p class="mb-2">The Croods is a 2013 animation film written, directed, and produced</p>
-              <span class="col_red">
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-              </span>
-              <p class="mb-0">1 Views</p>
-            </div>
-        </div>
-
-        <div class="col-md-3 col-6 mb-4">
-            <div class="trend_2im clearfix position-relative">
-              <div class="trend_2im1 clearfix">
-                <div class="grid">
-                  <figure class="effect-jazz mb-0">
-                    <img src="#" height="200" class="d-block w-100" alt="...">
-                  </figure>
-                </div>
-              </div>
-              <div class="trend_2im2 clearfix text-center position-absolute w-100 top-0">
-                <span class="fs-1"><a class="col_red" href="#"><i class="fa fa-youtube-play"></i></a></span>
-              </div>
-            </div>
-            <div class="trend_2ilast bg_grey p-3 clearfix">
-              <h5><a class="col_red" href="#" id="showModal"></a></h5>
-              <p class="mb-2">The Croods is a 2013 animation film written, directed, and produced</p>
-              <span class="col_red">
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-                <i class="fa fa-star"></i>
-              </span>
-              <p class="mb-0">1 Views</p>
-            </div>
-          </div>
-  
-        <div class="col-md-3 col-6 mb-4">
-              <div class="trend_2im clearfix position-relative">
-                <div class="trend_2im1 clearfix">
-                  <div class="grid">
-                    <figure class="effect-jazz mb-0">
-                      <img src="#" height="200" class="d-block w-100" alt="...">
-                    </figure>
-                  </div>
-                </div>
-                <div class="trend_2im2 clearfix text-center position-absolute w-100 top-0">
-                  <span class="fs-1"><a class="col_red" href="#"><i class="fa fa-youtube-play"></i></a></span>
-                </div>
-              </div>
-              <div class="trend_2ilast bg_grey p-3 clearfix">
-                <h5><a class="col_red" href="#" id="showModal"></a></h5>
-                <p class="mb-2">The Croods is a 2013 animation film written, directed, and produced</p>
-                <span class="col_red">
-                  <i class="fa fa-star"></i>
-                  <i class="fa fa-star"></i>
-                  <i class="fa fa-star"></i>
-                  <i class="fa fa-star"></i>
-                  <i class="fa fa-star"></i>
-                </span>
-                <p class="mb-0">1 Views</p>
-              </div>
-        </div>
+        {% for object in object_list %}
+        {% include 'movies/snippet/card.html' with object=object current_rating=current_rating %}
+        {% endfor %}
       </div>
+      <div class="pagination">
+        <span class="step-links">
+          {% if object_list.has_previous %}
+            <a href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">&laquo; first</a>
+            <a href="?page={{ object_list.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">previous</a>
+          {% endif %}
+      
+          <span class="current">
+            Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.
+          </span>
+      
+          {% if object_list.has_next %}
+            <a href="?page={{ object_list.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">next</a>
+            <a href="?page={{ object_list.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">last &raquo;</a>
+          {% endif %}
+        </span>
+      </div> 
     </div>
 </section>
 <section>

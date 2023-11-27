@@ -6,7 +6,7 @@ from django.db.models import Window, F
 from django.db.models.functions import DenseRank
 
 
-@shared_task
+@shared_task(name='task_update_movie_position_embedding_idx')
 def update_movie_position_embedding_idx():
     Movie = apps.get_model('movies', "Movie")
     qs = Movie.objects.all().annotate(

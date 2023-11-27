@@ -1,12 +1,13 @@
 from django.db import models
 from django.contrib.contenttypes.fields import GenericRelation
-from django.db.models import Q, F, Sum
+from django.db.models import Q, F, Sum, Case, When
 from django.db.models.query import QuerySet
 from ratings.models import Rating
 from django.utils import timezone
 import datetime
 from django.db.models.signals import post_save, post_delete
 from . import tasks as movies_tasks
+from reviews.models import Review
 
 # Create your models here.
 RATING_CALC_TIME_IN_DAYS = 3 # days
@@ -52,6 +53,11 @@ class MovieManager(models.Manager):
         )
         return self.get_queryset().filter(lookup).distinct()
 
+    def by_id_order(self, movie_pks=[]):
+        qs = self.get_queryset().filter(pk__in=movie_pks)
+        maintain_order = Case(*[When(pk=pki, then=idx) for idx, pki in enumerate(movie_pks)])
+        return qs.order_by(maintain_order)
+
 class Movie(models.Model):
     title = models.CharField(max_length=255, unique=True)
     overview = models.TextField()
@@ -68,7 +74,10 @@ class Movie(models.Model):
     score = models.FloatField(blank=True, null=True)
     tmdb_id = models.IntegerField(blank=True, null=True)
     idx = models.IntegerField(help_text='Position IDs for ML', blank=True, null=True)
+    reviews = GenericRelation(Review)
+
     objects = MovieManager()
+
 
     def get_absolute_url(self):
         return f"/movies/{self.id}/"
