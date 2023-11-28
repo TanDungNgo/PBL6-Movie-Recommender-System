@@ -17,12 +17,6 @@ class MovieRatingTest(LiveServerTestCase):
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
         driver = webdriver.Chrome(service=chrome_service)
-
-        chromedriver_path = 'D:/Download/chromedriver-win64 (2)/chromedriver-win64/chromedriver.exe'
-
-        # Khởi tạo driver Chrome với tùy chọn Service
-        chrome_service = webdriver.chrome.service.Service(chromedriver_path)
-        driver = webdriver.Chrome(service=chrome_service)
         # Navigate to the login page
         driver.get('http://127.0.0.1:8000/accounts/login/')
 

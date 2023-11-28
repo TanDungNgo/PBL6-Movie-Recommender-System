@@ -12,7 +12,7 @@ def add_review(request):
     object_id = request.POST.get('object_id')
     content = request.POST.get('content')
     user = request.user
-    message = "<span class='bg-danger text-light py-1 px-3 rounded'>You must <a href='/accounts/login'>login</a> to rate this.</div>"
+    message = "<span class='bg-danger text-light py-1 px-3 rounded'>You must <a href='/accounts/login'>login</a> to review this.</div>"
     if content == "" or content is None:
         message = "<span class='bg-danger text-light py-1 px-3 rounded'>You must write a review.</div>"
         return HttpResponse(message,status=200)
