@@ -6,11 +6,13 @@ import time
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from django.conf import settings
 
+CHROMEDRIVER_PATH = settings.BASE_DIR / 'chromedriver.exe'
 class LoginFormTest(LiveServerTestCase):
     def test_login_success(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -61,7 +63,7 @@ class LoginFormTest(LiveServerTestCase):
 
     def test_invalid_email(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -111,7 +113,7 @@ class LoginFormTest(LiveServerTestCase):
         driver.quit()
     def test_invalid_password(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -162,7 +164,7 @@ class LoginFormTest(LiveServerTestCase):
     
     def test_invalid_email_password(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -213,7 +215,7 @@ class LoginFormTest(LiveServerTestCase):
 
     def test_empty_email(self):
        # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -264,7 +266,7 @@ class LoginFormTest(LiveServerTestCase):
 
     def test_empty_password(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -315,7 +317,7 @@ class LoginFormTest(LiveServerTestCase):
     
     def test_empty_email_password(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -363,10 +365,11 @@ class LoginFormTest(LiveServerTestCase):
         time.sleep(4)
         # Close the browser
         driver.quit()
+
 class SignupFormTest(LiveServerTestCase):
     def test_signup_success(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -415,7 +418,7 @@ class SignupFormTest(LiveServerTestCase):
     
     def test_empty_username(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -469,7 +472,7 @@ class SignupFormTest(LiveServerTestCase):
 
     def test_empty_email(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -523,7 +526,7 @@ class SignupFormTest(LiveServerTestCase):
 
     def test_empty_password(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -577,7 +580,7 @@ class SignupFormTest(LiveServerTestCase):
 
     def test_already_exists_username(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -630,7 +633,7 @@ class SignupFormTest(LiveServerTestCase):
         driver.quit()
     def test_already_exists_email(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -685,7 +688,11 @@ class SignupFormTest(LiveServerTestCase):
 class UpdateProfileTest(LiveServerTestCase):
     def test_update_success(self):
         # Đường dẫn đến ChromeDriver
+
         chromedriver_path = 'D:/Download/chromedriver-win64 (2)/chromedriver-win64/chromedriver.exe'
+
+        chromedriver_path = CHROMEDRIVER_PATH
+
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -787,7 +794,6 @@ class UpdateProfileTest(LiveServerTestCase):
         time.sleep(4)
         # Close the browser
         driver.quit()
-
 
     def test_update_invalid_username(self):
         # Đường dẫn đến ChromeDriver
@@ -975,7 +981,7 @@ class UpdateProfileTest(LiveServerTestCase):
 
 class ChangePasswordTest(LiveServerTestCase):
     def test_change_success(self):
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
         
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
         driver = webdriver.Chrome(service=chrome_service)
@@ -1023,17 +1029,20 @@ class ChangePasswordTest(LiveServerTestCase):
         old_password_input = driver.find_element('name', 'old_password')
         new_password_input = driver.find_element('name', 'new_password')
         confirm_password_input = driver.find_element('name', 'confirm_password')
-        submit_button = driver.find_element('id', 'update-profile-button')
+        change = driver.find_element('id', 'change_password_btn')
+        form = driver.find_element('id', 'form_change_password')
+
+        time.sleep(2)
+        driver.execute_script("arguments[0].scrollIntoView(true);", form)
 
         # Perform actions on the form
         time.sleep(2)
         old_password_input.send_keys('123456789')
         time.sleep(2)
-        new_password_input.send_keys('phuong12345')
+        new_password_input.send_keys('12345678')
         time.sleep(2)
-        confirm_password_input.send_keys('phuong12345')
+        confirm_password_input.send_keys('12345678')
         time.sleep(2)
-        
 
         csrf_input = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, 
@@ -1048,21 +1057,20 @@ class ChangePasswordTest(LiveServerTestCase):
             print("CSRF token not found")
 
         # Submit the form
-        submit_button.click()
+        change.click()
 
         success_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-success']")
         success_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(success_message_locator))
 
         # Assert that the success message contains the expected text
-        expected_success_text = "Successfully updated."
+        expected_success_text = "Successfully changed."
         assert expected_success_text in success_message.text
 
-        time.sleep(4)
+        time.sleep(3)
         driver.quit()
 
-
     def test_invalid_old_password(self):
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
         driver = webdriver.Chrome(service=chrome_service)
@@ -1077,7 +1085,7 @@ class ChangePasswordTest(LiveServerTestCase):
         time.sleep(2)
         email_input.send_keys('phuong@gmail.com')
         time.sleep(2)
-        password_input.send_keys('phuong12345')
+        password_input.send_keys('12345678')
         time.sleep(2)
         
 
@@ -1110,7 +1118,11 @@ class ChangePasswordTest(LiveServerTestCase):
         old_password_input = driver.find_element('name', 'old_password')
         new_password_input = driver.find_element('name', 'new_password')
         confirm_password_input = driver.find_element('name', 'confirm_password')
-        submit_button = driver.find_element('id', 'update-profile-button')
+        change_button = driver.find_element('id', 'change_password_btn')
+        form = driver.find_element('id', 'form_change_password')
+
+        time.sleep(2)
+        driver.execute_script("arguments[0].scrollIntoView(true);", form)
 
         # Perform actions on the form
         time.sleep(2)
@@ -1134,7 +1146,7 @@ class ChangePasswordTest(LiveServerTestCase):
             print("CSRF token not found")
 
         # Submit the form
-        submit_button.click()
+        change_button.click()
 
         error_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-error']")
         error_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(error_message_locator))
@@ -1147,7 +1159,7 @@ class ChangePasswordTest(LiveServerTestCase):
         driver.quit()
 
     def test_invalid_new_password(self):
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
         driver = webdriver.Chrome(service=chrome_service)
@@ -1163,7 +1175,7 @@ class ChangePasswordTest(LiveServerTestCase):
         time.sleep(2)
         email_input.send_keys('phuong@gmail.com')
         time.sleep(2)
-        password_input.send_keys('phuong12345')
+        password_input.send_keys('12345678')
         time.sleep(2)
         
 
@@ -1196,11 +1208,15 @@ class ChangePasswordTest(LiveServerTestCase):
         old_password_input = driver.find_element('name', 'old_password')
         new_password_input = driver.find_element('name', 'new_password')
         confirm_password_input = driver.find_element('name', 'confirm_password')
-        submit_button = driver.find_element('id', 'update-profile-button')
+        change_button = driver.find_element('id', 'change_password_btn')
+        form = driver.find_element('id', 'form_change_password')
+
+        time.sleep(2)
+        driver.execute_script("arguments[0].scrollIntoView(true);", form)
 
         # Perform actions on the form
         time.sleep(2)
-        old_password_input.send_keys('phuong12345')
+        old_password_input.send_keys('12345678')
         time.sleep(2)
         new_password_input.send_keys('phuong123')
         time.sleep(2)
@@ -1220,7 +1236,7 @@ class ChangePasswordTest(LiveServerTestCase):
             print("CSRF token not found")
 
         # Submit the form with the CSRF token in the headers
-        submit_button.click()
+        change_button.click()
 
         error_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-error']")
         error_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(error_message_locator))

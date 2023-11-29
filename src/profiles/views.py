@@ -95,69 +95,8 @@ def signout(request):
     messages.success(request, 'Logout successfully.')
     return redirect('signin')
 
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 def profile(request):
-    if request.method == 'POST':
-        if 'user_id' in request.session:
-            try:
-                user_id = request.session['user_id']
-                user = User.objects.get(id=user_id)
-
-                first_name = request.POST.get('first_name', user.first_name)
-                last_name = request.POST.get('last_name', user.last_name)
-                username = request.POST.get('username', user.username)
-                email = request.POST.get('email', user.email)
-
-              
-
-                # Check if the username already exists
-                if User.objects.exclude(id=user_id).filter(username=username).exists():
-                    messages.error(request, 'Username already exists. Please choose a different one.')
-                    return redirect('profile')
-                
-                # Check if the email already exists
-                if User.objects.exclude(id=user_id).filter(email=email).exists():
-                    messages.error(request, 'Email already exists. Please use a different one.')
-                    return redirect('profile')
-
-                
-
-                user = User.objects.get(id=user_id)
-              
-
-                # Validate input data here (e.g., email format, phone number format)
-                user.first_name = first_name
-                user.last_name = last_name
-                user.username = username
-                user.email = email
-                user.save()
-
-                request.session.update({
-                    'user_username': username,
-                    'user_email': email,
-                    'user_first_name': first_name,
-                    'user_last_name': last_name,
-                })
-
-                user_data = {
-                    'username': username,
-                    'email': email,
-                    'first_name': first_name,
-                    'last_name': last_name,
-                }
-
-              
-
-                messages.success(request, 'Successfully updated.')
-                return redirect('profile')
-
-            except User.DoesNotExist:
-                messages.error(request, 'User not found')
-                return HttpResponse(status=404)
-        else:
-            messages.error(request, 'Please login')
-            return redirect('login')
-    else:
         if 'user_id' in request.session:
             user_session_data = {
                 'id': request.session['user_id'],
@@ -171,3 +110,112 @@ def profile(request):
             messages.error(request, 'Please login')
             return redirect('signin')
 
+@api_view(['POST'])   
+def update_profile(request):
+    if request.method == 'POST':
+        if 'user_id' in request.session:
+            try:
+                user_id = request.session['user_id']
+                user = User.objects.get(id=user_id)
+
+                username = request.POST.get('username')
+                email = request.POST.get('email')
+                first_name = request.POST.get('first_name')
+                last_name = request.POST.get('last_name')
+                
+                # Check if the username already exists
+                if User.objects.exclude(id=user_id).filter(username=username).exists():
+                    messages.error(request, 'Username already exists. Please choose a different one.')
+                    return redirect('profile')
+                
+                # Check if the email already exists
+                if User.objects.exclude(id=user_id).filter(email=email).exists():
+                    messages.error(request, 'Email already exists. Please use a different one.')
+                    return redirect('profile')
+                
+                user.username = username
+                user.first_name = first_name
+                user.last_name = last_name
+                user.email = email
+
+                user.save()
+
+                request.session.update({
+                    'user_name': username,
+                    'user_email': email,
+                    'user_first_name': first_name,
+                    'user_last_name': last_name,
+                })
+
+                messages.success(request, 'Successfully updated.')
+                return redirect('profile')
+
+            except User.DoesNotExist:
+                messages.error(request, 'User not found')
+                return HttpResponse(status=404)
+        else:
+            messages.error(request, 'Please login')
+            return redirect('signin')
+    else:
+        if 'user_id' in request.session:
+            user_session_data = {
+                'id': request.session['user_id'],
+                'email': request.session.get('user_email'),
+                'first_name': request.session.get('user_first_name'),
+                'last_name': request.session.get('user_last_name'),
+            }
+
+            return render(request, 'account/profile.html', user_session_data)
+        else:
+            messages.error(request, 'Please login')
+            return redirect('signin')
+        
+@api_view(['POST'])
+def change_password(request):
+    if request.method == 'POST':
+        if 'user_id' in request.session:
+            try:
+                user_id = request.session['user_id']
+                user = User.objects.get(id=user_id)
+
+                old_password = request.POST.get('old_password')
+                new_password = request.POST.get('new_password')
+                confirm_password = request.POST.get('confirm_password')
+
+                current_password = User.objects.get(id=user_id).password
+
+                if not old_password:
+                    messages.error(request, 'Please fill in all information.')
+                    return redirect('profile')
+
+                if not new_password:
+                    messages.error(request, 'Please fill in all information.')
+                    return redirect('profile')
+                
+                if not confirm_password:
+                    messages.error(request, 'Please fill in all information.')
+                    return redirect('profile')
+
+                if not check_password(old_password, current_password):
+                    messages.error(request, 'Old password is incorrect.')
+                    return redirect('profile')
+
+                if new_password != confirm_password:
+                    messages.error(request, 'New password and confirm password do not match.')
+                    return redirect('profile')
+                else:
+                    user.set_password(new_password)
+
+                    user.save()
+
+                    update_session_auth_hash(request, user)
+
+                    messages.success(request, 'Successfully changed.')
+                    return redirect('profile')
+
+            except User.DoesNotExist:
+                messages.error(request, 'User not found')
+                return HttpResponse(status=404)
+        else:
+            messages.error(request, 'Please login')
+            return redirect('login')
