@@ -6,11 +6,13 @@ import time
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
+from django.conf import settings
 
+CHROMEDRIVER_PATH = settings.BASE_DIR / 'chromedriver.exe'
 class LoginFormTest(LiveServerTestCase):
     def test_login_success(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -61,7 +63,7 @@ class LoginFormTest(LiveServerTestCase):
 
     def test_invalid_email(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -111,7 +113,7 @@ class LoginFormTest(LiveServerTestCase):
         driver.quit()
     def test_invalid_password(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -162,7 +164,7 @@ class LoginFormTest(LiveServerTestCase):
     
     def test_invalid_email_password(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -213,7 +215,7 @@ class LoginFormTest(LiveServerTestCase):
 
     def test_empty_email(self):
        # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -264,7 +266,7 @@ class LoginFormTest(LiveServerTestCase):
 
     def test_empty_password(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -315,7 +317,7 @@ class LoginFormTest(LiveServerTestCase):
     
     def test_empty_email_password(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -363,10 +365,11 @@ class LoginFormTest(LiveServerTestCase):
         time.sleep(4)
         # Close the browser
         driver.quit()
+
 class SignupFormTest(LiveServerTestCase):
     def test_signup_success(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -415,7 +418,7 @@ class SignupFormTest(LiveServerTestCase):
     
     def test_empty_username(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -469,7 +472,7 @@ class SignupFormTest(LiveServerTestCase):
 
     def test_empty_email(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -523,7 +526,7 @@ class SignupFormTest(LiveServerTestCase):
 
     def test_empty_password(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -577,7 +580,7 @@ class SignupFormTest(LiveServerTestCase):
 
     def test_already_exists_username(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -630,7 +633,7 @@ class SignupFormTest(LiveServerTestCase):
         driver.quit()
     def test_already_exists_email(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -685,7 +688,7 @@ class SignupFormTest(LiveServerTestCase):
 class UpdateProfileTest(LiveServerTestCase):
     def test_update_success(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -975,7 +978,7 @@ class UpdateProfileTest(LiveServerTestCase):
 
 class ChangePasswordTest(LiveServerTestCase):
     def test_change_success(self):
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
         
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
         driver = webdriver.Chrome(service=chrome_service)
@@ -1062,7 +1065,7 @@ class ChangePasswordTest(LiveServerTestCase):
 
 
     def test_invalid_old_password(self):
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
         driver = webdriver.Chrome(service=chrome_service)
@@ -1147,7 +1150,7 @@ class ChangePasswordTest(LiveServerTestCase):
         driver.quit()
 
     def test_invalid_new_password(self):
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
         driver = webdriver.Chrome(service=chrome_service)
