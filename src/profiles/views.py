@@ -9,6 +9,7 @@ from rest_framework.decorators import api_view
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import update_session_auth_hash
+from .models import CustomUser
 
 User = get_user_model()
 
@@ -23,6 +24,7 @@ def signin(request):
                 user = authenticate(request, username=user.username, password=password)
                 if user:
                     login(request, user)
+                    user = CustomUser.objects.get(email=email)
                     request.session['user_id'] = user.id
                     request.session['user_username'] = user.username
                     request.session['user_email'] = user.email
@@ -32,9 +34,10 @@ def signin(request):
                         request.session['user_role'] = 'admin'
                     else:
                         request.session['user_role'] = 'user'
-
-                    default_avatar_path = 'https://cdn-icons-png.flaticon.com/512/4998/4998641.png'
-                    request.session['user_avatar'] = default_avatar_path
+                    if user.avatar:
+                        request.session['user_avatar'] = user.avatar
+                    else:
+                        request.session['user_avatar'] = 'https://cdn-icons-png.flaticon.com/512/4998/4998641.png'
                     
                     messages.success(request, 'Login successfully.')
                     if user.is_superuser:
@@ -79,6 +82,7 @@ def signup(request):
         # Nếu không có lỗi và username, email đều chưa tồn tại, tiến hành tạo người dùng mới
         hashed_password = make_password(password)
         user = User(username=username, email=email, password=hashed_password)
+        CustomUser.objects.create_user(username=username, email=email, password=password)
         user.save()
 
         # Bạn có thể thêm mã xử lý khác ở đây, chẳng hạn như xử lý avatar và role
@@ -101,9 +105,11 @@ def profile(request):
             user_session_data = {
                 'id': request.session['user_id'],
                 'email': request.session.get('user_email'),
-                'first_name': request.session.get('user_first_name'),
-                'last_name': request.session.get('user_last_name'),
+                'first_name': request.session.get('user_firstname'),
+                'last_name': request.session.get('user_lastname'),
             }
+
+            print(user_session_data)
 
             return render(request, 'account/profile.html', user_session_data)
         else:
@@ -117,6 +123,7 @@ def update_profile(request):
             try:
                 user_id = request.session['user_id']
                 user = User.objects.get(id=user_id)
+                customuser = CustomUser.objects.get(id=user_id)
 
                 username = request.POST.get('username')
                 email = request.POST.get('email')
@@ -140,11 +147,18 @@ def update_profile(request):
 
                 user.save()
 
+                customuser.username = username
+                customuser.first_name = first_name
+                customuser.last_name = last_name
+                customuser.email = email
+
+                customuser.save()
+
                 request.session.update({
                     'user_name': username,
                     'user_email': email,
-                    'user_first_name': first_name,
-                    'user_last_name': last_name,
+                    'user_firstname': first_name,
+                    'user_lastname': last_name,
                 })
 
                 messages.success(request, 'Successfully updated.')
@@ -177,6 +191,7 @@ def change_password(request):
             try:
                 user_id = request.session['user_id']
                 user = User.objects.get(id=user_id)
+                customuser = CustomUser.objects.get(id=user_id)
 
                 old_password = request.POST.get('old_password')
                 new_password = request.POST.get('new_password')
@@ -205,8 +220,10 @@ def change_password(request):
                     return redirect('profile')
                 else:
                     user.set_password(new_password)
-
                     user.save()
+
+                    customuser.set_password(new_password)
+                    customuser.save()
 
                     update_session_auth_hash(request, user)
 

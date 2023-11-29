@@ -26,11 +26,8 @@ class LoginFormTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
-        email_input.send_keys('trang@gmail.com')
-        time.sleep(2)
+        email_input.send_keys('dung@gmail.com')
         password_input.send_keys('123456789')
-        time.sleep(2)
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -56,8 +53,8 @@ class LoginFormTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(4)
-
+        
+        time.sleep(2)
         # Close the browser
         driver.quit()
 
@@ -77,11 +74,11 @@ class LoginFormTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         email_input.send_keys('huyentrang@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('123456789')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -108,7 +105,7 @@ class LoginFormTest(LiveServerTestCase):
         assert expected_error_text in error_message.text
 
         # Optionally, you can assert that the URL, title, or other elements indicate a failed login
-        time.sleep(4)
+        time.sleep(2)
         # Close the browser
         driver.quit()
     def test_invalid_password(self):
@@ -127,11 +124,11 @@ class LoginFormTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         email_input.send_keys('trang@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('123456')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -158,7 +155,7 @@ class LoginFormTest(LiveServerTestCase):
         assert expected_error_text in error_message.text
 
         # Optionally, you can assert that the URL, title, or other elements indicate a failed login
-        time.sleep(4)
+        time.sleep(2)
         # Close the browser
         driver.quit()
     
@@ -178,11 +175,11 @@ class LoginFormTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         email_input.send_keys('huyentrang@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('123456')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -209,7 +206,7 @@ class LoginFormTest(LiveServerTestCase):
         assert expected_error_text in error_message.text
 
         # Optionally, you can assert that the URL, title, or other elements indicate a failed login
-        time.sleep(4)
+        time.sleep(2)
         # Close the browser
         driver.quit()
 
@@ -229,11 +226,11 @@ class LoginFormTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         email_input.send_keys('')
-        time.sleep(2)
+        
         password_input.send_keys('123456789')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -260,7 +257,7 @@ class LoginFormTest(LiveServerTestCase):
         assert expected_error_text in error_message.text
 
         # Optionally, you can assert that the URL, title, or other elements indicate a failed login
-        time.sleep(4)
+        time.sleep(2)
         # Close the browser
         driver.quit()
 
@@ -280,11 +277,11 @@ class LoginFormTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         email_input.send_keys('trang@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -311,7 +308,7 @@ class LoginFormTest(LiveServerTestCase):
         assert expected_error_text in error_message.text
 
         # Optionally, you can assert that the URL, title, or other elements indicate a failed login
-        time.sleep(4)
+        time.sleep(2)
         # Close the browser
         driver.quit()
     
@@ -331,11 +328,11 @@ class LoginFormTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         email_input.send_keys('')
-        time.sleep(2)
+        
         password_input.send_keys('')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -362,7 +359,7 @@ class LoginFormTest(LiveServerTestCase):
         assert expected_error_text in error_message.text
 
         # Optionally, you can assert that the URL, title, or other elements indicate a failed login
-        time.sleep(4)
+        time.sleep(2)
         # Close the browser
         driver.quit()
 
@@ -385,13 +382,13 @@ class SignupFormTest(LiveServerTestCase):
 
 
         # Perform actions on the form
-        time.sleep(2)
+        
         username_input.send_keys('thaotran')
-        time.sleep(2)
+        
         email_input.send_keys('thap@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('123456789')
-        time.sleep(2)
+        
 
         csrf_input = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, 
@@ -411,7 +408,7 @@ class SignupFormTest(LiveServerTestCase):
         self.assertEqual(driver.current_url, 'http://127.0.0.1:8000/accounts/login/', 'Signup successfully.')
         success_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-success']")
         success_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(success_message_locator))
-        time.sleep(4)
+        time.sleep(2)
 
         # Close the browser
         driver.quit()
@@ -433,13 +430,13 @@ class SignupFormTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         username_input.send_keys('')
-        time.sleep(2)
+        
         email_input.send_keys('thao@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('123456789')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -466,7 +463,7 @@ class SignupFormTest(LiveServerTestCase):
         assert expected_error_text in error_message.text
 
         # Optionally, you can assert that the URL, title, or other elements indicate a failed login
-        time.sleep(4)
+        time.sleep(2)
         # Close the browser
         driver.quit()
 
@@ -487,13 +484,13 @@ class SignupFormTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         username_input.send_keys('thaotran')
-        time.sleep(2)
+        
         email_input.send_keys('')
-        time.sleep(2)
+        
         password_input.send_keys('123456789')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -520,7 +517,7 @@ class SignupFormTest(LiveServerTestCase):
         assert expected_error_text in error_message.text
 
         # Optionally, you can assert that the URL, title, or other elements indicate a failed login
-        time.sleep(4)
+        time.sleep(2)
         # Close the browser
         driver.quit()
 
@@ -541,13 +538,13 @@ class SignupFormTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         username_input.send_keys('thaotran')
-        time.sleep(2)
+        
         email_input.send_keys('thao@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -574,7 +571,7 @@ class SignupFormTest(LiveServerTestCase):
         assert expected_error_text in error_message.text
 
         # Optionally, you can assert that the URL, title, or other elements indicate a failed login
-        time.sleep(4)
+        time.sleep(2)
         # Close the browser
         driver.quit()
 
@@ -595,13 +592,13 @@ class SignupFormTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         username_input.send_keys('huyentrang')
-        time.sleep(2)
+        
         email_input.send_keys('thao@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('123456789')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -628,7 +625,7 @@ class SignupFormTest(LiveServerTestCase):
         assert expected_error_text in error_message.text
 
         # Optionally, you can assert that the URL, title, or other elements indicate a failed login
-        time.sleep(4)
+        time.sleep(2)
         # Close the browser
         driver.quit()
     def test_already_exists_email(self):
@@ -648,13 +645,13 @@ class SignupFormTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         username_input.send_keys('thaotran')
-        time.sleep(2)
+        
         email_input.send_keys('trang@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('123456789')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -681,15 +678,13 @@ class SignupFormTest(LiveServerTestCase):
         assert expected_error_text in error_message.text
 
         # Optionally, you can assert that the URL, title, or other elements indicate a failed login
-        time.sleep(4)
+        time.sleep(2)
         # Close the browser
         driver.quit()
 
 class UpdateProfileTest(LiveServerTestCase):
     def test_update_success(self):
         # Đường dẫn đến ChromeDriver
-
-        chromedriver_path = 'D:/Download/chromedriver-win64 (2)/chromedriver-win64/chromedriver.exe'
 
         chromedriver_path = CHROMEDRIVER_PATH
 
@@ -706,11 +701,11 @@ class UpdateProfileTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         email_input.send_keys('trang@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('123456789')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -736,7 +731,7 @@ class UpdateProfileTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(4)
+        time.sleep(2)
 
         driver.get('http://127.0.0.1:8000/accounts/profile/')
 
@@ -748,24 +743,14 @@ class UpdateProfileTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'update-profile-button')
 
         # Perform actions on the form
-        time.sleep(2)
         username_input.clear()  # Clear the existing username
-        time.sleep(2)
         username_input.send_keys('huyentrang')
-
-        time.sleep(2)
         email_input.clear()
-        time.sleep(2)
         email_input.send_keys('trangle@gmail.com')
-        time.sleep(2)
         first_name_input.clear()
-        time.sleep(2)
         first_name_input.send_keys('Huyen Trang ')
-        time.sleep(2)
         last_name_input.clear()
-        time.sleep(2)
         last_name_input.send_keys('Le Thi')
-        time.sleep(2)
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -791,13 +776,13 @@ class UpdateProfileTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(4)
+        time.sleep(2)
         # Close the browser
         driver.quit()
 
     def test_update_invalid_username(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'D:/Download/chromedriver-win64 (2)/chromedriver-win64/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -811,11 +796,11 @@ class UpdateProfileTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         email_input.send_keys('trang@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('123456789')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -841,7 +826,7 @@ class UpdateProfileTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(4)
+        time.sleep(2)
 
         driver.get('http://127.0.0.1:8000/accounts/profile/')
 
@@ -853,12 +838,12 @@ class UpdateProfileTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'update-profile-button')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         username_input.clear()  # Clear the existing username
-        time.sleep(2)
+        
         username_input.send_keys('ductran')
 
-        time.sleep(2)
+        
         csrf_input = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, 
                                             'input[name="csrfmiddlewaretoken"]')))
@@ -883,13 +868,13 @@ class UpdateProfileTest(LiveServerTestCase):
         assert expected_error_text in error_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(4)
+        time.sleep(2)
         # Close the browser
         driver.quit()
 
     def test_update_invalid_email(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'D:/Download/chromedriver-win64 (2)/chromedriver-win64/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -903,11 +888,11 @@ class UpdateProfileTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         email_input.send_keys('trang@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('123456789')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -933,7 +918,7 @@ class UpdateProfileTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(4)
+        time.sleep(2)
 
         driver.get('http://127.0.0.1:8000/accounts/profile/')
 
@@ -945,12 +930,12 @@ class UpdateProfileTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'update-profile-button')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         email_input.clear()  # Clear the existing username
-        time.sleep(2)
+        
         email_input.send_keys('duc@gmail.com')
 
-        time.sleep(2)
+        
         csrf_input = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, 
                                             'input[name="csrfmiddlewaretoken"]')))
@@ -975,7 +960,7 @@ class UpdateProfileTest(LiveServerTestCase):
         assert expected_error_text in error_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(4)
+        time.sleep(2)
         # Close the browser
         driver.quit()
 
@@ -993,11 +978,11 @@ class ChangePasswordTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         email_input.send_keys('phuong@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('123456789')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -1022,7 +1007,7 @@ class ChangePasswordTest(LiveServerTestCase):
         expected_success_text = "Login successfully."
         assert expected_success_text in success_message.text
 
-        time.sleep(4)
+        time.sleep(2)
 
         driver.get('http://127.0.0.1:8000/accounts/profile/')
 
@@ -1032,17 +1017,17 @@ class ChangePasswordTest(LiveServerTestCase):
         change = driver.find_element('id', 'change_password_btn')
         form = driver.find_element('id', 'form_change_password')
 
-        time.sleep(2)
+        
         driver.execute_script("arguments[0].scrollIntoView(true);", form)
 
         # Perform actions on the form
-        time.sleep(2)
+        
         old_password_input.send_keys('123456789')
-        time.sleep(2)
+        
         new_password_input.send_keys('12345678')
-        time.sleep(2)
+        
         confirm_password_input.send_keys('12345678')
-        time.sleep(2)
+        
 
         csrf_input = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, 
@@ -1082,11 +1067,11 @@ class ChangePasswordTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         email_input.send_keys('phuong@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('12345678')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -1111,7 +1096,7 @@ class ChangePasswordTest(LiveServerTestCase):
         expected_success_text = "Login successfully."
         assert expected_success_text in success_message.text
 
-        time.sleep(4)
+        time.sleep(2)
 
         driver.get('http://127.0.0.1:8000/accounts/profile/')
 
@@ -1121,17 +1106,17 @@ class ChangePasswordTest(LiveServerTestCase):
         change_button = driver.find_element('id', 'change_password_btn')
         form = driver.find_element('id', 'form_change_password')
 
-        time.sleep(2)
+        
         driver.execute_script("arguments[0].scrollIntoView(true);", form)
 
         # Perform actions on the form
-        time.sleep(2)
+        
         old_password_input.send_keys('phuong123')
-        time.sleep(2)
+        
         new_password_input.send_keys('123456789')
-        time.sleep(2)
+        
         confirm_password_input.send_keys('123456789')
-        time.sleep(2)
+        
         
         csrf_input = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, 
@@ -1155,7 +1140,7 @@ class ChangePasswordTest(LiveServerTestCase):
         expected_error_text = "Old password is incorrect."
         assert expected_error_text in error_message.text
 
-        time.sleep(4)
+        time.sleep(2)
         driver.quit()
 
     def test_invalid_new_password(self):
@@ -1172,11 +1157,11 @@ class ChangePasswordTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         email_input.send_keys('phuong@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('12345678')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -1201,7 +1186,7 @@ class ChangePasswordTest(LiveServerTestCase):
         expected_success_text = "Login successfully."
         assert expected_success_text in success_message.text
 
-        time.sleep(4)
+        time.sleep(2)
 
         driver.get('http://127.0.0.1:8000/accounts/profile/')
 
@@ -1211,17 +1196,17 @@ class ChangePasswordTest(LiveServerTestCase):
         change_button = driver.find_element('id', 'change_password_btn')
         form = driver.find_element('id', 'form_change_password')
 
-        time.sleep(2)
+        
         driver.execute_script("arguments[0].scrollIntoView(true);", form)
 
         # Perform actions on the form
-        time.sleep(2)
+        
         old_password_input.send_keys('12345678')
-        time.sleep(2)
+        
         new_password_input.send_keys('phuong123')
-        time.sleep(2)
+        
         confirm_password_input.send_keys('phuong1234')
-        time.sleep(2)
+        
 
         csrf_input = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, 
@@ -1245,5 +1230,5 @@ class ChangePasswordTest(LiveServerTestCase):
         expected_error_text = "New password and confirm password do not match."
         assert expected_error_text in error_message.text
 
-        time.sleep(4)
+        time.sleep(2)
         driver.quit()

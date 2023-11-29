@@ -152,7 +152,7 @@
         window.location.href = "{% url 'movie_find_view' %}?search=" + encodeURIComponent(searchTerm);
       }
       else {
-        window.location.href = "{% url 'movie_find_view' %}"
+        window.location.href = "{% url 'movie_find_view' %}?search="
       }
     }
   });
