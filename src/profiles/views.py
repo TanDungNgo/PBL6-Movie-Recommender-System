@@ -108,9 +108,7 @@ def profile(request):
                 username = request.POST.get('username', user.username)
                 email = request.POST.get('email', user.email)
 
-                old_password = request.POST.get('old_password')
-                new_password = request.POST.get('new_password')
-                confirm_password = request.POST.get('confirm_password')
+              
 
                 # Check if the username already exists
                 if User.objects.exclude(id=user_id).filter(username=username).exists():
@@ -122,19 +120,10 @@ def profile(request):
                     messages.error(request, 'Email already exists. Please use a different one.')
                     return redirect('profile')
 
-                # Change password
-                current_password = User.objects.get(id=user_id).password
-
-                if not check_password(old_password, current_password):
-                    messages.error(request, 'Old password is incorrect.')
-                    return redirect('profile')
-
-                if new_password != confirm_password:
-                    messages.error(request, 'New password and confirm password do not match.')
-                    return redirect('profile')
+                
 
                 user = User.objects.get(id=user_id)
-                user.set_password(new_password)
+              
 
                 # Validate input data here (e.g., email format, phone number format)
                 user.first_name = first_name
@@ -157,7 +146,7 @@ def profile(request):
                     'last_name': last_name,
                 }
 
-                update_session_auth_hash(request, user)
+              
 
                 messages.success(request, 'Successfully updated.')
                 return redirect('profile')
