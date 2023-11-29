@@ -791,7 +791,6 @@ class UpdateProfileTest(LiveServerTestCase):
         # Close the browser
         driver.quit()
 
-
     def test_update_invalid_username(self):
         # Đường dẫn đến ChromeDriver
         chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
@@ -1026,17 +1025,20 @@ class ChangePasswordTest(LiveServerTestCase):
         old_password_input = driver.find_element('name', 'old_password')
         new_password_input = driver.find_element('name', 'new_password')
         confirm_password_input = driver.find_element('name', 'confirm_password')
-        submit_button = driver.find_element('id', 'update-profile-button')
+        change = driver.find_element('id', 'change_password_btn')
+        form = driver.find_element('id', 'form_change_password')
+
+        time.sleep(2)
+        driver.execute_script("arguments[0].scrollIntoView(true);", form)
 
         # Perform actions on the form
         time.sleep(2)
         old_password_input.send_keys('123456789')
         time.sleep(2)
-        new_password_input.send_keys('phuong12345')
+        new_password_input.send_keys('12345678')
         time.sleep(2)
-        confirm_password_input.send_keys('phuong12345')
+        confirm_password_input.send_keys('12345678')
         time.sleep(2)
-        
 
         csrf_input = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, 
@@ -1051,18 +1053,17 @@ class ChangePasswordTest(LiveServerTestCase):
             print("CSRF token not found")
 
         # Submit the form
-        submit_button.click()
+        change.click()
 
         success_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-success']")
         success_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(success_message_locator))
 
         # Assert that the success message contains the expected text
-        expected_success_text = "Successfully updated."
+        expected_success_text = "Successfully changed."
         assert expected_success_text in success_message.text
 
-        time.sleep(4)
+        time.sleep(3)
         driver.quit()
-
 
     def test_invalid_old_password(self):
         chromedriver_path = CHROMEDRIVER_PATH
@@ -1080,7 +1081,7 @@ class ChangePasswordTest(LiveServerTestCase):
         time.sleep(2)
         email_input.send_keys('phuong@gmail.com')
         time.sleep(2)
-        password_input.send_keys('phuong12345')
+        password_input.send_keys('12345678')
         time.sleep(2)
         
 
@@ -1113,7 +1114,11 @@ class ChangePasswordTest(LiveServerTestCase):
         old_password_input = driver.find_element('name', 'old_password')
         new_password_input = driver.find_element('name', 'new_password')
         confirm_password_input = driver.find_element('name', 'confirm_password')
-        submit_button = driver.find_element('id', 'update-profile-button')
+        change_button = driver.find_element('id', 'change_password_btn')
+        form = driver.find_element('id', 'form_change_password')
+
+        time.sleep(2)
+        driver.execute_script("arguments[0].scrollIntoView(true);", form)
 
         # Perform actions on the form
         time.sleep(2)
@@ -1137,7 +1142,7 @@ class ChangePasswordTest(LiveServerTestCase):
             print("CSRF token not found")
 
         # Submit the form
-        submit_button.click()
+        change_button.click()
 
         error_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-error']")
         error_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(error_message_locator))
@@ -1166,7 +1171,7 @@ class ChangePasswordTest(LiveServerTestCase):
         time.sleep(2)
         email_input.send_keys('phuong@gmail.com')
         time.sleep(2)
-        password_input.send_keys('phuong12345')
+        password_input.send_keys('12345678')
         time.sleep(2)
         
 
@@ -1199,11 +1204,15 @@ class ChangePasswordTest(LiveServerTestCase):
         old_password_input = driver.find_element('name', 'old_password')
         new_password_input = driver.find_element('name', 'new_password')
         confirm_password_input = driver.find_element('name', 'confirm_password')
-        submit_button = driver.find_element('id', 'update-profile-button')
+        change_button = driver.find_element('id', 'change_password_btn')
+        form = driver.find_element('id', 'form_change_password')
+
+        time.sleep(2)
+        driver.execute_script("arguments[0].scrollIntoView(true);", form)
 
         # Perform actions on the form
         time.sleep(2)
-        old_password_input.send_keys('phuong12345')
+        old_password_input.send_keys('12345678')
         time.sleep(2)
         new_password_input.send_keys('phuong123')
         time.sleep(2)
@@ -1223,7 +1232,7 @@ class ChangePasswordTest(LiveServerTestCase):
             print("CSRF token not found")
 
         # Submit the form with the CSRF token in the headers
-        submit_button.click()
+        change_button.click()
 
         error_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-error']")
         error_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(error_message_locator))

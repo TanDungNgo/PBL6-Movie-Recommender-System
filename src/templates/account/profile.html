@@ -15,7 +15,7 @@
                         class="col_red">Profile</span></h4> <hr style="color: gray">
                 </div>
                 <!-- Form START -->
-                <form method="post" enctype="multipart/form-data" class="file-upload" style="font-weight: bold;">
+                <form method="post" enctype="multipart/form-data" action="{% url 'update_profile' %}" class="file-upload" style="font-weight: bold;">
                     {% csrf_token %}
                     <div class="row mb-5 gx-5" >
                         <!-- Contact detail -->
@@ -63,7 +63,10 @@
                                             value="{{ request.session.user_country }}" style="background-color: #010102; border-color: black;">
                                     </div> -->
 
-
+                                    <div class="gap-3 d-md-flex justify-content-md-end text-center" style="margin-top: 50px;">
+                                        <button type="button" class="btn btn-danger btn-lg" style="background-color: #de1002; border-color: black;">Cancel profile</button>
+                                        <button id = "update-profile-button" type="submit" class="btn btn-primary btn-lg">Update profile</button>
+                                    </div>
                                 </div> <!-- Row END -->
                             </div>
                         </div>
@@ -91,7 +94,7 @@
                             </div>
                         </div>
                     </div> <!-- Row END -->
-
+                </form> 
                     <!-- Social media detail -->
                     <div class="row mb-5 gx-5">
                         <div class="col-xxl-6 mb-5 mb-xxl-0"  style="background-color: #191a1d; border-radius: 0.25rem!important;">
@@ -131,36 +134,13 @@
                             </div>
                         </div>
 
-                        <!-- change password -->
-                        <div class="col-xxl-6">
-                            <div class="bg-secondary-soft px-4 py-5 rounded"  style="background-color: #191a1d;">
-                                <div class="row g-3"    style="margin-top: -40px;" >
-                                    <h4 class="my-4" style="color: #de1002;">Change Password</h4>
-                                    <!-- Old password -->
-                                    <div class="col-md-6">
-                                        <label for="exampleInputPassword1" class="form-label">Old password </label>
-                                        <input type="password" class="form-control" name="old_password" id="exampleInputPassword1" style="background-color: #010102; border-color: black;">
-                                    </div>
-                                    <!-- New password -->
-                                    <div class="col-md-6">
-                                        <label for="exampleInputPassword2" class="form-label">New password </label>
-                                        <input type="password" class="form-control" name="new_password" id="exampleInputPassword2" style="background-color: #010102; border-color: black;">
-                                    </div>
-                                    <!-- Confirm password -->
-                                    <div class="col-md-12">
-                                        <label for="exampleInputPassword3" class="form-label">Confirm Password </label>
-                                        <input type="password" class="form-control" name="confirm_password" id="exampleInputPassword3" style="background-color: #010102; border-color: black;">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> <!-- Row END -->
+                        {%include "account/change_pass.html"%}
                     <!-- button -->
-                    <div class="gap-3 d-md-flex justify-content-md-end text-center">
+                    <!-- <div class="gap-3 d-md-flex justify-content-md-end text-center">
                         <button type="button" class="btn btn-danger btn-lg" style="background-color: #de1002; border-color: black;">Cancel profile</button>
                         <button id = "update-profile-button" type="submit" class="btn btn-primary btn-lg">Update profile</button>
-                    </div>
-                </form> <!-- Form END -->
+                    </div> -->
+                <!-- Form END -->
             </div>
         </div>
         <hr style="color: gray">
