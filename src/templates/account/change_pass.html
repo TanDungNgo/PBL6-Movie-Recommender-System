@@ -1,0 +1,34 @@
+
+<div class="col-xxl-6">
+    <form method="post" id="form_change_password" action="{% url 'change_password' %}" enctype="multipart/form-data" class="file-upload" style="font-weight: bold;">
+    {% csrf_token %}
+    <!-- change password -->
+        <div class="bg-secondary-soft px-4 py-5 rounded"  style="background-color: #191a1d;">
+            <div class="row g-3"    style="margin-top: -40px;" >
+                <h4 class="my-4" style="color: #de1002;">Change Password</h4>
+                <!-- Old password -->
+                <div class="col-md-6">
+                    <label for="exampleInputPassword1" class="form-label">Old password </label>
+                    <input type="password" class="form-control" name="old_password" id="exampleInputPassword1" style="background-color: #010102; border-color: black;">
+                </div>
+                <!-- New password -->
+                <div class="col-md-6">
+                    <label for="exampleInputPassword2" class="form-label">New password </label>
+                    <input type="password" class="form-control" name="new_password" id="exampleInputPassword2" style="background-color: #010102; border-color: black;">
+                </div>
+                <!-- Confirm password -->
+                <div class="col-md-12">
+                    <label for="exampleInputPassword3" class="form-label">Confirm Password </label>
+                    <input type="password" class="form-control" name="confirm_password" id="exampleInputPassword3" style="background-color: #010102; border-color: black;">
+                </div>
+                <!-- Submit button -->
+                <!-- <div class="col-md-6">
+                    <button id = "update-profile-button" type="submit" class="btn btn-primary btn-lg">Change Password</button>
+                </div> -->
+                <div class="gap-3 d-md-flex justify-content-md-end text-center">
+                    <button id="change_password_btn" type="submit" class="btn btn-primary btn-lg">Change Password</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div> <!-- Row END -->
