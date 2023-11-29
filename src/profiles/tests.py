@@ -688,7 +688,11 @@ class SignupFormTest(LiveServerTestCase):
 class UpdateProfileTest(LiveServerTestCase):
     def test_update_success(self):
         # Đường dẫn đến ChromeDriver
+
+        chromedriver_path = 'D:/Download/chromedriver-win64 (2)/chromedriver-win64/chromedriver.exe'
+
         chromedriver_path = CHROMEDRIVER_PATH
+
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -793,7 +797,7 @@ class UpdateProfileTest(LiveServerTestCase):
 
     def test_update_invalid_username(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = 'D:/Download/chromedriver-win64 (2)/chromedriver-win64/chromedriver.exe'
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -885,7 +889,7 @@ class UpdateProfileTest(LiveServerTestCase):
 
     def test_update_invalid_email(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = 'D:/Download/chromedriver-win64 (2)/chromedriver-win64/chromedriver.exe'
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)

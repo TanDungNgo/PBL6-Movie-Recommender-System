@@ -2,7 +2,7 @@
 <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
 
     <form hx-post="/rate/movie/" hx-trigger="change" hx-target="find .success">
-        <div class="success mb-2"></div>
+        <div class="success mb-2" name = "success"></div>
         {% if object_id %}
         <input type="hidden" value="{{ object_id }}" name="object_id" />
         {% endif %}
@@ -14,7 +14,7 @@
     
           {% else %}
     
-          <option {% if current_rating == choice %}selected{% endif %} value="{{ choice }}">{{ choice }}</option>
+          <option {% if current_rating == choice %}selected{% endif %} value="{{ choice }}" id="choice_{{choice}}">{{ choice }}</option>
           {% endif %}
         {% endfor %}
         

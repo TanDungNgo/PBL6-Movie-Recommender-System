@@ -219,4 +219,3 @@ def change_password(request):
         else:
             messages.error(request, 'Please login')
             return redirect('login')
-
