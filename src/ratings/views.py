@@ -6,7 +6,7 @@ from django.contrib import messages
 from .models import Rating
 
 @require_http_methods(['POST'])
-def rate_movie_view(request):
+def rate_movie(request):
     if not request.htmx:
         return HttpResponse("Not Allowed", status=400)
     object_id = request.POST.get('object_id')

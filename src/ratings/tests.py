@@ -7,12 +7,14 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.alert import Alert
+from django.conf import settings
 
+CHROMEDRIVER_PATH = settings.BASE_DIR / 'chromedriver.exe'
 class MovieRatingTest(LiveServerTestCase):
    
     def test_rate_movie_success(self):
         # Truy cập trang chi tiết phim
-        chromedriver_path = 'D:/Download/chromedriver-win64 (2)/chromedriver-win64/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -26,11 +28,11 @@ class MovieRatingTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         email_input.send_keys('duc@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('123456789')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -60,18 +62,18 @@ class MovieRatingTest(LiveServerTestCase):
 
         section = driver.find_element('id', 'trend')
 
-        time.sleep(2)
+        
         driver.execute_script("arguments[0].scrollIntoView(true);", section)
 
 
         driver.get('http://127.0.0.1:8000/movies/271404/')
-        time.sleep(2)
+        
 
         # Đánh giá phim
         message = driver.find_element('name', 'card')
-        time.sleep(4)
+        time.sleep(2)
         driver.execute_script("arguments[0].scrollIntoView(true);", message)
-        time.sleep(4)
+        time.sleep(2)
         rating_select = driver.find_element(By.NAME, "rating_value")  # Tìm phần tử select
         rating_select.click()
         # Chọn giá trị đánh giá (thay bằng giá trị cụ thể)
@@ -81,7 +83,7 @@ class MovieRatingTest(LiveServerTestCase):
         submit_button = driver.find_element(By.XPATH, "//form[@hx-post='/rate/movie/']") 
         submit_button.click()
         
-        time.sleep(2)
+        
         
 
         
@@ -90,11 +92,11 @@ class MovieRatingTest(LiveServerTestCase):
         success_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(success_message_locator))
         self.assertIn("Rating saved!", success_message.text)
 
-        time.sleep(4)
+        time.sleep(2)
 
 
     def test_rate_movie_fail(self):
-        chromedriver_path = 'D:/Download/chromedriver-win64 (2)/chromedriver-win64/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -102,17 +104,17 @@ class MovieRatingTest(LiveServerTestCase):
         driver.get('http://127.0.0.1:8000/')
         section = driver.find_element('id', 'trend')
 
-        time.sleep(2)
+        
         driver.execute_script("arguments[0].scrollIntoView(true);", section)
 
         driver.get('http://127.0.0.1:8000/movies/271404/')
-        time.sleep(2)
+        
 
         # Đánh giá phim
         message = driver.find_element('name', 'card')
-        time.sleep(4)
+        time.sleep(2)
         driver.execute_script("arguments[0].scrollIntoView(true);", message)
-        time.sleep(4)
+        time.sleep(2)
         rating_select = driver.find_element(By.NAME, "rating_value")  # Tìm phần tử select
         rating_select.click()
         # Chọn giá trị đánh giá (thay bằng giá trị cụ thể)

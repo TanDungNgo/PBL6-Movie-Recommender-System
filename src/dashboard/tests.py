@@ -5,11 +5,14 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 from django.contrib.staticfiles.testing import LiveServerTestCase
+from django.conf import settings
 
+# Create your tests here.
+CHROMEDRIVER_PATH = settings.BASE_DIR / 'chromedriver.exe'
 class MovieCreateTest(LiveServerTestCase):
     def test_create_movie_success(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -22,11 +25,11 @@ class MovieCreateTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         email_input.send_keys('trang@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('123456789')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -52,7 +55,7 @@ class MovieCreateTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(4)
+        time.sleep(2)
         
         
         driver.get('http://127.0.0.1:8000/dashboard/create/')
@@ -64,15 +67,15 @@ class MovieCreateTest(LiveServerTestCase):
         poster_path_input = driver.find_element('name', 'poster_path')
         submit_button = driver.find_element('id', 'submit_button')
 
-        time.sleep(2)
+        
         title_input.send_keys('Sailor Moon')
-        time.sleep(2)
+        
         overview_input.send_keys('Beautiful female guardian Sailor Moon: Eternal – Movie version is an anime film released in 2021 including 2 parts based on the Dream arc in the manga Sailor Moon by author Naoko Takeuchi.')
-        time.sleep(2)
+        
         release_date_input.send_keys('10/25/2023')
-        time.sleep(2)
+        
         poster_path_input.send_keys('https://imaginaire.com/en/images/SAILOR-MOON-FABRIC-POSTER-SAILOR-MOON-29-5-X-42__0699858777174-Z.JPG')
-        time.sleep(2)
+        
         submit_button.click()
 
         self.assertEqual(driver.current_url, 'http://127.0.0.1:8000/dashboard/movie_list/', 'Create successful!')
@@ -86,7 +89,7 @@ class MovieCreateTest(LiveServerTestCase):
 
     def test_create_movie_empty_title(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -99,11 +102,11 @@ class MovieCreateTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         email_input.send_keys('trang@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('123456789')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -129,7 +132,7 @@ class MovieCreateTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(2)
+        
         driver.get('http://127.0.0.1:8000/dashboard/create/')
 
         # Find and interact with the form elements to create a new movie
@@ -139,15 +142,15 @@ class MovieCreateTest(LiveServerTestCase):
         poster_path_input = driver.find_element('name', 'poster_path')
         submit_button = driver.find_element('id', 'submit_button')
 
-        time.sleep(2)
+        
         title_input.send_keys('')
-        time.sleep(2)
+        
         overview_input.send_keys('Beautiful female guardian Sailor Moon: Eternal – Movie version is an anime film released in 2021 including 2 parts based on the Dream arc in the manga Sailor Moon by author Naoko Takeuchi.')
-        time.sleep(2)
+        
         release_date_input.send_keys('10/25/2023')
-        time.sleep(2) 
+         
         poster_path_input.send_keys('https://imaginaire.com/en/images/SAILOR-MOON-FABRIC-POSTER-SAILOR-MOON-29-5-X-42__0699858777174-Z.JPG')
-        time.sleep(2)
+        
 
         submit_button.click()
 
@@ -158,7 +161,7 @@ class MovieCreateTest(LiveServerTestCase):
         expected_error_text = "Title is required."
         assert expected_error_text in error_message.text
 
-        time.sleep(2)
+        
         driver.quit()
     def test_create_movie_empty_overview(self):
         # Đường dẫn đến ChromeDriver
@@ -175,11 +178,11 @@ class MovieCreateTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         email_input.send_keys('trang@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('123456789')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -205,7 +208,7 @@ class MovieCreateTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(2)
+        
         driver.get('http://127.0.0.1:8000/dashboard/create/')
 
         # Find and interact with the form elements to create a new movie
@@ -216,16 +219,16 @@ class MovieCreateTest(LiveServerTestCase):
 
         submit_button = driver.find_element('id', 'submit_button')
 
-        time.sleep(2)
+        
         title_input.send_keys('Avatar')
-        time.sleep(2)
+        
         overview_input.send_keys('')
-        time.sleep(2)
+        
         release_date_input.send_keys('10/25/2023')
-        time.sleep(2)
+        
         poster_path_input.send_keys('https://upload.wikimedia.org/wikipedia/vi/b/b0/Avatar-Teaser-Poster.jpg')
 
-        time.sleep(2)
+        
 
 
         submit_button.click()
@@ -237,12 +240,12 @@ class MovieCreateTest(LiveServerTestCase):
         expected_error_text = "Overview is required."
         assert expected_error_text in error_message.text
 
-        time.sleep(2)
+        
         driver.quit()
     
     def test_create_movie_empty_release_date(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -255,11 +258,11 @@ class MovieCreateTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         email_input.send_keys('trang@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('123456789')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -285,7 +288,7 @@ class MovieCreateTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(2)
+        
         driver.get('http://127.0.0.1:8000/dashboard/create/')
 
         # Find and interact with the form elements to create a new movie
@@ -296,16 +299,16 @@ class MovieCreateTest(LiveServerTestCase):
 
         submit_button = driver.find_element('id', 'submit_button')
 
-        time.sleep(2)
+        
         title_input.send_keys('Avatar')
-        time.sleep(2)
+        
         overview_input.send_keys('A paraplegic Marine dispatched to the moon Pandora on a unique mission becomes torn between following his orders and protecting the world he feels is his home.')
-        time.sleep(2)
+        
         release_date_input.send_keys('')
-        time.sleep(2)
+        
         poster_path_input.send_keys('https://upload.wikimedia.org/wikipedia/vi/b/b0/Avatar-Teaser-Poster.jpg')
 
-        time.sleep(2)
+        
 
 
         submit_button.click()
@@ -317,12 +320,12 @@ class MovieCreateTest(LiveServerTestCase):
         expected_error_text = "Release Date is required."
         assert expected_error_text in error_message.text
 
-        time.sleep(2)
+        
         driver.quit()
 
     def test_create_movie_empty_poster_path(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -335,11 +338,11 @@ class MovieCreateTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         email_input.send_keys('trang@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('123456789')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -365,7 +368,7 @@ class MovieCreateTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(2)
+        
         driver.get('http://127.0.0.1:8000/dashboard/create/')
 
         # Find and interact with the form elements to create a new movie
@@ -376,16 +379,16 @@ class MovieCreateTest(LiveServerTestCase):
 
         submit_button = driver.find_element('id', 'submit_button')
 
-        time.sleep(2)
+        
         title_input.send_keys('Avatar')
-        time.sleep(2)
+        
         overview_input.send_keys('A paraplegic Marine dispatched to the moon Pandora on a unique mission becomes torn between following his orders and protecting the world he feels is his home.')
-        time.sleep(2)
+        
         release_date_input.send_keys('10/25/2023')
-        time.sleep(2)
+        
         poster_path_input.send_keys('')
 
-        time.sleep(2)
+        
 
         submit_button.click()
 
@@ -396,12 +399,12 @@ class MovieCreateTest(LiveServerTestCase):
         expected_error_text = "Poster path is required."
         assert expected_error_text in error_message.text
 
-        time.sleep(2)
+        
         driver.quit()
 
     def test_create_movie_wrong_format_release_date(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -414,11 +417,11 @@ class MovieCreateTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         email_input.send_keys('trang@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('123456789')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -444,7 +447,7 @@ class MovieCreateTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(2)
+        
         driver.get('http://127.0.0.1:8000/dashboard/create/')
 
         # Find and interact with the form elements to create a new movie
@@ -455,16 +458,16 @@ class MovieCreateTest(LiveServerTestCase):
 
         submit_button = driver.find_element('id', 'submit_button')
 
-        time.sleep(2)
+        
         title_input.send_keys('Avatar')
-        time.sleep(2)
+        
         overview_input.send_keys('A paraplegic Marine dispatched to the moon Pandora on a unique mission becomes torn between following his orders and protecting the world he feels is his home.')
-        time.sleep(2)
+        
         release_date_input.send_keys('23/20/2023')
-        time.sleep(2)
+        
         poster_path_input.send_keys('https://upload.wikimedia.org/wikipedia/vi/b/b0/Avatar-Teaser-Poster.jpg')
 
-        time.sleep(2)
+        
 
 
         submit_button.click()
@@ -477,14 +480,14 @@ class MovieCreateTest(LiveServerTestCase):
         assert expected_error_text in error_message.text
         
 
-        time.sleep(2)
+        
         driver.quit()
 
 
 class MovieDeleteTest(LiveServerTestCase):
     def test_delete_movie_success(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'D:/Download/chromedriver-win64 (2)/chromedriver-win64/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -497,11 +500,11 @@ class MovieDeleteTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         email_input.send_keys('trang@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('123456789')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -527,18 +530,18 @@ class MovieDeleteTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(4)
+        time.sleep(2)
         
         
         driver.get('http://127.0.0.1:8000/dashboard/movie_list/')
 
         # Đợi cho trang danh sách phim được tải (bạn có thể điều chỉnh thời gian chờ)
-        time.sleep(2)
+        
 
         delete_buttons = driver.find_elements(By.CLASS_NAME, 'delete-movie')
         if delete_buttons:
             delete_buttons[0].click()  # Click the first delete button
-            time.sleep(4)  # Wait for the SweetAlert dialog to appear
+            time.sleep(2)  # Wait for the SweetAlert dialog to appear
 
             # Confirm the deletion in the SweetAlert dialog
             confirm_button = driver.find_element(By.XPATH, "//button[contains(@class, 'swal2-confirm')]")
@@ -556,14 +559,14 @@ class MovieDeleteTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(4)
+        time.sleep(2)
 
         driver.quit()
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 class MovieDeleteTest(LiveServerTestCase):
     def test_delete_movie_faild(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'D:/Download/chromedriver-win64 (2)/chromedriver-win64/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -576,11 +579,11 @@ class MovieDeleteTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         email_input.send_keys('trang@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('123456789')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -606,18 +609,18 @@ class MovieDeleteTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(4)
+        time.sleep(2)
         
         
         driver.get('http://127.0.0.1:8000/dashboard/movie_list/')
 
         # Đợi cho trang danh sách phim được tải (bạn có thể điều chỉnh thời gian chờ)
-        time.sleep(2)
+        
 
         delete_buttons = driver.find_elements(By.CLASS_NAME, 'delete-movie')
         if delete_buttons:
             delete_buttons[0].click()  # Click the first delete button
-            time.sleep(2)  # Wait for the SweetAlert dialog to appear
+              # Wait for the SweetAlert dialog to appear
 
             # Locate the 'No' button in the SweetAlert dialog
             no_button = driver.find_element(By.XPATH, "//button[contains(@class, 'swal2-cancel')]")
@@ -640,13 +643,13 @@ class MovieDeleteTest(LiveServerTestCase):
             # If the success message did not appear, this is the expected behavior
             pass
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(4)
+        time.sleep(2)
 
         driver.quit()
 
 class MovieEditTest(LiveServerTestCase):
     def test_edit_movie_success(self):
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
         driver = webdriver.Chrome(service=chrome_service)
@@ -658,11 +661,11 @@ class MovieEditTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         email_input.send_keys('phuong@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('123456789')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -688,16 +691,16 @@ class MovieEditTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(4)
+        time.sleep(2)
 
         driver.get('http://127.0.0.1:8000/dashboard/movie_list/')
 
-        time.sleep(2)
+        
 
         edit_button = driver.find_elements('name', 'edit_btn')
         if edit_button:
             edit_button[1].click()  # Click the first delete button
-            time.sleep(2)  # Wait for the SweetAlert dialog to appear
+              # Wait for the SweetAlert dialog to appear
         else:
             print("No edit button found")
 
@@ -708,14 +711,14 @@ class MovieEditTest(LiveServerTestCase):
         poster_path_input = driver.find_element('name', 'poster_path')
         submit_button = driver.find_element('id', 'submit_button')
 
-        time.sleep(2)
+        
         poster_path_input.clear()
-        time.sleep(2)
+        
         poster_path_input.send_keys('https://m.media-amazon.com/images/I/61R-TCEvkBS._AC_UF894,1000_QL80_.jpg')
-        time.sleep(2)
+        
 
         driver.execute_script("arguments[0].scrollIntoView(true);", submit_button)
-        time.sleep(2)
+        
 
         submit_button.click()
 
@@ -725,11 +728,11 @@ class MovieEditTest(LiveServerTestCase):
         expected_success_text = "Update successful!"
         assert expected_success_text in success_message.text
         
-        time.sleep(4)
+        time.sleep(2)
         driver.quit()
 
     def test_edit_movie_empty_title(self):
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
         driver = webdriver.Chrome(service=chrome_service)
@@ -741,11 +744,11 @@ class MovieEditTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         email_input.send_keys('phuong@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('123456789')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -771,16 +774,16 @@ class MovieEditTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(4)
+        time.sleep(2)
         
         driver.get('http://127.0.0.1:8000/dashboard/movie_list/')
 
-        time.sleep(2)
+        
 
         edit_button = driver.find_elements('name', 'edit_btn')
         if edit_button:
             edit_button[1].click()  # Click the first delete button
-            time.sleep(2)  # Wait for the SweetAlert dialog to appear
+              # Wait for the SweetAlert dialog to appear
         else:
             print("No edit button found")
 
@@ -792,12 +795,12 @@ class MovieEditTest(LiveServerTestCase):
         poster_path_input = driver.find_element('name', 'poster_path')
         submit_button = driver.find_element('id', 'submit_button')
 
-        time.sleep(2)
+        
         title_input.clear()
-        time.sleep(2)
+        
         
         driver.execute_script("arguments[0].scrollIntoView(true);", submit_button)
-        time.sleep(2)
+        
 
         submit_button.click()
 
@@ -808,11 +811,11 @@ class MovieEditTest(LiveServerTestCase):
         expected_error_text = "Title is required."
         assert expected_error_text in error_message.text
 
-        time.sleep(4)
+        time.sleep(2)
         driver.quit()
 
     def test_edit_movie_empty_overview(self):
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
         driver = webdriver.Chrome(service=chrome_service)
@@ -824,11 +827,11 @@ class MovieEditTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         email_input.send_keys('phuong@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('123456789')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -854,16 +857,16 @@ class MovieEditTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(4)
+        time.sleep(2)
         
         driver.get('http://127.0.0.1:8000/dashboard/movie_list/')
 
-        time.sleep(2)
+        
 
         edit_button = driver.find_elements('name', 'edit_btn')
         if edit_button:
             edit_button[1].click()  # Click the first delete button
-            time.sleep(2)  # Wait for the SweetAlert dialog to appear
+              # Wait for the SweetAlert dialog to appear
         else:
             print("No edit button found")
 
@@ -875,12 +878,12 @@ class MovieEditTest(LiveServerTestCase):
         poster_path_input = driver.find_element('name', 'poster_path')
         submit_button = driver.find_element('id', 'submit_button')
 
-        time.sleep(2)
+        
         overview_input.clear()
-        time.sleep(2)
+        
 
         driver.execute_script("arguments[0].scrollIntoView(true);", submit_button)
-        time.sleep(2)
+        
 
         submit_button.click()
 
@@ -891,11 +894,11 @@ class MovieEditTest(LiveServerTestCase):
         expected_error_text = "Overview is required."
         assert expected_error_text in error_message.text
 
-        time.sleep(4)
+        time.sleep(2)
         driver.quit()
     
     def test_edit_movie_empty_release_date(self):
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
         driver = webdriver.Chrome(service=chrome_service)
@@ -907,11 +910,11 @@ class MovieEditTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         email_input.send_keys('phuong@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('123456789')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -937,16 +940,16 @@ class MovieEditTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(4)
+        time.sleep(2)
         
         driver.get('http://127.0.0.1:8000/dashboard/movie_list/')
 
-        time.sleep(2)
+        
 
         edit_button = driver.find_elements('name', 'edit_btn')
         if edit_button:
             edit_button[1].click()  # Click the first delete button
-            time.sleep(2)  # Wait for the SweetAlert dialog to appear
+              # Wait for the SweetAlert dialog to appear
         else:
             print("No edit button found")
 
@@ -958,12 +961,12 @@ class MovieEditTest(LiveServerTestCase):
         poster_path_input = driver.find_element('name', 'poster_path')
         submit_button = driver.find_element('id', 'submit_button')
 
-        time.sleep(2)
+        
         release_date_input.clear()
-        time.sleep(2)
+        
 
         driver.execute_script("arguments[0].scrollIntoView(true);", submit_button)
-        time.sleep(2)
+        
 
         submit_button.click()
 
@@ -974,11 +977,11 @@ class MovieEditTest(LiveServerTestCase):
         expected_error_text = "Release Date is required."
         assert expected_error_text in error_message.text
 
-        time.sleep(4)
+        time.sleep(2)
         driver.quit()
 
     def test_edit_movie_empty_poster_path(self):
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
         driver = webdriver.Chrome(service=chrome_service)
@@ -990,11 +993,11 @@ class MovieEditTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         email_input.send_keys('phuong@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('123456789')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -1020,16 +1023,16 @@ class MovieEditTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(4)
+        time.sleep(2)
         
         driver.get('http://127.0.0.1:8000/dashboard/movie_list/')
 
-        time.sleep(2)
+        
 
         edit_button = driver.find_elements('name', 'edit_btn')
         if edit_button:
             edit_button[1].click()  # Click the first delete button
-            time.sleep(2)  # Wait for the SweetAlert dialog to appear
+              # Wait for the SweetAlert dialog to appear
         else:
             print("No edit button found")
 
@@ -1040,12 +1043,12 @@ class MovieEditTest(LiveServerTestCase):
         poster_path_input = driver.find_element('name', 'poster_path')
         submit_button = driver.find_element('id', 'submit_button')
 
-        time.sleep(2)
+        
         poster_path_input.clear()
-        time.sleep(2)
+        
 
         driver.execute_script("arguments[0].scrollIntoView(true);", submit_button)
-        time.sleep(2)
+        
 
         submit_button.click()
 
@@ -1056,11 +1059,11 @@ class MovieEditTest(LiveServerTestCase):
         expected_error_text = "Poster path is required."
         assert expected_error_text in error_message.text
 
-        time.sleep(4)
+        time.sleep(2)
         driver.quit()
 
     def test_edit_movie_wrong_format_release_date(self):
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
         driver = webdriver.Chrome(service=chrome_service)
@@ -1072,11 +1075,11 @@ class MovieEditTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         email_input.send_keys('phuong@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('123456789')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -1102,16 +1105,16 @@ class MovieEditTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(4)
+        time.sleep(2)
         
         driver.get('http://127.0.0.1:8000/dashboard/movie_list/')
 
-        time.sleep(2)
+        
 
         edit_button = driver.find_elements('name', 'edit_btn')
         if edit_button:
             edit_button[1].click()  # Click the first delete button
-            time.sleep(2)  # Wait for the SweetAlert dialog to appear
+              # Wait for the SweetAlert dialog to appear
         else:
             print("No edit button found")
 
@@ -1123,14 +1126,14 @@ class MovieEditTest(LiveServerTestCase):
         poster_path_input = driver.find_element('name', 'poster_path')
         submit_button = driver.find_element('id', 'submit_button')
 
-        time.sleep(2)
+        
         release_date_input.clear()
-        time.sleep(2)
+        
         release_date_input.send_keys('23/20/2023')
-        time.sleep(2)
+        
 
         driver.execute_script("arguments[0].scrollIntoView(true);", submit_button)
-        time.sleep(2)
+        
 
         submit_button.click()
 
@@ -1141,5 +1144,5 @@ class MovieEditTest(LiveServerTestCase):
         expected_error_text = "Invalid date format. Please use MM/DD/YYYY format."
         assert expected_error_text in error_message.text
 
-        time.sleep(4)
+        time.sleep(2)
         driver.quit()

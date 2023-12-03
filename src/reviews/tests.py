@@ -7,11 +7,13 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.alert import Alert
+from django.conf import settings
 
+CHROMEDRIVER_PATH = settings.BASE_DIR / 'chromedriver.exe'
 class MovieReviewTest(LiveServerTestCase):
     def test_review_movie_success(self):
         # Truy cập trang chi tiết phim
-        chromedriver_path = 'D:/Download/chromedriver-win64 (2)/chromedriver-win64/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -25,11 +27,11 @@ class MovieReviewTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         email_input.send_keys('duc@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('123456789')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -63,9 +65,9 @@ class MovieReviewTest(LiveServerTestCase):
         # Step 3: Submit a review
         textarea = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.NAME, 'content')))
         submit_button = driver.find_element(By.ID, 'button')
-        time.sleep(2)
+        
         textarea.send_keys('woa phim chi ma hay zay choi bay oi!')
-        time.sleep(2)
+        
         submit_button.click()
 
         # Step 4: Assert success message
@@ -73,14 +75,14 @@ class MovieReviewTest(LiveServerTestCase):
         success_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(success_message_locator))
         self.assertIn("Review saved!", success_message.text)
 
-        time.sleep(2)
+        
 
         # Clean up
         driver.quit()
 
 
     def test_review_movie_fail_not_logged_in(self):
-        chromedriver_path = 'D:/Download/chromedriver-win64 (2)/chromedriver-win64/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -90,13 +92,13 @@ class MovieReviewTest(LiveServerTestCase):
         driver.get('http://127.0.0.1:8000/movies/432607/')
 
         # Find the textarea and submit button
-        time.sleep(4)
+        time.sleep(2)
         textarea = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.NAME, 'content')))
         submit_button = driver.find_element(By.ID, 'button')
-        time.sleep(2)
+        
         # Attempt to submit a review
         textarea.send_keys('phim rat hay')
-        time.sleep(4)
+        time.sleep(2)
         submit_button.click()
 
         # Assert failure message for not being logged in
@@ -106,14 +108,14 @@ class MovieReviewTest(LiveServerTestCase):
         error_message = "<span class='bg-danger text-light py-1 px-3 rounded'>You must <a href='/accounts/login'>login</a> to review this.</div>"
         driver.execute_script("arguments[0].insertAdjacentHTML('afterend', arguments[1]);", element_to_display_message, error_message)
 
-        time.sleep(4)
+        time.sleep(2)
 
         # Clean up
         driver.quit()
 
     def test_review_movie_fail_empty_content(self):
         # Truy cập trang chi tiết phim
-        chromedriver_path = 'D:/Download/chromedriver-win64 (2)/chromedriver-win64/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -127,11 +129,11 @@ class MovieReviewTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit')
 
         # Perform actions on the form
-        time.sleep(2)
+        
         email_input.send_keys('duc@gmail.com')
-        time.sleep(2)
+        
         password_input.send_keys('123456789')
-        time.sleep(2)
+        
         
 
         csrf_input = WebDriverWait(driver, 10).until(
@@ -161,14 +163,14 @@ class MovieReviewTest(LiveServerTestCase):
 
         # Step 2: Navigate to movie detail page
         driver.get('http://127.0.0.1:8000/movies/432607/')
-        time.sleep(2)
+        
 
         # Step 3: Submit a review
         textarea = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.NAME, 'content')))
         submit_button = driver.find_element(By.ID, 'button')
-        time.sleep(4)
+        time.sleep(2)
         textarea.send_keys('')
-        time.sleep(4)
+        time.sleep(2)
         submit_button.click()
 
         # Step 4: Assert success message
@@ -176,9 +178,7 @@ class MovieReviewTest(LiveServerTestCase):
         failure_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(failure_message_locator))
         self.assertIn("You must write a review.", failure_message.text)
 
-        time.sleep(4)
+        time.sleep(2)
 
         # Clean up
         driver.quit()
-
-    

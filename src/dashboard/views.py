@@ -15,6 +15,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.platypus import Table, TableStyle
 from io import BytesIO
 from datetime import datetime
+from profiles.models import CustomUser
 # Create your views here.
 User = get_user_model()
 class DashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateView):
@@ -95,11 +96,11 @@ def movie_list(request):
         movies = paginator.page(paginator.num_pages)
     return render(request, 'dashboard/movie_list.html', {'movies': movies})
 
-def user_list(request):
-    users = User.objects.all()
+def get_list_users(request):
+    users = CustomUser.objects.all()
     return render(request, 'dashboard/user_list.html', {'users': users})
     
-def movie_edit(request, movie_id):
+def edit_movie(request, movie_id):
     current_movie = get_object_or_404(Movie, id=movie_id)
 
     date_object = current_movie.release_date

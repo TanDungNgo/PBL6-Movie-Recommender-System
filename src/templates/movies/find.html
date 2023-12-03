@@ -37,8 +37,13 @@
 <section id="trend" class="pt-4 pb-5">
     <div class="container">
       <div class="row trend_2 mt-4">
-        <h2>Search results for: <span class="col_red" id="searchResult"> </span></h2>
+        {% if not_search %}
+        <h1>Search<span class="col_red" id="searchResult"> </span></h1>
+        <h5 class="mt-4">Search by typing a word or phrase in the search box at the top of this page.</h5>
+        {% else %}
+        <h1>Search results for: <span class="col_red" id="searchResult"> </span></h1>
       </div>
+      {% if object_list|length > 0 %}
       <div class="row trend_2 mt-4">
         {% for object in object_list %}
         {% include 'movies/snippet/card.html' with object=object current_rating=current_rating %}
@@ -61,6 +66,12 @@
           {% endif %}
         </span>
       </div>  
+      {% else %}
+      <div class="row trend_2 mt-4">
+        <h5 class="mt-4">No results found for "{{ request.GET.search }}"</h5>
+      </div>
+      {% endif %}
+      {% endif %}
     </div>
 </section>
 <section>

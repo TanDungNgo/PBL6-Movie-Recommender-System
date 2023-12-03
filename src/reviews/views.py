@@ -6,7 +6,7 @@ from django.views.decorators.http import require_http_methods
 from django.http import HttpResponse
 
 @require_http_methods(['POST'])
-def add_review(request):
+def review_movie(request):
     if not request.htmx:
         return HttpResponse("Not Allowed", status=400)
     object_id = request.POST.get('object_id')

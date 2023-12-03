@@ -127,23 +127,25 @@ class MovieVideoView(generic.DetailView):
 
 movie_video_view = MovieVideoView.as_view()
 
-def movie_find_view(request):
+def search_movie(request):
     context = {}
     search = request.GET.get('search','')
-    movies = Movie.objects.search(search)
-
-    movies_per_page = 12
-    paginator = Paginator(movies, movies_per_page)
-    if 'page' in request.GET and request.GET['page']:
-        page = request.GET['page']
+    if search:
+        movies = Movie.objects.search(search)
+        movies_per_page = 12
+        paginator = Paginator(movies, movies_per_page)
+        if 'page' in request.GET and request.GET['page']:
+            page = request.GET['page']
+        else:
+            page = 1
+        
+        try:
+            movies = paginator.page(page)
+        except PageNotAnInteger:
+            movies = paginator.page(1)
+        except EmptyPage:
+            movies = paginator.page(paginator.num_pages)
+        context['object_list'] = movies
     else:
-        page = 1
-    
-    try:
-        movies = paginator.page(page)
-    except PageNotAnInteger:
-        movies = paginator.page(1)
-    except EmptyPage:
-        movies = paginator.page(paginator.num_pages)
-    context['object_list'] = movies
+        context['not_search'] = True
     return render(request, "movies/find.html", context)
