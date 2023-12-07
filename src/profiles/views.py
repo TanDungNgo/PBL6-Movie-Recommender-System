@@ -26,8 +26,8 @@ def signin(request):
                     request.session['user_id'] = user.id
                     request.session['user_username'] = user.username
                     request.session['user_email'] = user.email
-                    request.session['user_firstname'] = user.first_name
-                    request.session['user_lastname'] = user.last_name
+                    request.session['user_first_name'] = user.first_name
+                    request.session['user_last_name'] = user.last_name
                     if user.is_superuser:
                         request.session['user_role'] = 'admin'
                     else:

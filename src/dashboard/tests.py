@@ -4,13 +4,19 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
+from django.conf import settings
 from django.contrib.staticfiles.testing import LiveServerTestCase
-
+CHROMEDRIVER_PATH = settings.BASE_DIR / 'chromedriver.exe'
 class MovieCreateTest(LiveServerTestCase):
     def test_create_movie_success(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        
+        # Đường dẫn đến ChromeDriver
+        chromedriver_path = CHROMEDRIVER_PATH
 
+        # Khởi tạo driver Chrome với tùy chọn Service
+        chrome_service = webdriver.chrome.service.Service(chromedriver_path)
+        driver = webdriver.Chrome(service=chrome_service)
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
         driver = webdriver.Chrome(service=chrome_service)
@@ -65,7 +71,7 @@ class MovieCreateTest(LiveServerTestCase):
         submit_button = driver.find_element('id', 'submit_button')
 
         time.sleep(2)
-        title_input.send_keys('Sailor Moon')
+        title_input.send_keys('Sailor Moon ')
         time.sleep(2)
         overview_input.send_keys('Beautiful female guardian Sailor Moon: Eternal – Movie version is an anime film released in 2021 including 2 parts based on the Dream arc in the manga Sailor Moon by author Naoko Takeuchi.')
         time.sleep(2)
@@ -86,7 +92,7 @@ class MovieCreateTest(LiveServerTestCase):
 
     def test_create_movie_empty_title(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -162,7 +168,7 @@ class MovieCreateTest(LiveServerTestCase):
         driver.quit()
     def test_create_movie_empty_overview(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -242,7 +248,7 @@ class MovieCreateTest(LiveServerTestCase):
     
     def test_create_movie_empty_release_date(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -321,8 +327,7 @@ class MovieCreateTest(LiveServerTestCase):
         driver.quit()
 
     def test_create_movie_empty_poster_path(self):
-        # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -400,8 +405,7 @@ class MovieCreateTest(LiveServerTestCase):
         driver.quit()
 
     def test_create_movie_wrong_format_release_date(self):
-        # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -484,7 +488,7 @@ class MovieCreateTest(LiveServerTestCase):
 class MovieDeleteTest(LiveServerTestCase):
     def test_delete_movie_success(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'D:/Download/chromedriver-win64 (2)/chromedriver-win64/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -563,7 +567,7 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException
 class MovieDeleteTest(LiveServerTestCase):
     def test_delete_movie_faild(self):
         # Đường dẫn đến ChromeDriver
-        chromedriver_path = 'D:/Download/chromedriver-win64 (2)/chromedriver-win64/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
         # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
@@ -646,8 +650,9 @@ class MovieDeleteTest(LiveServerTestCase):
 
 class MovieEditTest(LiveServerTestCase):
     def test_edit_movie_success(self):
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
+        # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
         driver = webdriver.Chrome(service=chrome_service)
         # Navigate to the login page (if login is required)
@@ -729,8 +734,9 @@ class MovieEditTest(LiveServerTestCase):
         driver.quit()
 
     def test_edit_movie_empty_title(self):
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
+        # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
         driver = webdriver.Chrome(service=chrome_service)
         # Navigate to the login page (if login is required)
@@ -812,8 +818,9 @@ class MovieEditTest(LiveServerTestCase):
         driver.quit()
 
     def test_edit_movie_empty_overview(self):
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
+        # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
         driver = webdriver.Chrome(service=chrome_service)
         # Navigate to the login page (if login is required)
@@ -895,8 +902,9 @@ class MovieEditTest(LiveServerTestCase):
         driver.quit()
     
     def test_edit_movie_empty_release_date(self):
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
+        # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
         driver = webdriver.Chrome(service=chrome_service)
         # Navigate to the login page (if login is required)
@@ -978,8 +986,9 @@ class MovieEditTest(LiveServerTestCase):
         driver.quit()
 
     def test_edit_movie_empty_poster_path(self):
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
+        # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
         driver = webdriver.Chrome(service=chrome_service)
         # Navigate to the login page (if login is required)
@@ -1060,8 +1069,9 @@ class MovieEditTest(LiveServerTestCase):
         driver.quit()
 
     def test_edit_movie_wrong_format_release_date(self):
-        chromedriver_path = 'E:/PBL6/PBL6-Movie-Recommender-System/src/chromedriver.exe'
+        chromedriver_path = CHROMEDRIVER_PATH
 
+        # Khởi tạo driver Chrome với tùy chọn Service
         chrome_service = webdriver.chrome.service.Service(chromedriver_path)
         driver = webdriver.Chrome(service=chrome_service)
         # Navigate to the login page (if login is required)

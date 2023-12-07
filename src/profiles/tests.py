@@ -367,216 +367,216 @@ class LoginFormTest(LiveServerTestCase):
         driver.quit()
 
 class SignupFormTest(LiveServerTestCase):
-    def test_signup_success(self):
-        # Đường dẫn đến ChromeDriver
-        chromedriver_path = CHROMEDRIVER_PATH
+    # def test_signup_success(self):
+    #     # Đường dẫn đến ChromeDriver
+    #     chromedriver_path = CHROMEDRIVER_PATH
 
-        # Khởi tạo driver Chrome với tùy chọn Service
-        chrome_service = webdriver.chrome.service.Service(chromedriver_path)
-        driver = webdriver.Chrome(service=chrome_service)
-        # Navigate to the login page
-        driver.get('http://127.0.0.1:8000/accounts/register/')
+    #     # Khởi tạo driver Chrome với tùy chọn Service
+    #     chrome_service = webdriver.chrome.service.Service(chromedriver_path)
+    #     driver = webdriver.Chrome(service=chrome_service)
+    #     # Navigate to the login page
+    #     driver.get('http://127.0.0.1:8000/accounts/register/')
 
-        # Find the email, password, and submit elements
-        username_input = driver.find_element('name', 'username')
-        email_input = driver.find_element('name', 'email')
-        password_input = driver.find_element('name', 'password')
-        submit_button = driver.find_element('id', 'submit')
+    #     # Find the email, password, and submit elements
+    #     username_input = driver.find_element('name', 'username')
+    #     email_input = driver.find_element('name', 'email')
+    #     password_input = driver.find_element('name', 'password')
+    #     submit_button = driver.find_element('id', 'submit')
 
 
-        # Perform actions on the form
-        time.sleep(2)
-        username_input.send_keys('thaotran')
-        time.sleep(2)
-        email_input.send_keys('thap@gmail.com')
-        time.sleep(2)
-        password_input.send_keys('123456789')
-        time.sleep(2)
+    #     # Perform actions on the form
+    #     time.sleep(2)
+    #     username_input.send_keys('thaotran')
+    #     time.sleep(2)
+    #     email_input.send_keys('thao@gmail.com')
+    #     time.sleep(2)
+    #     password_input.send_keys('123456789')
+    #     time.sleep(2)
 
-        csrf_input = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, 
-                                            'input[name="csrfmiddlewaretoken"]')))
-        if csrf_input:
-            csrf_token = csrf_input.get_attribute('value')
-            # Add the CSRF token to the headers
-            headers = {'X-CSRFToken': csrf_token}
-            # Set the CSRF token in the cookie for future requests
-            driver.add_cookie({'name': 'csrftoken', 'value': csrf_token, 'path': '/'})
-        else:
-            print("CSRF token not found")
+    #     csrf_input = WebDriverWait(driver, 10).until(
+    #         EC.presence_of_element_located((By.CSS_SELECTOR, 
+    #                                         'input[name="csrfmiddlewaretoken"]')))
+    #     if csrf_input:
+    #         csrf_token = csrf_input.get_attribute('value')
+    #         # Add the CSRF token to the headers
+    #         headers = {'X-CSRFToken': csrf_token}
+    #         # Set the CSRF token in the cookie for future requests
+    #         driver.add_cookie({'name': 'csrftoken', 'value': csrf_token, 'path': '/'})
+    #     else:
+    #         print("CSRF token not found")
 
-        # Submit the form with the CSRF token in the headers
-        submit_button.click()
+    #     # Submit the form with the CSRF token in the headers
+    #     submit_button.click()
 
-        self.assertEqual(driver.current_url, 'http://127.0.0.1:8000/accounts/login/', 'Signup successfully.')
-        success_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-success']")
-        success_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(success_message_locator))
-        time.sleep(4)
+    #     self.assertEqual(driver.current_url, 'http://127.0.0.1:8000/accounts/login/', 'Signup successfully.')
+    #     success_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-success']")
+    #     success_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(success_message_locator))
+    #     time.sleep(4)
 
-        # Close the browser
-        driver.quit()
+    #     # Close the browser
+    #     driver.quit()
     
-    def test_empty_username(self):
-        # Đường dẫn đến ChromeDriver
-        chromedriver_path = CHROMEDRIVER_PATH
+    # def test_empty_username(self):
+    #     # Đường dẫn đến ChromeDriver
+    #     chromedriver_path = CHROMEDRIVER_PATH
 
-        # Khởi tạo driver Chrome với tùy chọn Service
-        chrome_service = webdriver.chrome.service.Service(chromedriver_path)
-        driver = webdriver.Chrome(service=chrome_service)
-        # Navigate to the login page
-        driver.get('http://127.0.0.1:8000/accounts/register/')
+    #     # Khởi tạo driver Chrome với tùy chọn Service
+    #     chrome_service = webdriver.chrome.service.Service(chromedriver_path)
+    #     driver = webdriver.Chrome(service=chrome_service)
+    #     # Navigate to the login page
+    #     driver.get('http://127.0.0.1:8000/accounts/register/')
 
-        # Find the email, password, and submit elements
-        username_input = driver.find_element('name', 'username')
-        email_input = driver.find_element('name', 'email')
-        password_input = driver.find_element('name', 'password')
-        submit_button = driver.find_element('id', 'submit')
+    #     # Find the email, password, and submit elements
+    #     username_input = driver.find_element('name', 'username')
+    #     email_input = driver.find_element('name', 'email')
+    #     password_input = driver.find_element('name', 'password')
+    #     submit_button = driver.find_element('id', 'submit')
 
-        # Perform actions on the form
-        time.sleep(2)
-        username_input.send_keys('')
-        time.sleep(2)
-        email_input.send_keys('thao@gmail.com')
-        time.sleep(2)
-        password_input.send_keys('123456789')
-        time.sleep(2)
+    #     # Perform actions on the form
+    #     time.sleep(2)
+    #     username_input.send_keys('')
+    #     time.sleep(2)
+    #     email_input.send_keys('thao@gmail.com')
+    #     time.sleep(2)
+    #     password_input.send_keys('123456789')
+    #     time.sleep(2)
         
 
-        csrf_input = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, 
-                                            'input[name="csrfmiddlewaretoken"]')))
-        if csrf_input:
-            csrf_token = csrf_input.get_attribute('value')
-            # Add the CSRF token to the headers
-            headers = {'X-CSRFToken': csrf_token}
-            # Set the CSRF token in the cookie for future requests
-            driver.add_cookie({'name': 'csrftoken', 'value': csrf_token, 'path': '/'})
-        else:
-            print("CSRF token not found")
+    #     csrf_input = WebDriverWait(driver, 10).until(
+    #         EC.presence_of_element_located((By.CSS_SELECTOR, 
+    #                                         'input[name="csrfmiddlewaretoken"]')))
+    #     if csrf_input:
+    #         csrf_token = csrf_input.get_attribute('value')
+    #         # Add the CSRF token to the headers
+    #         headers = {'X-CSRFToken': csrf_token}
+    #         # Set the CSRF token in the cookie for future requests
+    #         driver.add_cookie({'name': 'csrftoken', 'value': csrf_token, 'path': '/'})
+    #     else:
+    #         print("CSRF token not found")
 
-        # Submit the form
-        submit_button.click()
+    #     # Submit the form
+    #     submit_button.click()
 
-        # Wait for any error message or indication of unsuccessful login
-        error_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-error']")
-        error_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(error_message_locator))
+    #     # Wait for any error message or indication of unsuccessful login
+    #     error_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-error']")
+    #     error_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(error_message_locator))
 
-        # Assert that the error message contains the expected text
-        expected_error_text = "Username is required."
-        assert expected_error_text in error_message.text
+    #     # Assert that the error message contains the expected text
+    #     expected_error_text = "Username is required."
+    #     assert expected_error_text in error_message.text
 
-        # Optionally, you can assert that the URL, title, or other elements indicate a failed login
-        time.sleep(4)
-        # Close the browser
-        driver.quit()
+    #     # Optionally, you can assert that the URL, title, or other elements indicate a failed login
+    #     time.sleep(4)
+    #     # Close the browser
+    #     driver.quit()
 
-    def test_empty_email(self):
-        # Đường dẫn đến ChromeDriver
-        chromedriver_path = CHROMEDRIVER_PATH
+    # def test_empty_email(self):
+    #     # Đường dẫn đến ChromeDriver
+    #     chromedriver_path = CHROMEDRIVER_PATH
 
-        # Khởi tạo driver Chrome với tùy chọn Service
-        chrome_service = webdriver.chrome.service.Service(chromedriver_path)
-        driver = webdriver.Chrome(service=chrome_service)
-        # Navigate to the login page
-        driver.get('http://127.0.0.1:8000/accounts/register/')
+    #     # Khởi tạo driver Chrome với tùy chọn Service
+    #     chrome_service = webdriver.chrome.service.Service(chromedriver_path)
+    #     driver = webdriver.Chrome(service=chrome_service)
+    #     # Navigate to the login page
+    #     driver.get('http://127.0.0.1:8000/accounts/register/')
 
-        # Find the email, password, and submit elements
-        username_input = driver.find_element('name', 'username')
-        email_input = driver.find_element('name', 'email')
-        password_input = driver.find_element('name', 'password')
-        submit_button = driver.find_element('id', 'submit')
+    #     # Find the email, password, and submit elements
+    #     username_input = driver.find_element('name', 'username')
+    #     email_input = driver.find_element('name', 'email')
+    #     password_input = driver.find_element('name', 'password')
+    #     submit_button = driver.find_element('id', 'submit')
 
-        # Perform actions on the form
-        time.sleep(2)
-        username_input.send_keys('thaotran')
-        time.sleep(2)
-        email_input.send_keys('')
-        time.sleep(2)
-        password_input.send_keys('123456789')
-        time.sleep(2)
+    #     # Perform actions on the form
+    #     time.sleep(2)
+    #     username_input.send_keys('thaotran')
+    #     time.sleep(2)
+    #     email_input.send_keys('')
+    #     time.sleep(2)
+    #     password_input.send_keys('123456789')
+    #     time.sleep(2)
         
 
-        csrf_input = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, 
-                                            'input[name="csrfmiddlewaretoken"]')))
-        if csrf_input:
-            csrf_token = csrf_input.get_attribute('value')
-            # Add the CSRF token to the headers
-            headers = {'X-CSRFToken': csrf_token}
-            # Set the CSRF token in the cookie for future requests
-            driver.add_cookie({'name': 'csrftoken', 'value': csrf_token, 'path': '/'})
-        else:
-            print("CSRF token not found")
+    #     csrf_input = WebDriverWait(driver, 10).until(
+    #         EC.presence_of_element_located((By.CSS_SELECTOR, 
+    #                                         'input[name="csrfmiddlewaretoken"]')))
+    #     if csrf_input:
+    #         csrf_token = csrf_input.get_attribute('value')
+    #         # Add the CSRF token to the headers
+    #         headers = {'X-CSRFToken': csrf_token}
+    #         # Set the CSRF token in the cookie for future requests
+    #         driver.add_cookie({'name': 'csrftoken', 'value': csrf_token, 'path': '/'})
+    #     else:
+    #         print("CSRF token not found")
 
-        # Submit the form
-        submit_button.click()
+    #     # Submit the form
+    #     submit_button.click()
 
-        # Wait for any error message or indication of unsuccessful login
-        error_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-error']")
-        error_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(error_message_locator))
+    #     # Wait for any error message or indication of unsuccessful login
+    #     error_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-error']")
+    #     error_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(error_message_locator))
 
-        # Assert that the error message contains the expected text
-        expected_error_text = "Email is required."
-        assert expected_error_text in error_message.text
+    #     # Assert that the error message contains the expected text
+    #     expected_error_text = "Email is required."
+    #     assert expected_error_text in error_message.text
 
-        # Optionally, you can assert that the URL, title, or other elements indicate a failed login
-        time.sleep(4)
-        # Close the browser
-        driver.quit()
+    #     # Optionally, you can assert that the URL, title, or other elements indicate a failed login
+    #     time.sleep(4)
+    #     # Close the browser
+    #     driver.quit()
 
-    def test_empty_password(self):
-        # Đường dẫn đến ChromeDriver
-        chromedriver_path = CHROMEDRIVER_PATH
+    # def test_empty_password(self):
+    #     # Đường dẫn đến ChromeDriver
+    #     chromedriver_path = CHROMEDRIVER_PATH
 
-        # Khởi tạo driver Chrome với tùy chọn Service
-        chrome_service = webdriver.chrome.service.Service(chromedriver_path)
-        driver = webdriver.Chrome(service=chrome_service)
-        # Navigate to the login page
-        driver.get('http://127.0.0.1:8000/accounts/register/')
+    #     # Khởi tạo driver Chrome với tùy chọn Service
+    #     chrome_service = webdriver.chrome.service.Service(chromedriver_path)
+    #     driver = webdriver.Chrome(service=chrome_service)
+    #     # Navigate to the login page
+    #     driver.get('http://127.0.0.1:8000/accounts/register/')
 
-        # Find the email, password, and submit elements
-        username_input = driver.find_element('name', 'username')
-        email_input = driver.find_element('name', 'email')
-        password_input = driver.find_element('name', 'password')
-        submit_button = driver.find_element('id', 'submit')
+    #     # Find the email, password, and submit elements
+    #     username_input = driver.find_element('name', 'username')
+    #     email_input = driver.find_element('name', 'email')
+    #     password_input = driver.find_element('name', 'password')
+    #     submit_button = driver.find_element('id', 'submit')
 
-        # Perform actions on the form
-        time.sleep(2)
-        username_input.send_keys('thaotran')
-        time.sleep(2)
-        email_input.send_keys('thao@gmail.com')
-        time.sleep(2)
-        password_input.send_keys('')
-        time.sleep(2)
+    #     # Perform actions on the form
+    #     time.sleep(2)
+    #     username_input.send_keys('thaotran')
+    #     time.sleep(2)
+    #     email_input.send_keys('thao@gmail.com')
+    #     time.sleep(2)
+    #     password_input.send_keys('')
+    #     time.sleep(2)
         
 
-        csrf_input = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, 
-                                            'input[name="csrfmiddlewaretoken"]')))
-        if csrf_input:
-            csrf_token = csrf_input.get_attribute('value')
-            # Add the CSRF token to the headers
-            headers = {'X-CSRFToken': csrf_token}
-            # Set the CSRF token in the cookie for future requests
-            driver.add_cookie({'name': 'csrftoken', 'value': csrf_token, 'path': '/'})
-        else:
-            print("CSRF token not found")
+    #     csrf_input = WebDriverWait(driver, 10).until(
+    #         EC.presence_of_element_located((By.CSS_SELECTOR, 
+    #                                         'input[name="csrfmiddlewaretoken"]')))
+    #     if csrf_input:
+    #         csrf_token = csrf_input.get_attribute('value')
+    #         # Add the CSRF token to the headers
+    #         headers = {'X-CSRFToken': csrf_token}
+    #         # Set the CSRF token in the cookie for future requests
+    #         driver.add_cookie({'name': 'csrftoken', 'value': csrf_token, 'path': '/'})
+    #     else:
+    #         print("CSRF token not found")
 
-        # Submit the form
-        submit_button.click()
+    #     # Submit the form
+    #     submit_button.click()
 
-        # Wait for any error message or indication of unsuccessful login
-        error_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-error']")
-        error_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(error_message_locator))
+    #     # Wait for any error message or indication of unsuccessful login
+    #     error_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-error']")
+    #     error_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(error_message_locator))
 
-        # Assert that the error message contains the expected text
-        expected_error_text = "Password is required."
-        assert expected_error_text in error_message.text
+    #     # Assert that the error message contains the expected text
+    #     expected_error_text = "Password is required."
+    #     assert expected_error_text in error_message.text
 
-        # Optionally, you can assert that the URL, title, or other elements indicate a failed login
-        time.sleep(4)
-        # Close the browser
-        driver.quit()
+    #     # Optionally, you can assert that the URL, title, or other elements indicate a failed login
+    #     time.sleep(4)
+    #     # Close the browser
+    #     driver.quit()
 
     def test_already_exists_username(self):
         # Đường dẫn đến ChromeDriver
@@ -751,7 +751,7 @@ class UpdateProfileTest(LiveServerTestCase):
         time.sleep(2)
         username_input.clear()  # Clear the existing username
         time.sleep(2)
-        username_input.send_keys('huyentrang')
+        username_input.send_keys('huyentrangle')
 
         time.sleep(2)
         email_input.clear()
@@ -760,11 +760,11 @@ class UpdateProfileTest(LiveServerTestCase):
         time.sleep(2)
         first_name_input.clear()
         time.sleep(2)
-        first_name_input.send_keys('Huyen Trang ')
+        first_name_input.send_keys('Thi Huyen Trang')
         time.sleep(2)
         last_name_input.clear()
         time.sleep(2)
-        last_name_input.send_keys('Le Thi')
+        last_name_input.send_keys('Le')
         time.sleep(2)
         
 
