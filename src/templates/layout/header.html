@@ -3,7 +3,7 @@
 <section id="top">
   <div class="container">
     <div class="row top_1">
-      <div class="col-md-3">
+      <div class="col-md-3" style="display: flex; align-items: center;">
         <div class="top_1l pt-1">
           <h3 class="mb-0">
             <a class="text-white" href="{% url 'home' %}"
@@ -18,12 +18,14 @@
           <div class="input-group">
             <input
               type="text"
-              id="searchInput"
               class="form-control bg-black"
               name="search"
-              placeholder="Search Site..."
+              placeholder="Enter the Movie Name..."
+              id="autoComplete"
+              autocomplete="off"
+              style="background-color: #ffffff !important;border-color:#ffffff !important;width: 60% !important;color: #181818 !important; height: 50px; border-radius: 0px;" required="required"
             />
-            <span class="input-group-btn">
+            <span class="input-group-btn" style="display: flex;">
               <button
                 id="searchButton"
                 class="btn btn text-white bg_red rounded-0 border-0"
@@ -35,6 +37,7 @@
           </div>
         </div>
       </div>
+
   </div>
 </section>
 
@@ -128,12 +131,14 @@
       </div>
     </div>
     </div>
-    
+
+
   </nav>
 </section>
+<script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@7.2.0/dist/js/autoComplete.min.js"></script>
 <script>
   document.addEventListener("DOMContentLoaded", function() {
-    const searchInput = document.getElementById("searchInput");
+    const searchInput = document.getElementById("autoComplete");
     const searchButton = document.getElementById("searchButton");
 
     searchInput.addEventListener("keypress", function(event) {
@@ -156,4 +161,41 @@
       }
     }
   });
+
+  new autoComplete({
+    data: {                              // Data src [Array, Function, Async] | (REQUIRED)
+      src: films,
+    },
+    selector: "#autoComplete",           // Input field selector              | (Optional)
+    threshold: 2,                        // Min. Chars length to start Engine | (Optional)
+    debounce: 100,                       // Post duration for engine to start | (Optional)
+    searchEngine: "strict",              // Search Engine type/mode           | (Optional)
+    resultsList: {                       // Rendered results list object      | (Optional)
+        render: true,
+        container: source => {
+            source.setAttribute("id", "movie_list");
+        },
+        destination: document.querySelector("#autoComplete"),
+        position: "afterend",
+        element: "ul"
+    },
+    maxResults: 7,                         // Max. number of rendered results | (Optional)
+    highlight: true,                       // Highlight matching results      | (Optional)
+    resultItem: {                          // Rendered result item            | (Optional)
+        content: (data, source) => {
+            source.innerHTML = data.match;
+        },
+        element: "li"
+    },
+    noResults: () => {                     // Action script on noResults      | (Optional)
+        const result = document.createElement("li");
+        result.setAttribute("class", "no_result");
+        result.setAttribute("tabindex", "1");
+        result.innerHTML = "No Results";
+        document.querySelector("#autoComplete_list").appendChild(result);
+    },
+    onSelection: feedback => {             // Action script onSelection event | (Optional)
+        document.getElementById('autoComplete').value = feedback.selection.value;
+    }
+});
 </script>

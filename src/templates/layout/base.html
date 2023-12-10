@@ -28,6 +28,12 @@
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'movies/css/toastr.css' %}" media="all">
     <script type="text/javascript" src="{% static 'movies/js/toastr.min.js' %}"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@7.2.0/dist/css/autoComplete.min.css">
+    <link href="{% static 'movies/css/autoComplete.css' %}" rel="stylesheet" />
+    <script type="text/javascript">
+      var films = {{ movies_list | safe }};
+    </script>
   </head>
   <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     {% if messages %}

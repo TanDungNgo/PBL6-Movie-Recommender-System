@@ -4,9 +4,11 @@ from django.shortcuts import render
 from django.views import generic
 from django.db.models import Avg
 from django.contrib.auth import get_user_model
+import requests
 
 User = get_user_model()
 from movies.models import Movie
+
 class Home(generic.ListView):
     template_name = 'dpthome/index.html'
     paginate_by = 10

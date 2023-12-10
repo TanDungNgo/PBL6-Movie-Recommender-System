@@ -94,6 +94,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'ratings.context_processors.rating_choices',
+
+                'dptpage.context_processors.movies_list'
             ],
         },
     },
@@ -148,6 +150,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
