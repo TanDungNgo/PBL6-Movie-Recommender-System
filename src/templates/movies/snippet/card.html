@@ -3,7 +3,7 @@
 {% block content %}
 {% load static %}
 
-<div class="col-md-3 col-6">
+<div class="col-md-3 col-6" style="margin-bottom: 20px;">
   <div class="trend_2im clearfix position-relative">
 
     <div class="trend_2im1 clearfix">
@@ -23,11 +23,9 @@
       <span class="fs-1"><a class="col_red" href="{{ object.get_video_url }}"><i class="fa fa-youtube-play"></i></a></span>
     </div>
   </div>
-  <div class="trend_2ilast bg_grey p-3 clearfix">
+  <div class="trend_2ilast bg_grey p-3 clearfix" style="min-height: 260px;">
     <h5><a class="col_red" href="{{ object.get_absolute_url }}" id="title"> {{ object.title }}</a></h5>
     <p class="mb-2">{{ object.overview|slice:":80" }}</p>
-
-
 
     <div class="mb-0" style="display: flex; justify-content: space-between; align-items: center;">
       <div class="rating">
