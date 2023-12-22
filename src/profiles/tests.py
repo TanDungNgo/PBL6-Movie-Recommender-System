@@ -19,17 +19,13 @@ class LoginFormTest(LiveServerTestCase):
         driver = webdriver.Chrome(service=chrome_service)
         # Navigate to the login page
         driver.get('http://127.0.0.1:8000/accounts/login/')
-
         # Find the email, password, and submit elements
         email_input = driver.find_element('name', 'email')
         password_input = driver.find_element('name', 'password')
         submit_button = driver.find_element('id', 'submit')
-
         # Perform actions on the form
         email_input.send_keys('dung@gmail.com')
         password_input.send_keys('123456789')
-        
-
         csrf_input = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, 
                                             'input[name="csrfmiddlewaretoken"]')))
