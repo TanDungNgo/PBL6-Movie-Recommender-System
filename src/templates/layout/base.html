@@ -34,6 +34,9 @@
     <script type="text/javascript">
       var films = {{ movies_list | safe }};
     </script>
+
+   
+
   </head>
   <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     {% if messages %}

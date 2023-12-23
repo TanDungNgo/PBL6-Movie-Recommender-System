@@ -3,6 +3,19 @@
 
 {% block title %}{{ object.title }}{% endblock %}
 {% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+       <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+   
+       <!-- Bootstrap JS -->
+       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+
 
 <section id="popular" class="pt-4 pb-5 bg_grey">
   <div class="card-container">
@@ -53,12 +66,14 @@
         <h3>TOP CAST</h3>
         <h5>(Click on the cast to know more)</h5>
       </center>
-      <div class="card-actor-info" style="display: flex; margin-bottom: 50px;margin-top: 40px; flex-wrap: wrap;justify-content: space-around;">
+      
+     
+      <div class="card-actor-info" style="display: flex; margin-bottom: 20px; margin-top: 40px; flex-wrap: wrap; justify-content: space-around;">
         {% for cast in first_row %}
         <div class="card-actor-item" style="display: flex;">
           {% if cast.profile_path %}
           <img src="https://image.tmdb.org/t/p/w185{{ cast.profile_path }}"
-            style="height: 200px; margin-right: 10px; object-fit: cover; margin-bottom: 5px;" /><br />
+          data-toggle="modal" data-target="#modal-{{ cast.id }}" style="height: 200px; margin-right: 10px; object-fit: cover; margin-bottom: 5px;" /><br />
           {% else %}
           <img src="{% static 'movies/img/default-image.jpg' %}"
             style="height: 200px; width: 133px; margin-right: 10px; object-fit: cover; margin-bottom: 5px;" /><br />
@@ -70,12 +85,13 @@
         </div>
         {% endfor %}
       </div>
-      <div class="card-actor-info" style="display: flex; margin-bottom: 50px; flex-wrap: wrap;justify-content: space-around;">
+      
+      <div class="card-actor-info" style="display: flex; margin-bottom: 50px; margin-top: 40px; flex-wrap: wrap; justify-content: space-around;">
         {% for cast in second_row %}
         <div class="card-actor-item" style="display: flex;">
           {% if cast.profile_path %}
           <img src="https://image.tmdb.org/t/p/w185{{ cast.profile_path }}"
-            style="height: 200px; margin-right: 10px; object-fit: cover; margin-bottom: 5px;" /><br />
+          data-toggle="modal" data-target="#modal-{{ cast.id }}" style="height: 200px; margin-right: 10px; object-fit: cover; margin-bottom: 5px;" /><br />
           {% else %}
           <img src="{% static 'movies/img/default-image.jpg' %}"
             style="height: 200px; width: 133px; margin-right: 10px; object-fit: cover; margin-bottom: 5px;" /><br />
@@ -87,6 +103,39 @@
         </div>
         {% endfor %}
       </div>
+      
+      {% for cast in detailed_casts %}
+      <div class="modal fade" id="modal-{{ cast.id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle-{{ cast.id }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header" style="background-color: #de1002; height: 55px;">
+              <h5 class="modal-title" id="exampleModalLongTitle-{{ cast.id }}" style="color: white;">{{ cast.name }}</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="background-color: #de1002; border: none; font-size: 30px; color: white;">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body" style="color: black; display: flex;">
+              <div class="card-left-img" style="flex: 1; align-self: center;">
+                <img src="https://image.tmdb.org/t/p/w185{{ cast.profile_path }}" alt="{{ cast.name }}" style="max-width: 100%; height: auto;" />
+              </div>
+              <div class="card-right-info" style="flex: 2; padding-left: 20px;">
+                <h5>Birthday:<span> {{ cast.birthday }}</span></h5>
+                <h5>Place of Birth:<span> {{ cast.place_of_birth }}</span></h5>
+                <h5>Biography:
+                  <span> {{ cast.biography }}</span>
+                </h5>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+        
+      </div>
+      
     </div>
   </div>
 </section>
@@ -119,4 +168,4 @@
   </div>
 </section>
 {% endblock %}
-       
+</html>
