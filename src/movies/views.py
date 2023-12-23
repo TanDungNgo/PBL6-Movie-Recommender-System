@@ -133,7 +133,6 @@ class MovieDetailView(generic.DetailView):
             else:
                 print(f"Movie with title '{title}' does not exist.")
         context['recommend_movies'] = recommend_movies
-
         return context
 
 
