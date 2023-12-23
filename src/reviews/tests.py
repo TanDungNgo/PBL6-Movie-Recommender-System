@@ -92,13 +92,13 @@ class MovieReviewTest(LiveServerTestCase):
         driver.get('http://127.0.0.1:8000/movies/432607/')
 
         # Find the textarea and submit button
-        time.sleep(2)
+        time.sleep(1)
         textarea = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.NAME, 'content')))
         submit_button = driver.find_element(By.ID, 'button')
         
         # Attempt to submit a review
         textarea.send_keys('phim rat hay')
-        time.sleep(2)
+        time.sleep(1)
         submit_button.click()
 
         # Assert failure message for not being logged in
@@ -108,7 +108,7 @@ class MovieReviewTest(LiveServerTestCase):
         error_message = "<span class='bg-danger text-light py-1 px-3 rounded'>You must <a href='/accounts/login'>login</a> to review this.</div>"
         driver.execute_script("arguments[0].insertAdjacentHTML('afterend', arguments[1]);", element_to_display_message, error_message)
 
-        time.sleep(2)
+        time.sleep(1)
 
         # Clean up
         driver.quit()
@@ -168,9 +168,9 @@ class MovieReviewTest(LiveServerTestCase):
         # Step 3: Submit a review
         textarea = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.NAME, 'content')))
         submit_button = driver.find_element(By.ID, 'button')
-        time.sleep(2)
+        time.sleep(1)
         textarea.send_keys('')
-        time.sleep(2)
+        time.sleep(1)
         submit_button.click()
 
         # Step 4: Assert success message
@@ -178,7 +178,7 @@ class MovieReviewTest(LiveServerTestCase):
         failure_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(failure_message_locator))
         self.assertIn("You must write a review.", failure_message.text)
 
-        time.sleep(2)
+        time.sleep(1)
 
         # Clean up
         driver.quit()

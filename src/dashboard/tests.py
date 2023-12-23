@@ -55,7 +55,7 @@ class MovieCreateTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(2)
+        time.sleep(1)
         
         
         driver.get('http://127.0.0.1:8000/dashboard/create/')
@@ -530,7 +530,7 @@ class MovieDeleteTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(2)
+        time.sleep(1)
         
         
         driver.get('http://127.0.0.1:8000/dashboard/movie_list/')
@@ -541,7 +541,7 @@ class MovieDeleteTest(LiveServerTestCase):
         delete_buttons = driver.find_elements(By.CLASS_NAME, 'delete-movie')
         if delete_buttons:
             delete_buttons[0].click()  # Click the first delete button
-            time.sleep(2)  # Wait for the SweetAlert dialog to appear
+            time.sleep(1)  # Wait for the SweetAlert dialog to appear
 
             # Confirm the deletion in the SweetAlert dialog
             confirm_button = driver.find_element(By.XPATH, "//button[contains(@class, 'swal2-confirm')]")
@@ -559,7 +559,7 @@ class MovieDeleteTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(2)
+        time.sleep(1)
 
         driver.quit()
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
@@ -609,7 +609,7 @@ class MovieDeleteTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(2)
+        time.sleep(1)
         
         
         driver.get('http://127.0.0.1:8000/dashboard/movie_list/')
@@ -643,7 +643,7 @@ class MovieDeleteTest(LiveServerTestCase):
             # If the success message did not appear, this is the expected behavior
             pass
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(2)
+        time.sleep(1)
 
         driver.quit()
 
@@ -691,7 +691,7 @@ class MovieEditTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(2)
+        time.sleep(1)
 
         driver.get('http://127.0.0.1:8000/dashboard/movie_list/')
 
@@ -728,7 +728,7 @@ class MovieEditTest(LiveServerTestCase):
         expected_success_text = "Update successful!"
         assert expected_success_text in success_message.text
         
-        time.sleep(2)
+        time.sleep(1)
         driver.quit()
 
     def test_edit_movie_empty_title(self):
@@ -774,7 +774,7 @@ class MovieEditTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(2)
+        time.sleep(1)
         
         driver.get('http://127.0.0.1:8000/dashboard/movie_list/')
 
@@ -811,7 +811,7 @@ class MovieEditTest(LiveServerTestCase):
         expected_error_text = "Title is required."
         assert expected_error_text in error_message.text
 
-        time.sleep(2)
+        time.sleep(1)
         driver.quit()
 
     def test_edit_movie_empty_overview(self):
@@ -857,7 +857,7 @@ class MovieEditTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(2)
+        time.sleep(1)
         
         driver.get('http://127.0.0.1:8000/dashboard/movie_list/')
 
@@ -894,7 +894,7 @@ class MovieEditTest(LiveServerTestCase):
         expected_error_text = "Overview is required."
         assert expected_error_text in error_message.text
 
-        time.sleep(2)
+        time.sleep(1)
         driver.quit()
     
     def test_edit_movie_empty_release_date(self):
@@ -940,7 +940,7 @@ class MovieEditTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(2)
+        time.sleep(1)
         
         driver.get('http://127.0.0.1:8000/dashboard/movie_list/')
 
@@ -977,7 +977,7 @@ class MovieEditTest(LiveServerTestCase):
         expected_error_text = "Release Date is required."
         assert expected_error_text in error_message.text
 
-        time.sleep(2)
+        time.sleep(1)
         driver.quit()
 
     def test_edit_movie_empty_poster_path(self):
@@ -1023,7 +1023,7 @@ class MovieEditTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(2)
+        time.sleep(1)
         
         driver.get('http://127.0.0.1:8000/dashboard/movie_list/')
 
@@ -1059,7 +1059,7 @@ class MovieEditTest(LiveServerTestCase):
         expected_error_text = "Poster path is required."
         assert expected_error_text in error_message.text
 
-        time.sleep(2)
+        time.sleep(1)
         driver.quit()
 
     def test_edit_movie_wrong_format_release_date(self):
@@ -1105,7 +1105,7 @@ class MovieEditTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(2)
+        time.sleep(1)
         
         driver.get('http://127.0.0.1:8000/dashboard/movie_list/')
 
@@ -1144,5 +1144,5 @@ class MovieEditTest(LiveServerTestCase):
         expected_error_text = "Invalid date format. Please use MM/DD/YYYY format."
         assert expected_error_text in error_message.text
 
-        time.sleep(2)
+        time.sleep(1)
         driver.quit()

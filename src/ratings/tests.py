@@ -71,9 +71,9 @@ class MovieRatingTest(LiveServerTestCase):
 
         # Đánh giá phim
         message = driver.find_element('name', 'card')
-        time.sleep(2)
+        time.sleep(1)
         driver.execute_script("arguments[0].scrollIntoView(true);", message)
-        time.sleep(2)
+        time.sleep(1)
         rating_select = driver.find_element(By.NAME, "rating_value")  # Tìm phần tử select
         rating_select.click()
         # Chọn giá trị đánh giá (thay bằng giá trị cụ thể)
@@ -92,7 +92,7 @@ class MovieRatingTest(LiveServerTestCase):
         success_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(success_message_locator))
         self.assertIn("Rating saved!", success_message.text)
 
-        time.sleep(2)
+        time.sleep(1)
 
 
     def test_rate_movie_fail(self):
@@ -112,9 +112,9 @@ class MovieRatingTest(LiveServerTestCase):
 
         # Đánh giá phim
         message = driver.find_element('name', 'card')
-        time.sleep(2)
+        time.sleep(1)
         driver.execute_script("arguments[0].scrollIntoView(true);", message)
-        time.sleep(2)
+        time.sleep(1)
         rating_select = driver.find_element(By.NAME, "rating_value")  # Tìm phần tử select
         rating_select.click()
         # Chọn giá trị đánh giá (thay bằng giá trị cụ thể)
@@ -131,6 +131,6 @@ class MovieRatingTest(LiveServerTestCase):
         driver.execute_script("arguments[0].insertAdjacentHTML('afterend', arguments[1]);", element_to_display_message, error_message)
         
 
-        time.sleep(5)
+        time.sleep(1)
         driver.quit()
 

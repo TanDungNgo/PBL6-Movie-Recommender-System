@@ -50,7 +50,7 @@ class LoginFormTest(LiveServerTestCase):
 
         # Wait for the page to load (you may need to adjust the sleep duration)
         
-        time.sleep(2)
+        time.sleep(1)
         # Close the browser
         driver.quit()
 
@@ -101,7 +101,7 @@ class LoginFormTest(LiveServerTestCase):
         assert expected_error_text in error_message.text
 
         # Optionally, you can assert that the URL, title, or other elements indicate a failed login
-        time.sleep(2)
+        time.sleep(1)
         # Close the browser
         driver.quit()
     def test_invalid_password(self):
@@ -151,7 +151,7 @@ class LoginFormTest(LiveServerTestCase):
         assert expected_error_text in error_message.text
 
         # Optionally, you can assert that the URL, title, or other elements indicate a failed login
-        time.sleep(2)
+        time.sleep(1)
         # Close the browser
         driver.quit()
     
@@ -202,7 +202,7 @@ class LoginFormTest(LiveServerTestCase):
         assert expected_error_text in error_message.text
 
         # Optionally, you can assert that the URL, title, or other elements indicate a failed login
-        time.sleep(2)
+        time.sleep(1)
         # Close the browser
         driver.quit()
 
@@ -253,7 +253,7 @@ class LoginFormTest(LiveServerTestCase):
         assert expected_error_text in error_message.text
 
         # Optionally, you can assert that the URL, title, or other elements indicate a failed login
-        time.sleep(2)
+        time.sleep(1)
         # Close the browser
         driver.quit()
 
@@ -304,7 +304,7 @@ class LoginFormTest(LiveServerTestCase):
         assert expected_error_text in error_message.text
 
         # Optionally, you can assert that the URL, title, or other elements indicate a failed login
-        time.sleep(2)
+        time.sleep(1)
         # Close the browser
         driver.quit()
     
@@ -355,7 +355,7 @@ class LoginFormTest(LiveServerTestCase):
         assert expected_error_text in error_message.text
 
         # Optionally, you can assert that the URL, title, or other elements indicate a failed login
-        time.sleep(2)
+        time.sleep(1)
         # Close the browser
         driver.quit()
 
@@ -404,7 +404,7 @@ class SignupFormTest(LiveServerTestCase):
         self.assertEqual(driver.current_url, 'http://127.0.0.1:8000/accounts/login/', 'Signup successfully.')
         success_message_locator = (By.XPATH, "//div[@class='jq-toast-wrap top-right']//div[@class='jq-toast-single jq-has-icon jq-icon-success']")
         success_message = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(success_message_locator))
-        time.sleep(2)
+        time.sleep(1)
 
         # Close the browser
         driver.quit()
@@ -459,7 +459,7 @@ class SignupFormTest(LiveServerTestCase):
         assert expected_error_text in error_message.text
 
         # Optionally, you can assert that the URL, title, or other elements indicate a failed login
-        time.sleep(2)
+        time.sleep(1)
         # Close the browser
         driver.quit()
 
@@ -513,7 +513,7 @@ class SignupFormTest(LiveServerTestCase):
         assert expected_error_text in error_message.text
 
         # Optionally, you can assert that the URL, title, or other elements indicate a failed login
-        time.sleep(2)
+        time.sleep(1)
         # Close the browser
         driver.quit()
 
@@ -567,7 +567,7 @@ class SignupFormTest(LiveServerTestCase):
         assert expected_error_text in error_message.text
 
         # Optionally, you can assert that the URL, title, or other elements indicate a failed login
-        time.sleep(2)
+        time.sleep(1)
         # Close the browser
         driver.quit()
 
@@ -621,7 +621,7 @@ class SignupFormTest(LiveServerTestCase):
         assert expected_error_text in error_message.text
 
         # Optionally, you can assert that the URL, title, or other elements indicate a failed login
-        time.sleep(2)
+        time.sleep(1)
         # Close the browser
         driver.quit()
     def test_already_exists_email(self):
@@ -674,7 +674,7 @@ class SignupFormTest(LiveServerTestCase):
         assert expected_error_text in error_message.text
 
         # Optionally, you can assert that the URL, title, or other elements indicate a failed login
-        time.sleep(2)
+        time.sleep(1)
         # Close the browser
         driver.quit()
 
@@ -727,7 +727,7 @@ class UpdateProfileTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(2)
+        time.sleep(1)
 
         driver.get('http://127.0.0.1:8000/accounts/profile/')
 
@@ -772,7 +772,7 @@ class UpdateProfileTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(2)
+        time.sleep(1)
         # Close the browser
         driver.quit()
 
@@ -822,7 +822,7 @@ class UpdateProfileTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(2)
+        time.sleep(1)
 
         driver.get('http://127.0.0.1:8000/accounts/profile/')
 
@@ -864,7 +864,7 @@ class UpdateProfileTest(LiveServerTestCase):
         assert expected_error_text in error_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(2)
+        time.sleep(1)
         # Close the browser
         driver.quit()
 
@@ -914,7 +914,7 @@ class UpdateProfileTest(LiveServerTestCase):
         assert expected_success_text in success_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(2)
+        time.sleep(1)
 
         driver.get('http://127.0.0.1:8000/accounts/profile/')
 
@@ -956,7 +956,7 @@ class UpdateProfileTest(LiveServerTestCase):
         assert expected_error_text in error_message.text
 
         # Wait for the page to load (you may need to adjust the sleep duration)
-        time.sleep(2)
+        time.sleep(1)
         # Close the browser
         driver.quit()
 
@@ -1003,7 +1003,7 @@ class ChangePasswordTest(LiveServerTestCase):
         expected_success_text = "Login successfully."
         assert expected_success_text in success_message.text
 
-        time.sleep(2)
+        time.sleep(1)
 
         driver.get('http://127.0.0.1:8000/accounts/profile/')
 
@@ -1047,7 +1047,7 @@ class ChangePasswordTest(LiveServerTestCase):
         expected_success_text = "Successfully changed."
         assert expected_success_text in success_message.text
 
-        time.sleep(3)
+        time.sleep(1)
         driver.quit()
 
     def test_invalid_old_password(self):
@@ -1136,7 +1136,7 @@ class ChangePasswordTest(LiveServerTestCase):
         expected_error_text = "Old password is incorrect."
         assert expected_error_text in error_message.text
 
-        time.sleep(2)
+        time.sleep(1)
         driver.quit()
 
     def test_invalid_new_password(self):
@@ -1182,7 +1182,7 @@ class ChangePasswordTest(LiveServerTestCase):
         expected_success_text = "Login successfully."
         assert expected_success_text in success_message.text
 
-        time.sleep(2)
+        time.sleep(1)
 
         driver.get('http://127.0.0.1:8000/accounts/profile/')
 
@@ -1226,5 +1226,5 @@ class ChangePasswordTest(LiveServerTestCase):
         expected_error_text = "New password and confirm password do not match."
         assert expected_error_text in error_message.text
 
-        time.sleep(2)
+        time.sleep(1)
         driver.quit()
