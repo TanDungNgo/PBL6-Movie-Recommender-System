@@ -1,54 +1,152 @@
-<script src="https://unpkg.com/htmx.org@1.9.8" integrity="sha384-rgjA7mptc2ETQqXoYC3/zJvkU7K/aP44Y+z7xQuJiVnB/422P/Ak+F/AqFR7E4Wr" crossorigin="anonymous"></script>
-<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
-    <form id="reviewForm" hx-post="/review/movie/" hx-trigger="submit" hx-target="find .success"> 
-      <div class="success mb-2"></div>
-        {% if object_id %}
-        <input type="hidden" value="{{ object_id }}" name="object_id" />
-        {% endif %}
-        <textarea name="content" rows="4"
-        placeholder="Enter your review here..."
-        style="width: 100%; padding: 10px; margin-bottom: 10px;"
-        ></textarea>
-        <button class="button" id="button" 
-        style="background-color: #e50914 !important;text-align: center !important; border-radius: 0.25rem;
-        font-size: 1rem;
-        font-weight: 700" 
-        type="submit">Submit Review</button>
-    </form>
-
-    <h5 style="font-size: 30px; margin: 50px 0 20px 0;">Top reviews</h5>
-    <div class="card-review-info" style="display: flex; margin-bottom: 50px; flex-direction: column;">
-      {% for review in reviews %}
-          <div class="card-review-item" style="display: flex; border: 1px solid #ddd; padding: 10px; border-radius: 8px; margin-bottom: 20px;">
-              <img src="https://cdn-icons-png.flaticon.com/512/4998/4998641.png" alt="" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
-              <div style="width: 100%;">
-                  <span style="font-weight: 800; font-size: 18px;">{{ review.user }}</span><br />
-                  <span>{{ review.content }}</span><br />
-                  <span style="color: #888;">{{ review.timestamp }}</span>
-              </div>
-          </div>
-      {% endfor %}
-    </div>  
-</body>
-<script>
-    document.addEventListener('htmx:afterSwap', function (event) {
-        if (event.detail.target.matches('.success')) {
-            var content = document.querySelector('textarea[name="content"]').value;
-            if (content) {
-                var username = '{{ request.session.user_username }}';
-                var timestamp = Date.now();
-                document.querySelector('textarea[name="content"]').value = '';
-                var newReviewHtml = `
-                    <div class="card-review-item" style="display: flex; border: 1px solid #ddd; padding: 10px; border-radius: 8px; margin-bottom: 20px;">
-                        <img src="https://cdn-icons-png.flaticon.com/512/4998/4998641.png" alt="" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 10px;">
-                        <div style="width: 100%;">
-                            <span style="font-weight: 800; font-size: 18px;">${username}</span><br />
-                            <span>${content}</span><br />
-                            <span style="color: #888;">${timestamp}</span>
-                        </div>
-                    </div>`;
-                document.querySelector('.card-review-info').insertAdjacentHTML('beforebegin', newReviewHtml);
-            }
-        }   
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css"
+/>
+<div>
+  <form style="width: 70%;">
+    {% csrf_token %}
+    <div class="success mb-2"></div>
+    {% if object_id %}
+    <input type="hidden" value="{{ object_id }}" name="object_id" />
+    {% endif %}
+    <textarea
+      name="content"
+      rows="4"
+      placeholder="Enter your review here..."
+      style="width: 100%; padding: 10px; margin-bottom: 10px"
+    ></textarea>
+    <div
+      class="button"
+      id="reviewButton"
+      style="
+        height: 36px;
+        padding: 6px 20px;
+        border-radius: 0.1875rem;
+        font-weight: bold;
+        cursor: pointer;
+      "
+    >
+      Submit Review
+    </div>
+  </form>
+  <!-- {% if  reviews|length > 0 %} -->
+  <h5 style="font-size: 30px; margin: 50px 0 20px 0">Top reviews</h5>
+  <!-- {% endif %} -->
+  <div
+    class="card-review-info"
+    style="display: flex; margin-bottom: 50px; flex-direction: column"
+  >
+    {% include 'reviews/snippet/review_list.html' with reviews=reviews%}
+    {% if reviews|length >= 5 %}
+    <div id="load-more-btn" class="button"
+    style="
+    width: 70%;
+    text-align: center;
+    height: 36px;
+    padding: 6px 20px;
+    border-radius: 0.1875rem;
+    font-weight: bold;
+    cursor: pointer;">
+      Load More Reviews
+    </div>
+    {% endif %}
+  </div>
+</div>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $("#reviewButton").click(function () {
+      $.ajax({
+        url: "/review/movie/",
+        type: "POST",
+        data: {
+          csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val(),
+          object_id: "{{ object_id }}",
+          content: $("[name=content]").val(),
+        },
+        success: function (data) {
+          if (data.status == "error") {
+            $.toast({
+              heading: "Error",
+              text: data.message,
+              showHideTransition: "slide",
+              icon: "error",
+              position: "top-right",
+              loaderBg: "#FF0000",
+            });
+          } else {
+            $.toast({
+              heading: "Success",
+              text: data.message,
+              showHideTransition: "slide",
+              icon: "success",
+              position: "top-right",
+              loaderBg: "#05BD11",
+            });
+            document.querySelector('textarea[name="content"]').value = "";
+            var newReviewHtml = `
+            <div class="card-review-item">
+                <img class="card-review-item__avatar" src="${data.review.avatar}" alt="${data.review.user}">
+                <div class="card-review-item__content">
+                    <div  class="card-review-item__info">
+                        <span class="card-review-item__user">${data.review.user}</span>
+                        <span class="card-review-item__content-text">${data.review.content}</span>
+                        <span class="card-review-item__timestamp">${data.review.timestamp}</span>
+                    </div>
+                    <div class="card-review-item__actions">
+                        <div class="replyBtn">Reply</div>
+                        <div class="editBtn">Edit</div>
+                        <div class="deleteBtn">Delete</div>
+                    </div>
+                </div>
+            </div>
+            `;
+            document
+              .querySelector(".card-review-info")
+              .insertAdjacentHTML("beforebegin", newReviewHtml);
+          }
+        },
+        error: function (error) {
+          console.log("error", error);
+          $.toast({
+            heading: "Error",
+            text: "Something went wrong",
+            showHideTransition: "slide",
+            icon: "error",
+            position: "top-right",
+            loaderBg: "#FF0000",
+          });
+        },
+      });
     });
+
+    var currentCount = {{ reviews|length }};
+
+    var loadCount = 5;
+
+    $("#load-more-btn").click(function () {
+        $.ajax({
+            url: "/load-more-reviews/",  
+            type: "GET",
+            data: {
+                'current_count': currentCount,
+                'load_count': loadCount,
+                'object_id': '{{ object_id }}',
+            },
+            success: function (data) {
+              console.log(data.reviews_html);
+                $("#review-container").append(data.reviews_html);
+                currentCount += data.loaded_count;
+                if (data.all_loaded) {
+                    $("#load-more-btn").hide();
+                }
+            },
+            error: function (error) {
+                console.log("Error loading more reviews", error);
+            },
+        });
+    });
+  });
+
+
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>

@@ -103,7 +103,10 @@ class MovieDetailView(generic.DetailView):
         api_key = '8265bd1679663a7ea12ac168da84d2e8'  # Khóa API của bạn
         url = f'https://api.themoviedb.org/3/person/{actor_id}?api_key={api_key}&language=en-US'
         reviews = movie.reviews.all()
-        context['reviews'] = reviews
+        page = 5
+        paginator = Paginator(reviews, page)
+
+        context['reviews'] = paginator.get_page(1)
 
         detailed_casts = []
         for cast in context['casts']:
