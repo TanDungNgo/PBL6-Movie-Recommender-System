@@ -27,5 +27,5 @@ urlpatterns = [
     path('rate/movie/', ratings_views.rate_movie, name='rate_movie'),
     path('dashboard/', include('dashboard.urls')),
     path('suggestions/', include('suggestions.urls')),
-    path('review/movie/', reviews_views.review_movie, name='review_movie'),
+    path('', include('reviews.urls')),
 ]
