@@ -352,11 +352,15 @@
 							{% for movie in top_score_movies|slice:":10" %}
 								<div class="grid clearfix">
 									<figure class="effect-jazz mb-0">
+										<a href="{{ movie.get_absolute_url }}">
+											
+										
 										{% if movie.poster_path %}
-											<img src="{{ movie.poster_path }}" class="d-block w-100" alt="{{ movie.title }} Poster" width="550" style="object-fit: cover;" >
+											<img src="{{ movie.poster_path }}"  class="d-block w-100" alt="{{ movie.title }} Poster" width="550" style="object-fit: cover;" >
 										{% else %}
 											<p>No poster available.</p>
 										{% endif %}
+									</a>
 									</figure>
 								</div>
 							{% endfor %}	
