@@ -91,7 +91,10 @@ class MovieDetailView(generic.DetailView):
         })
 
         reviews = movie.reviews.all()
-        context['reviews'] = reviews
+        page = 5
+        paginator = Paginator(reviews, page)
+
+        context['reviews'] = paginator.get_page(1)
 
         return context
 

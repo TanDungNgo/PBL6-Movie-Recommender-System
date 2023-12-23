@@ -94,7 +94,7 @@
 <section class="pt-4 pb-5">
   <div class="card-container">
     <h2>Write a Review for {{ movie.title }}</h2>
-    {% include 'reviews/snippet/review.html' with object_id=object.id reviews=reviews %}
+    {% include 'reviews/snippet/review.html' with object_id=object.id reviews=reviews%}
   </div>
 </section>
 
@@ -119,4 +119,3 @@
   </div>
 </section>
 {% endblock %}
-       
