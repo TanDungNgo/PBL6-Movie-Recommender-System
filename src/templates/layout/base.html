@@ -35,8 +35,10 @@
     <script type="text/javascript">
       var films = {{ movies_list | safe }};
     </script>
+
     <!--AJAX-->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
   </head>
   <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
     {% if messages %}

@@ -40,6 +40,14 @@ class MovieDetailView(generic.DetailView):
     # context -> object -> id
     queryset = Movie.objects.all()
 
+    def get_actor_details(self, actor_id):
+        """Hàm này lấy thông tin chi tiết của diễn viên từ The Movie DB API."""
+        api_key = '8265bd1679663a7ea12ac168da84d2e8'  # Thay 'your_api_key' bằng API key thực tế của bạn
+        url = f'https://api.themoviedb.org/3/person/{actor_id}?api_key={api_key}&language=en-US'
+        response = requests.get(url)
+        response.raise_for_status()  # Nếu API trả về lỗi, một exception sẽ được ném ra
+        return response.json()
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         movie_requests = self.request  # Rename 'requests' to 'movie_requests'
@@ -65,6 +73,7 @@ class MovieDetailView(generic.DetailView):
         data = response.json()
         casts = data.get('cast', [])[:8]
         directors = [crew for crew in data.get('crew', []) if crew.get('job') == 'Director']
+        
 
         num_casts_per_row = len(casts) // 2
         first_row = casts[:num_casts_per_row]
@@ -85,18 +94,31 @@ class MovieDetailView(generic.DetailView):
             'casts': casts,
             'first_row': first_row,
             'second_row': second_row,
+         
             'genres': genres,
             'countries': countries,
             'directors': directors,
         })
-
+        actor_id = self.kwargs.get('pk')
+        api_key = '8265bd1679663a7ea12ac168da84d2e8'  # Khóa API của bạn
+        url = f'https://api.themoviedb.org/3/person/{actor_id}?api_key={api_key}&language=en-US'
         reviews = movie.reviews.all()
         page = 5
         paginator = Paginator(reviews, page)
 
         context['reviews'] = paginator.get_page(1)
 
+        detailed_casts = []
+        for cast in context['casts']:
+            actor_details = self.get_actor_details(cast['id'])
+            detailed_casts.append(actor_details)
+
+        context['detailed_casts'] = detailed_casts
+
+        
         return context
+
+
 
 movie_detail_view = MovieDetailView.as_view()
 

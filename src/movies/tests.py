@@ -39,7 +39,7 @@ class MovieFindTest(LiveServerTestCase):
             self.assertIsInstance(movie, Movie)
         
         assert 'Find' in driver.title
-        time.sleep(2)
+        time.sleep(1)
         driver.quit()
 
     def test_find_with_genre(self):
@@ -68,7 +68,7 @@ class MovieFindTest(LiveServerTestCase):
         print(message)
         # assert message in driver.page_source
 
-        time.sleep(2)
+        time.sleep(1)
         driver.quit()
 
     def test_find_with_movie_dont_exist(self):
@@ -95,7 +95,7 @@ class MovieFindTest(LiveServerTestCase):
         message = 'No results found for"' + search_value + '"'
         print(message)
         # assert message in driver.page_source
-        time.sleep(2)
+        time.sleep(1)
         driver.quit()
 
     def test_empty_input(self):
@@ -120,5 +120,5 @@ class MovieFindTest(LiveServerTestCase):
         self.assertEqual(driver.current_url, 'http://127.0.0.1:8000/movies/find/?search=' + search_value)
         assert 'Find' in driver.title
         assert 'Search by typing a word or phrase in the search box at the top of this page.' in driver.page_source
-        time.sleep(2)
+        time.sleep(1)
         driver.quit()
