@@ -1,25 +1,94 @@
-<script src="https://unpkg.com/htmx.org@1.9.8" integrity="sha384-rgjA7mptc2ETQqXoYC3/zJvkU7K/aP44Y+z7xQuJiVnB/422P/Ak+F/AqFR7E4Wr" crossorigin="anonymous"></script>
-<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
-
-    <form hx-post="/rate/movie/" hx-trigger="change" hx-target="find .success">
-        <div class="success mb-2" name = "success"></div>
-        {% if object_id %}
+{% load static %}
+<link href="{% static 'movies/css/rating.css' %}" rel="stylesheet" />
+<div class="rating-container">
+  <form id="rateMovieForm_{{ object_id }}">
+    {% csrf_token %}
+    {% if object_id %}
         <input type="hidden" value="{{ object_id }}" name="object_id" />
-        {% endif %}
-    <select name="rating_value" class="form-control" style="width: 130px; border-radius: 0.25rem;">
+    {% endif %}
+    <select name="rating_value" class="form-control"
+    style="width: 130px; border-radius: 0.25rem; cursor: pointer;">
         {% for choice in rating_choices %}
-          {% if choice is None %}
-    
-          <option disabled selected>Rating Movie</option>
-    
-          {% else %}
-    
-          <option {% if current_rating == choice %}selected{% endif %} value="{{ choice }}" id="choice_{{choice}}">{{ choice }}</option>
-          {% endif %}
+            {% if choice is None %}
+                <option disabled selected>Rating Movie</option>
+            {% else %}
+                <option {% if current_rating == choice %}selected{% endif %} value="{{ choice }}" id="choice_{{choice}}">{{ choice }}</option>
+            {% endif %}
         {% endfor %}
-        
-      </select>
-    </form>
+    </select>
+  </form>
+  {% if current_rating %}
+  <span class="label_ratings">
+      {% if current_rating == 5 %}
+          Excellent
+      {% elif current_rating == 4 %}
+          Good
+      {% elif current_rating == 3 %}
+          Average
+      {% elif current_rating == 2 %}
+          Poor
+      {% elif current_rating == 1 %}
+          Very Poor
+      {% else %}
+          Not Rated
+      {% endif %}
+  </span>
+  {% endif %}
+</div>
 
-    
-</body>
+<script type="text/javascript">
+  $(document).ready(function () {
+      $("#rateMovieForm_{{ object_id }}").change(function () {
+          let rating_value = $("#rateMovieForm_{{ object_id }} select").val();
+          $.ajax({
+              url: "/rate/movie/",
+              type: "POST",
+              data: {
+                csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val(),
+                object_id: "{{ object_id }}",
+                rating_value: rating_value,
+              },
+              success: function (data) {
+                  if (data.status == "error") {
+                    $.toast({
+                      heading: "Error",
+                      text: data.message,
+                      showHideTransition: "slide",
+                      icon: "error",
+                      position: "top-right",
+                      loaderBg: "#FF0000",
+                    });
+                  } else {
+                    $.toast({
+                      heading: "Success",
+                      text: data.message,
+                      showHideTransition: "slide",
+                      icon: "success",
+                      position: "top-right",
+                      loaderBg: "#05BD11",
+                    });
+                    if (rating_value == 5) {
+                      $("#choice_5").prop("selected", true);
+                      $(".label_ratings").text("Excellent");
+                    } else if (rating_value == 4) {
+                      $("#choice_4").prop("selected", true);
+                      $(".label_ratings").text("Good");
+                    } else if (rating_value == 3) {
+                      $("#choice_3").prop("selected", true);
+                      $(".label_ratings").text("Average");
+                    } else if (rating_value == 2) {
+                      $("#choice_2").prop("selected", true);
+                      $(".label_ratings").text("Poor");
+                    } else if (rating_value == 1) {
+                      $("#choice_1").prop("selected", true);
+                      $(".label_ratings").text("Very Poor");
+                    } else {
+                      $("#choice_0").prop("selected", true);
+                      $(".label_ratings").text("Not Rated");
+                    }
+                  }
+              },
+          });
+      });
+  });
+</script>

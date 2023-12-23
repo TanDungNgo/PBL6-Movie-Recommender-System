@@ -1,9 +1,13 @@
-
 from django.shortcuts import render
 from django.views import generic
 from django.db.models import Avg
 from django.contrib.auth import get_user_model
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.conf import settings
+import pickle
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+import pandas as pd
 
 User = get_user_model()
 
@@ -14,6 +18,9 @@ from .models import Movie
 import requests
 # Create your views here.
 API_KEY = settings.API_KEY
+filename = str(settings.DATA_DIR) + '/model/nlp_model.pkl'
+clf = pickle.load(open(filename, 'rb'))
+vectorizer = pickle.load(open(str(settings.DATA_DIR) + '/model/tranform.pkl', 'rb'))
 
 class MovieListView(generic.ListView):
     template_name = 'movies/list.html'
@@ -56,8 +63,8 @@ class MovieDetailView(generic.DetailView):
             movie_object = context['object']
             object_ids = [movie_object.id]
             my_ratings = user.rating_set.movies().as_object_dict(object_ids=object_ids)
-            
-            context['my_ratings'] = my_ratings
+            movie_id = str(movie_object.id)
+            context['my_ratings'] = my_ratings.get(movie_id)
 
         movies = Movie.objects.all().order_by('-rating_avg')
         # Retrieve the movie_id from URL parameters or self.kwargs
@@ -116,6 +123,17 @@ class MovieDetailView(generic.DetailView):
         context['detailed_casts'] = detailed_casts
 
         
+        list_rcmd = recommend(movie.title)
+        recommend_movies = []
+        for title in list_rcmd:
+            matching_movies = Movie.objects.filter(title__iexact=title)
+            if matching_movies.exists():
+                rcmd_movie = matching_movies.first()
+                recommend_movies.append(rcmd_movie)
+            else:
+                print(f"Movie with title '{title}' does not exist.")
+        context['recommend_movies'] = recommend_movies
+
         return context
 
 
@@ -124,7 +142,7 @@ movie_detail_view = MovieDetailView.as_view()
 
 class MovieVideoView(generic.DetailView):
     model = Movie
-    template_name = 'movies/watch_video.html'  # Tạo một template mới cho việc xem video
+    template_name = 'movies/watch_video.html'
     # context -> object -> id
     queryset = Movie.objects.all()
 
@@ -174,3 +192,43 @@ def search_movie(request):
     else:
         context['not_search'] = True
     return render(request, "movies/find.html", context)
+
+def recommend(movie_name):
+    movie_name = movie_name.lower()
+    list_rcmd = similarity(movie_name)
+    return list_rcmd
+
+
+def similarity(movie_name):
+    rc = rcmd(movie_name)
+    return rc
+
+def rcmd(m):
+    m = m.lower()
+    try:
+        data.head()
+        similarity.shape
+    except:
+        data, similarity = create_similarity()
+    if m not in data['movie_title'].unique():
+        return('Sorry! The movie you requested is not in our database. Please check the spelling or try with some other movies')
+    else:
+        i = data.loc[data['movie_title']==m].index[0]
+        lst = list(enumerate(similarity[i]))
+        lst = sorted(lst, key = lambda x:x[1] ,reverse=True)
+        lst = lst[1:21]
+        l = []
+        for i in range(len(lst)):
+            a = lst[i][0]
+            l.append(data['movie_title'][a])
+        return l
+
+def create_similarity():
+    file = str(settings.DATA_DIR) + '/main_data.csv'
+    data = pd.read_csv(file)
+    # creating a count matrix
+    cv = CountVectorizer()
+    count_matrix = cv.fit_transform(data['comb'])
+    # creating a similarity score matrix
+    similarity = cosine_similarity(count_matrix)
+    return data,similarity
