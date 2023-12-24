@@ -215,7 +215,7 @@ def rcmd(m):
         i = data.loc[data['movie_title']==m].index[0]
         lst = list(enumerate(similarity[i]))
         lst = sorted(lst, key = lambda x:x[1] ,reverse=True)
-        lst = lst[1:21]
+        lst = lst[1:11]
         l = []
         for i in range(len(lst)):
             a = lst[i][0]

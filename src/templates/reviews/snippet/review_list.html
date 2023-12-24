@@ -1,6 +1,5 @@
 {% load static %}
 <link href="{% static 'movies/css/modal.css' %}" rel="stylesheet" />
-<div id="review-container">
   {% for review in reviews %}
   <div class="card-review-item" data-review-id="{{ review.id }}">
     <img
@@ -27,9 +26,7 @@
           name="content"
           placeholder="Enter your edited review here..."
           style="width: 100%"
-        >
-          {{ review.content }}</textarea
-        >
+        >{{ review.content }}</textarea>
         <div style="display: flex">
           <div class="saveBtn">Save changes</div>
           <div class="cancelEditBtn">Cancel</div>
@@ -45,7 +42,6 @@
     </div>
   </div>
   {% endfor %}
-</div>
 <div id="confirmModal" class="confirmModal">
   <div class="confirmModal-content">
     <p style="color: black; font-weight: bold">
@@ -57,142 +53,3 @@
     </div>
   </div>
 </div>
-<script>
-  $(".deleteBtn").click(function () {
-    var reviewId = $(this).data("review-id");
-    $("#confirmModal").show();
-    $("#confirmDeleteBtn").data("review-id", reviewId);
-  });
-
-  $("#confirmDeleteBtn").click(function () {
-    var reviewId = $(this).data("review-id");
-    $.ajax({
-      url: "/review/delete/",
-      type: "POST",
-      data: {
-        csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val(),
-        review_id: reviewId,
-      },
-      success: function (data) {
-        if (data.status == "error") {
-          $.toast({
-            heading: "Error",
-            text: data.message,
-            showHideTransition: "slide",
-            icon: "error",
-            position: "top-right",
-            loaderBg: "#FF0000",
-          });
-        } else {
-          $.toast({
-            heading: "Success",
-            text: data.message,
-            showHideTransition: "slide",
-            icon: "success",
-            position: "top-right",
-            loaderBg: "#05BD11",
-          });
-          $("#review-container").html(data.reviews);
-          $("#confirmModal").hide();
-          $(`.card-review-item[data-review-id=${reviewId}]`).remove();
-        }
-      },
-    });
-  });
-
-  $("#cancelDeleteBtn, .close").click(function () {
-    $("#confirmModal").hide();
-  });
-
-  $(".editBtn").click(function () {
-    var reviewId = $(this).data("review-id");
-    $(
-      `.card-review-item[data-review-id=${reviewId}] .card-review-item__content-text`
-    ).hide();
-    $(
-      `.card-review-item[data-review-id=${reviewId}] .card-review-item__timestamp`
-    ).hide();
-    $(
-      `.card-review-item[data-review-id=${reviewId}] .card-review-item__actions`
-    ).hide();
-    $(`.card-review-item[data-review-id=${reviewId}] .editReviewForm`).show();
-  });
-
-  $(".cancelEditBtn").click(function () {
-    var reviewId = $(this).parent().parent().data("review-id");
-    $(
-      `.card-review-item[data-review-id=${reviewId}] .card-review-item__content-text`
-    ).show();
-    $(
-      `.card-review-item[data-review-id=${reviewId}] .card-review-item__timestamp`
-    ).show();
-    $(
-      `.card-review-item[data-review-id=${reviewId}] .card-review-item__actions`
-    ).show();
-    $(`.card-review-item[data-review-id=${reviewId}] .editReviewForm`).hide();
-  });
-
-  $(".saveBtn").click(function () {
-    var reviewId = $(this).parent().parent().data("review-id");
-    var content = $(
-      `.card-review-item[data-review-id=${reviewId}] textarea[name=content]`
-    ).val();
-    console.log("Data: ", reviewId, content);
-    $.ajax({
-      type: "POST",
-      url: "/review/update/",
-      data: {
-        csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val(),
-        review_id: reviewId,
-        content: content,
-      },
-      success: function (data) {
-        if (data.status === "success") {
-          $.toast({
-            heading: "Success",
-            text: data.message,
-            showHideTransition: "slide",
-            icon: "success",
-            position: "top-right",
-            loaderBg: "#05BD11",
-          });
-          $(
-            `.card-review-item[data-review-id=${reviewId}] .card-review-item__content-text`
-          )
-            .text(data.review.content)
-            .show();
-          $(
-            `.card-review-item[data-review-id=${reviewId}] .editReviewForm`
-          ).hide();
-          $(
-            `.card-review-item[data-review-id=${reviewId}] .card-review-item__timestamp`
-          )
-            .text(data.review.timestamp)
-            .show();
-          $(
-            `.card-review-item[data-review-id=${reviewId}] .card-review-item__actions`
-          ).show();
-        } else {
-          $.toast({
-            heading: "Error",
-            text: "Something went wrong",
-            showHideTransition: "slide",
-            icon: "error",
-            position: "top-right",
-            loaderBg: "#FF0000",
-          });
-        }
-      },
-      error: function (error) {
-        $.toast({
-          heading: "Error",
-          text: "Something went wrong",
-          showHideTransition: "slide",
-          icon: "error",
-          position: "top-right",
-          loaderBg: "#FF0000",
-        });
-      },
-    });
-  });
-</script>

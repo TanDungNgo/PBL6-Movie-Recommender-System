@@ -139,7 +139,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+# TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
@@ -165,7 +165,7 @@ MEDIA_ROOT = DATA_DIR / 'local-cdn' / 'media'
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia/Saigon'
+TIME_ZONE = 'Asia/Ho_Chi_Minh'
 
 USE_I18N = True
 
