@@ -2,6 +2,7 @@
   rel="stylesheet"
   href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css"
 />
+<body>
 <div>
   <form style="width: 70%;">
     {% csrf_token %}
@@ -29,14 +30,14 @@
       Submit Review
     </div>
   </form>
-  <!-- {% if  reviews|length > 0 %} -->
   <h5 style="font-size: 30px; margin: 50px 0 20px 0">Top reviews</h5>
-  <!-- {% endif %} -->
   <div
     class="card-review-info"
     style="display: flex; margin-bottom: 50px; flex-direction: column"
   >
-    {% include 'reviews/snippet/review_list.html' with reviews=reviews%}
+    <div id="review-container">
+      {% include 'reviews/snippet/review_list.html' with reviews=reviews%}
+    </div>
     {% if reviews|length >= 5 %}
     <div id="load-more-btn" class="button"
     style="
@@ -84,7 +85,7 @@
             });
             document.querySelector('textarea[name="content"]').value = "";
             var newReviewHtml = `
-            <div class="card-review-item">
+            <div class="card-review-item" data-review-id="${data.review.id}">
                 <img class="card-review-item__avatar" src="${data.review.avatar}" alt="${data.review.user}">
                 <div class="card-review-item__content">
                     <div  class="card-review-item__info">
@@ -92,17 +93,35 @@
                         <span class="card-review-item__content-text">${data.review.content}</span>
                         <span class="card-review-item__timestamp">${data.review.timestamp}</span>
                     </div>
+                    <div
+                      class="editReviewForm"
+                      data-review-id="${data.review.id}"
+                      style="display: none; width: 100%"
+                    >
+                      <textarea
+                        name="content"
+                        placeholder="Enter your edited review here..."
+                        style="width: 100%"
+                      >${data.review.content}</textarea>
+                      <div style="display: flex">
+                        <div class="saveBtn">Save changes</div>
+                        <div class="cancelEditBtn">Cancel</div>
+                      </div>
+                    </div>
                     <div class="card-review-item__actions">
                         <div class="replyBtn">Reply</div>
-                        <div class="editBtn">Edit</div>
-                        <div class="deleteBtn">Delete</div>
+                        <div class="editBtn" data-review-id="${data.review.id}">Edit</div>
+                        <div class="deleteBtn" data-review-id="${data.review.id}">Delete</div>
                     </div>
                 </div>
             </div>
             `;
+            // document
+            //   .querySelector("#review-container")
+            //   .insertAdjacentHTML("beforebegin", newReviewHtml);
             document
-              .querySelector(".card-review-info")
-              .insertAdjacentHTML("beforebegin", newReviewHtml);
+              .querySelector("#review-container")
+              .insertAdjacentHTML("afterbegin", newReviewHtml);
           }
         },
         error: function (error) {
@@ -145,8 +164,146 @@
             },
         });
     });
+  
+  $("#review-container").on("click", ".deleteBtn", function () {
+    console.log("Delete button clicked");
+    var reviewId = $(this).data("review-id");
+    $("#confirmModal").show();
+    $("#confirmDeleteBtn").data("review-id", reviewId);
   });
 
+  $("#confirmDeleteBtn").click(function () {
+    var reviewId = $(this).data("review-id");
+    $.ajax({
+      url: "/review/delete/",
+      type: "POST",
+      data: {
+        csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val(),
+        review_id: reviewId,
+      },
+      success: function (data) {
+        if (data.status == "error") {
+          $.toast({
+            heading: "Error",
+            text: data.message,
+            showHideTransition: "slide",
+            icon: "error",
+            position: "top-right",
+            loaderBg: "#FF0000",
+          });
+        } else {
+          $.toast({
+            heading: "Success",
+            text: data.message,
+            showHideTransition: "slide",
+            icon: "success",
+            position: "top-right",
+            loaderBg: "#05BD11",
+          });
+          $("#review-container").html(data.reviews);
+          $("#confirmModal").hide();
+          $(`.card-review-item[data-review-id=${reviewId}]`).remove();
+        }
+      },
+    });
+  });
 
+  $("#cancelDeleteBtn, .close").click(function () {
+    $("#confirmModal").hide();
+  });
+
+  $("#review-container").on("click", ".editBtn", function () {
+    console.log("Edit button clicked");
+    var reviewId = $(this).data("review-id");
+    $(
+      `.card-review-item[data-review-id=${reviewId}] .card-review-item__content-text`
+    ).hide();
+    $(
+      `.card-review-item[data-review-id=${reviewId}] .card-review-item__timestamp`
+    ).hide();
+    $(
+      `.card-review-item[data-review-id=${reviewId}] .card-review-item__actions`
+    ).hide();
+    $(`.card-review-item[data-review-id=${reviewId}] .editReviewForm`).show();
+  });
+
+  $("#review-container").on("click", ".cancelEditBtn", function () {
+    var reviewId = $(this).parent().parent().data("review-id");
+    $(
+      `.card-review-item[data-review-id=${reviewId}] .card-review-item__content-text`
+    ).show();
+    $(
+      `.card-review-item[data-review-id=${reviewId}] .card-review-item__timestamp`
+    ).show();
+    $(
+      `.card-review-item[data-review-id=${reviewId}] .card-review-item__actions`
+    ).show();
+    $(`.card-review-item[data-review-id=${reviewId}] .editReviewForm`).hide();
+  });
+
+  $("#review-container").on("click", ".saveBtn", function () {
+    var reviewId = $(this).parent().parent().data("review-id");
+    var content = $(
+      `.card-review-item[data-review-id=${reviewId}] textarea[name=content]`
+    ).val();
+    $.ajax({
+      type: "POST",
+      url: "/review/update/",
+      data: {
+        csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val(),
+        review_id: reviewId,
+        content: content,
+      },
+      success: function (data) {
+        if (data.status === "success") {
+          $.toast({
+            heading: "Success",
+            text: data.message,
+            showHideTransition: "slide",
+            icon: "success",
+            position: "top-right",
+            loaderBg: "#05BD11",
+          });
+          $(
+            `.card-review-item[data-review-id=${reviewId}] .card-review-item__content-text`
+          )
+            .text(data.review.content)
+            .show();
+          $(
+            `.card-review-item[data-review-id=${reviewId}] .editReviewForm`
+          ).hide();
+          $(
+            `.card-review-item[data-review-id=${reviewId}] .card-review-item__timestamp`
+          )
+            .text(data.review.timestamp)
+            .show();
+          $(
+            `.card-review-item[data-review-id=${reviewId}] .card-review-item__actions`
+          ).show();
+        } else {
+          $.toast({
+            heading: "Error",
+            text: "Something went wrong",
+            showHideTransition: "slide",
+            icon: "error",
+            position: "top-right",
+            loaderBg: "#FF0000",
+          });
+        }
+      },
+      error: function (error) {
+        $.toast({
+          heading: "Error",
+          text: "Something went wrong",
+          showHideTransition: "slide",
+          icon: "error",
+          position: "top-right",
+          loaderBg: "#FF0000",
+        });
+      },
+    });
+  });
+  });
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
+</body>
