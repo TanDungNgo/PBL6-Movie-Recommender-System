@@ -1,6 +1,5 @@
 from django.shortcuts import render
 from django.views import generic
-from django.db.models import Avg
 from django.contrib.auth import get_user_model
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.conf import settings
@@ -8,6 +7,9 @@ import pickle
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 import pandas as pd
+from django.template.loader import render_to_string
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
 
 User = get_user_model()
 
@@ -63,8 +65,12 @@ class MovieDetailView(generic.DetailView):
             movie_object = context['object']
             object_ids = [movie_object.id]
             my_ratings = user.rating_set.movies().as_object_dict(object_ids=object_ids)
-            movie_id = str(movie_object.id)
-            context['my_ratings'] = my_ratings.get(movie_id)
+            if my_ratings:
+                movie_id = str(movie_object.id)
+                context['my_ratings'] = my_ratings.get(movie_id)
+            else:
+                context['my_ratings'] = 0
+
 
         movies = Movie.objects.all().order_by('-rating_avg')
         # Retrieve the movie_id from URL parameters or self.kwargs
@@ -125,19 +131,7 @@ class MovieDetailView(generic.DetailView):
 
         context['detailed_casts'] = detailed_casts
 
-        
-        list_rcmd = recommend(movie.title)
-        recommend_movies = []
-        for title in list_rcmd:
-            matching_movies = Movie.objects.filter(title__iexact=title)
-            if matching_movies.exists():
-                rcmd_movie = matching_movies.first()
-                recommend_movies.append(rcmd_movie)
-            else:
-                print(f"Movie with title '{title}' does not exist.")
-        context['recommend_movies'] = recommend_movies
         return context
-
 
 
 movie_detail_view = MovieDetailView.as_view()
@@ -234,3 +228,25 @@ def create_similarity():
     # creating a similarity score matrix
     similarity = cosine_similarity(count_matrix)
     return data,similarity
+
+def get_recommendations(request, pk):
+    movie = Movie.objects.get(pk=pk)
+    title = movie.title
+    list_rcmd = recommend(title)
+    recommend_movies = []
+    for title in list_rcmd:
+        matching_movies = Movie.objects.filter(title__iexact=title)
+        if matching_movies.exists():
+            rcmd_movie = matching_movies.first()
+            recommend_movies.append(rcmd_movie)
+        else:
+            print(f"Movie with title '{title}' does not exist.")
+    
+    movie_html = render_to_string('movies/list.html', {'object_list': recommend_movies, 'request': request})
+
+    response_data = {
+        'status': 'success',
+        'message': 'Recommendations retrieved successfully!',
+        'recommend_movies': movie_html,
+    }
+    return JsonResponse(response_data)

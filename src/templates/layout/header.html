@@ -107,17 +107,16 @@
                   <div class="nav-item dropdown">
                       <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
                           <img class="rounded-circle me-lg-2" src="{{ request.session.user_avatar }}" alt="" style="width: 40px; height: 40px;">
-                          <span class="d-none d-lg-inline-flex">{{ request.session.user_username }}</span>
+                          <span class="d-none d-lg-inline-flex" style="font-weight: 600;">{{ request.session.user_username }}</span>
                       </a>
-                      <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0">
-                          <a href="{% url 'profile' %}" class="dropdown-item"  style="font-weight: bold;">My Profile</a>
-
+                      <div class="dropdown-menu dropdown-menu-end bg-secondary border-0 rounded-0 rounded-bottom m-0" style="background-color: white!important;">
+                          <a href="{% url 'profile' %}" class="dropdown-item">My Profile</a>
                           {% if request.session.user_role == 'admin' %}
-                              <a href="{% url 'dashboard' %}" class="dropdown-item" style="font-weight: bold;">Manage</a>
+                              <a href="{% url 'dashboard' %}" class="dropdown-item">Manage</a>
                           {% endif %}
-                          <a href="{% url 'suggestion' %}" class="dropdown-item"  style="font-weight: bold;">Suggestion</a>
-                          <a href="#" class="dropdown-item"  style="font-weight: bold;">Settings</a>
-                          <a href="{% url 'signout' %}" class="dropdown-item"  style="font-weight: bold;">Sign Out</a>
+                          <a href="{% url 'suggestion' %}" class="dropdown-item">Suggestion</a>
+                          <a href="#" class="dropdown-item">Settings</a>
+                          <a href="{% url 'signout' %}" class="dropdown-item">Sign Out</a>
                       </div>
                   </div>
               </div>
