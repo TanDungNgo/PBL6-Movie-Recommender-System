@@ -7,7 +7,7 @@
         <input type="hidden" value="{{ object_id }}" name="object_id" />
     {% endif %}
     <select name="rating_value" class="form-control"
-    style="width: 130px; border-radius: 0.25rem; cursor: pointer;">
+    style="width: 130px; border-radius: 0.25rem; cursor: pointer; background: white;">
         {% for choice in rating_choices %}
             {% if choice is None %}
                 <option disabled selected>Rating Movie</option>
@@ -17,27 +17,42 @@
         {% endfor %}
     </select>
   </form>
-  {% if current_rating %}
   <span class="label_ratings">
-      {% if current_rating == 5 %}
-          Excellent
-      {% elif current_rating == 4 %}
-          Good
-      {% elif current_rating == 3 %}
-          Average
-      {% elif current_rating == 2 %}
-          Poor
-      {% elif current_rating == 1 %}
-          Very Poor
-      {% else %}
-          Not Rated
-      {% endif %}
   </span>
-  {% endif %}
 </div>
 
 <script type="text/javascript">
   $(document).ready(function () {
+      var current_rating = {{ current_rating }};
+      if (current_rating == 5) {
+          $("#choice_5").prop("selected", true);
+          $(".label_ratings").text("Excellent");
+          // $(".label_ratings").css("background-color", "#efc909");
+          // $(".label_ratings::before").css("border-color", "transparent #efc909 transparent transparent");
+        } else if (current_rating == 4) {
+            $("#choice_4").prop("selected", true);
+            $(".label_ratings").text("Good");
+            // $(".label_ratings").css("background-color", "#f3a106");
+            // $(".label_ratings::before").css("border-color", "transparent #f3a106 transparent transparent");
+        } else if (current_rating == 3) {
+            $("#choice_3").prop("selected", true);
+            $(".label_ratings").text("Average");
+            // $(".label_ratings").css("background-color", "#f06a06");
+            // $(".label_ratings::before").css("border-color", "transparent #f06a06 transparent transparent");
+        } else if (current_rating == 2) {
+            $("#choice_2").prop("selected", true);
+            $(".label_ratings").text("Poor");
+            // $(".label_ratings").css("background-color", "#ef4604");
+            // $(".label_ratings::before").css("border-color", "transparent #ef4604 transparent transparent");
+        } else if (current_rating == 1) {
+            $("#choice_1").prop("selected", true);
+            $(".label_ratings").text("Very Poor");
+            // $(".label_ratings").css("background-color", "#ff4105");
+            // $(".label_ratings::before").css("border-color", "transparent #ff4105 transparent transparent");
+        } else {
+          $(".label_ratings").hide();
+        }
+
       $("#rateMovieForm_{{ object_id }}").change(function () {
           let rating_value = $("#rateMovieForm_{{ object_id }} select").val();
           $.ajax({
@@ -86,6 +101,7 @@
                       $("#choice_0").prop("selected", true);
                       $(".label_ratings").text("Not Rated");
                     }
+                    $(".label_ratings").show();
                   }
               },
           });

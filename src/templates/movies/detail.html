@@ -155,7 +155,6 @@
 				</div>
 			</div>
 		</div>
-
 		<div class="row trend_2 mt-4">
 			<div id="carouselExampleCaptions1" class="carousel slide" data-bs-ride="carousel">
 				<div class="carousel-indicators">
@@ -164,8 +163,7 @@
 					<button type="button" data-bs-target="#carouselExampleCaptions1" data-bs-slide-to="1"
 						aria-label="Slide 2" class="" aria-current="true"></button>
 				</div>
-				<div class="carousel-inner">
-					{% include 'movies/list.html' with object_list=recommend_movies %}
+				<div class="carousel-inner" id="recommend_movies">
 				</div>
 			</div>
 		</div>
@@ -192,13 +190,29 @@
 				<div class="carousel-inner">
 					{% include 'movies/list.html' with object_list=top_rated_movies %} 
 				</div>
-
 			</div>
 		</div>
 	</div>
 </section>
-
+<script>
+$(document).ready(function () {
+    var movie_id = {{ movie.id }};
+    $.ajax({
+        url: '/movies/recommend/' + movie_id + '/',
+        type: 'GET',
+        success: function (data) {
+            if ('recommend_movies' in data) {
+                var recommend_movies_html = data.recommend_movies;
+                $('#recommend_movies').html(recommend_movies_html);
+            } else {
+                console.error('Error:', data.error);
+            }
+        },
+        error: function (error) {
+            console.error('Ajax request failed:', error);
+        }
+    });
+});
+</script>
 {% endblock %}
 </html>
-
-
