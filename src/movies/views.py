@@ -93,9 +93,11 @@ class MovieDetailView(generic.DetailView):
         data_movie = response.json()
         genres = data_movie.get('genres', [])
         countries = data_movie.get('production_countries', [])
+        backdrop_path = data_movie.get('backdrop_path', [])
 
         context['top_rated_movies'] = top_rated_movies
         context['related_movies'] = related_movies
+
         context.update({
             'movie_id': movie_id,
             'casts': casts,
@@ -105,6 +107,7 @@ class MovieDetailView(generic.DetailView):
             'genres': genres,
             'countries': countries,
             'directors': directors,
+            'backdrop_path': backdrop_path,
         })
         actor_id = self.kwargs.get('pk')
         api_key = '8265bd1679663a7ea12ac168da84d2e8'  # Khóa API của bạn
