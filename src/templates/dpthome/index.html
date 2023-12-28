@@ -153,7 +153,7 @@
 													{% if movie.poster_path %}
 													<img src="{{ movie.poster_path }}" class="d-block w-100"
 														alt="{{ movie.title }} Poster" width="550"
-														style="object-fit: cover;"" >
+														style="object-fit: cover;" >
 														{% else %}
 															<p>No poster available.</p>
 														{% endif %}
@@ -172,8 +172,7 @@
 									</div>
 									<div class="col-md-8 col-8">
 										<div class="popular_2i1r">
-											<h5><a class="col_red" href="{{ movie.get_absolute_url }}" id="title"> {{
-													movie.title }}</a></h5>
+											<h5><a class="col_red" href="{{ movie.get_absolute_url }}" id="title"> {{movie.title }}</a></h5>
 											<h6>{{ movie.genre }}</h6>
 											<h6> Imdb : {{ movie.rating_avg }} <span class="ms-2"><i
 														class="fa fa-star col_red me-1"></i></span>
@@ -220,8 +219,7 @@
 									</div>
 									<div class="col-md-8 col-8">
 										<div class="popular_2i1r">
-											<h5><a class="col_red" href="{{ movie.get_absolute_url }}" id="title"> {{
-													movie.title }}</a></h5>
+											<h5><a class="col_red" href="{{ movie.get_absolute_url }}" id="title"> {{movie.title }}</a></h5>
 											<h6>{{ movie.genre }}</h6>
 											<h6> Imdb : {{ movie.rating_avg }} <span class="ms-2"><i
 														class="fa fa-star col_red me-1"></i></span>
@@ -271,8 +269,7 @@
 									</div>
 									<div class="col-md-8 col-8">
 										<div class="popular_2i1r">
-											<h5><a class="col_red" href="{{ movie.get_absolute_url }}" id="title"> {{
-													movie.title }}</a></h5>
+											<h5><a class="col_red" href="{{ movie.get_absolute_url }}" id="title"> {{movie.title }}</a></h5>
 											<h6>{{ movie.genre }}</h6>
 											<h6> Imdb : {{ movie.rating_avg }} <span class="ms-2"><i
 														class="fa fa-star col_red me-1"></i></span>
