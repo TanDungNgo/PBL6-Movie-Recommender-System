@@ -29,7 +29,23 @@ class Home(generic.ListView):
         return Movie.objects.filter(release_date__lte=timezone.now()).order_by('-release_date')[:4]
     
     def get_top_score_movies(self):
-        return Movie.objects.order_by('-score')[:20]
+        top_score_movies = Movie.objects.order_by('-score')[:20]
+
+        for movie in top_score_movies:
+            # Make API request to get detailed information
+            api_url = f"https://api.themoviedb.org/3/movie/{movie.tmdb_id}?api_key=8265bd1679663a7ea12ac168da84d2e8&language=en-US"
+            response = requests.get(api_url)
+            data = response.json()
+
+            # Update fields in Movie model with API data
+            movie.backdrop_path = data.get('backdrop_path', '')
+            movie.runtime = data.get('runtime', 0)
+            movie.genres = ', '.join([genre['name'] for genre in data.get('genres', [])])
+            movie.countries = ', '.join([country['name'] for country in data.get('production_countries', [])])
+
+            movie.save()
+
+        return top_score_movies
 
 
 home = Home.as_view()
