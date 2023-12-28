@@ -17,12 +17,12 @@
 			{% for movie in top_score_movies|slice:":3" %}
 			<div class="carousel-item {% if forloop.first %}active{% endif %}">
 				{% if movie.backdrop_path %}
-				<img src="https://image.tmdb.org/t/p/original/{{ movie.backdrop_path }}" height="650px"
-					style="object-fit: cover;" class="d-block w-100" alt="{{ movie.title }}">
+					<img src="https://image.tmdb.org/t/p/original/{{ movie.backdrop_path }}" height="650px"
+						style="object-fit: cover;" class="d-block w-100" alt="{{ movie.title }}">
 				{% else %}
 
-				<img src="{% static 'movies/img/default-image.jpg' %}" height="650px" style="object-fit: cover;"
-					class="d-block w-100" alt="{{ movie.title }}">
+					<img src="{% static 'movies/img/default-image.jpg' %}" height="650px" style="object-fit: cover;"
+						class="d-block w-100" alt="{{ movie.title }}">
 				{% endif %}
 				<div class="carousel-caption d-md-block">
 					<h1 class="font_60">{{ movie.title }}</h1>
