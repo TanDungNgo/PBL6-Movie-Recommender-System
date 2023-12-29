@@ -1,6 +1,6 @@
 {% extends "layout/base.html" %}
 {% load static %}
-{% block title %}Suggestion{% endblock %}
+{% block title %}Bookmark{% endblock %}
 {% block content %}
 <style>
   .pagination {
@@ -36,8 +36,9 @@
 <section id="trend" class="pt-4 pb-5">
     <div class="container">
       <div class="row trend_2 mt-4">
-        <h2>Suggest Movies <span class="col_red" id="searchResult"> </span></h2>
+        <h2>Bookmarked Movies <span class="col_red" id="searchResult"> </span></h2>
       </div>
+      {% if object_list %}
       <div class="row trend_2 mt-4">
         {% for object in object_list %}
         {% include 'movies/snippet/card.html' with object=object current_rating=current_rating %}
@@ -60,6 +61,11 @@
           {% endif %}
         </span>
       </div> 
+      {% else %}
+      <div class="row trend_2 mt-4">
+        <h2 class="col_red">No Bookmarked Movies</h2>
+      </div>
+      {% endif %}
     </div>
 </section>
 <section>

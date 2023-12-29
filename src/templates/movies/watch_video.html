@@ -38,7 +38,7 @@
 
     {% if keys|length > 1 %}
     <div class="featured-videos" style="display: flex; flex-wrap: wrap; gap: 10px;">
-        {% for key in keys %}
+        {% for key in keys|slice:"1:5" %}
             <div class="featured-video" style="flex: 0 0 calc(33.33% - 10px); box-sizing: border-box;">
                 <iframe width="400" height="225" src="https://www.youtube.com/embed/{{ key }}" frameborder="0" allowfullscreen></iframe>
             </div>

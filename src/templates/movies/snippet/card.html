@@ -2,6 +2,8 @@
 {% with my_ratings|get_dict_val:object.id as current_rating %}
 {% block content %}
 {% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'movies/css/toastr.css' %}" media="all">
+<script type="text/javascript" src="{% static 'movies/js/toastr.min.js' %}"></script>
 <link href="{% static 'movies/css/bookmark.css' %}" rel="stylesheet" />
 <div class="col-md-3 col-6" style="margin-bottom: 20px;">
   <div class="trend_2im clearfix position-relative">
@@ -23,7 +25,7 @@
   <div class="trend_2ilast bg_grey p-3 clearfix" style="min-height: 240px;">
     <h5 style="display: flex; justify-content: space-between; align-items: center;">
       <a class="col_red" href="{{ object.get_absolute_url }}" id="title">{{ object.title }}</a>
-      <div class="bookmark"><span class="tooltiptext">Bookmark</span></div>
+      <div class="bookmark" onclick="toggleBookmark(this)" data-movie-id="{{ object.id }}"><span class="tooltiptext">Bookmark</span></div>
     </h5>
     <p class="mb-2">{{ object.overview|slice:":80" }}</p>
     <div class="mb-0" style="display: flex; justify-content: space-between; align-items: center;">
@@ -38,5 +40,60 @@
     </div>
   </div>
 </div>
+<script>
+function toggleBookmark(bookmarkElement) {
+  const movieId = bookmarkElement.dataset.movieId;
+  const isBookmarked = bookmarkElement.classList.toggle('bookmarked');
+  saveBookmarkState(movieId, isBookmarked);
+}
+
+function saveBookmarkState(movieId, isBookmarked) {
+  const bookmarkedMovies = JSON.parse(localStorage.getItem('bookmarkedMovies')) || {};
+  bookmarkedMovies[movieId] = isBookmarked;
+  localStorage.setItem('bookmarkedMovies', JSON.stringify(bookmarkedMovies));
+  $.ajax({
+    url: "/bookmark/movie/",
+    type: "POST",
+    data: {
+      'movie_id': movieId,
+      'is_bookmarked': isBookmarked,
+      'csrfmiddlewaretoken': '{{ csrf_token }}'
+    },
+    dataType: 'json',
+    success: function (data) {
+      if(data.status == 'success') {
+        console.log(data.message);
+        $.toast({
+          heading: "Success",
+          text: data.message,
+          showHideTransition: "slide",
+          icon: "success",
+          position: "top-right",
+          loaderBg: "#5ba035",
+        });
+      } else {
+        console.log("Error: " + data.message);
+      }
+    }
+  });
+}
+
+
+function restoreBookmarkState() {
+  const bookmarkedMovies = JSON.parse(localStorage.getItem('bookmarkedMovies')) || {};
+  for (const movieId in bookmarkedMovies) {
+    const isBookmarked = bookmarkedMovies[movieId];
+    const movieElement = document.querySelector(`.bookmark[data-movie-id="${movieId}"]`);
+    if (movieElement) {
+      if (isBookmarked) {
+        movieElement.classList.add('bookmarked');
+      } else {
+        movieElement.classList.remove('bookmarked');
+      }
+    }
+  }
+}
+window.onload = restoreBookmarkState;
+</script>
 {% endblock %}
 {% endwith %}
