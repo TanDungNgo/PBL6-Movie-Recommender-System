@@ -24,6 +24,8 @@ class DashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateVie
         context = super().get_context_data(**kwargs)
         context['total_movies'] = Movie.objects.count()
         context['total_users'] = User.objects.count()
+        users_with_last_login = User.objects.exclude(last_login__isnull=True)
+        context['users_with_last_login'] = users_with_last_login
         return context
 
     def test_func(self):
