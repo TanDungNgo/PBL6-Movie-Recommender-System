@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'exports',
     'suggestions',
     'reviews',
+    'bookmarks',
 ]
 SITE_ID = 1
 LOGIN_URL = '/accounts/login/'
@@ -73,7 +74,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_htmx.middleware.HtmxMiddleware', # request.htmx
-    
 ]
 
 ROOT_URLCONF = 'dpthome.urls'
@@ -94,7 +94,6 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'ratings.context_processors.rating_choices',
-
                 'dptpage.context_processors.movies_list'
             ],
         },

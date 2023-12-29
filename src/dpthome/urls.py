@@ -28,4 +28,5 @@ urlpatterns = [
     path('dashboard/', include('dashboard.urls')),
     path('suggestions/', include('suggestions.urls')),
     path('', include('reviews.urls')),
+    path('bookmark/', include('bookmarks.urls')),
 ]
