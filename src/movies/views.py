@@ -12,8 +12,11 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from .models import Movie, Genre
 import requests
+from django.core.serializers import serialize
+from profiles.models import CustomUser as User
+from datetime import datetime
 
-User = get_user_model()
+# User = get_user_model()
 
 # Create your views here.
 API_KEY = settings.API_KEY
@@ -35,24 +38,69 @@ class MovieListView(generic.ListView):
         #     object_ids = [x.id for x in object_list][:20]
         #     my_ratings = user.rating_set.movies().as_object_dict(object_ids=object_ids)
         #     context['my_ratings'] = my_ratings
+        # object_list = context['object_list']
+        # movies_per_page = 12
+        # paginator = Paginator(object_list, movies_per_page)
+        # if 'page' in requests.GET and requests.GET['page']:
+        #     page = requests.GET['page']
+        # else:
+        #     page = 1
+        # try:
+        #     object_list = paginator.page(page)
+        # except PageNotAnInteger:
+        #     object_list = paginator.page(1)
+        # except EmptyPage:
+        #     object_list = paginator.page(paginator.num_pages)
+        # context['object_list'] = object_list
         genre_list = Genre.objects.all()
         context['genre_list'] = genre_list
-        object_list = context['object_list']
-        movies_per_page = 12
-        paginator = Paginator(object_list, movies_per_page)
-        if 'page' in requests.GET and requests.GET['page']:
-            page = requests.GET['page']
-        else:
-            page = 1
-        try:
-            object_list = paginator.page(page)
-        except PageNotAnInteger:
-            object_list = paginator.page(1)
-        except EmptyPage:
-            object_list = paginator.page(paginator.num_pages)
-        context['object_list'] = object_list
+        current_year = datetime.now().year
+        year_list = list(range(current_year, current_year - 10, -1))
+        year_list.append('< ' + str(current_year - 9))
+        context['year_list'] = year_list
         return context
 movie_list_view = MovieListView.as_view()
+
+def get_filtered_movies(request):
+    movies_per_page = 12
+    selected_genre = request.GET.get('genre')
+    selected_year = request.GET.get('year')
+    selected_filter = request.GET.get('filter')
+    if selected_genre != 'all' and selected_year != 'all':
+        movies = Movie.objects.filter(genres__name=selected_genre, release_date__year=selected_year)
+    elif selected_genre != 'all' and selected_year == 'all':
+        movies = Movie.objects.filter(genres__name=selected_genre)
+    elif selected_genre == 'all' and selected_year != 'all':
+        if selected_year == '< ' + str(datetime.now().year - 9):
+            movies = Movie.objects.filter(release_date__year__lt=datetime.now().year - 9)
+        else:
+            movies = Movie.objects.filter(release_date__year=selected_year)
+    else:
+        movies = Movie.objects.all()
+    if selected_filter == 'featured':
+        movies = movies.order_by('-score')
+    elif selected_filter == 'popular':
+        movies = movies.order_by('-rating_count')
+    elif selected_filter == 'newest':
+        movies = movies.order_by('-release_date')
+    paginator = Paginator(movies, movies_per_page)
+    if 'page' in request.GET and request.GET['page']:
+        page = request.GET['page']
+    else:
+        page = 1
+    try:
+        movies = paginator.page(page)
+    except PageNotAnInteger:
+        movies = paginator.page(1)
+    except EmptyPage:
+        movies = paginator.page(paginator.num_pages)
+    movie_html = render_to_string('movies/snippet/card_pagination.html', {'object_list': movies, 'request': request})
+    response_data = {
+        'status': 'success',
+        'message': 'Movies retrieved successfully!',
+        'movie_html': movie_html,
+    }
+    return JsonResponse(response_data)
 
 class MovieDetailView(generic.DetailView):
     template_name = 'movies/detail.html'
