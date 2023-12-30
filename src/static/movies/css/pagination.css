@@ -1,35 +1,29 @@
 .pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
-.pagination i{
-    padding: 13px;
+.step-links {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.page {
-    width: 40px;
-    height: 40px;
-    display: inline-block;
-    padding: 5px 10px;
-    margin: 0 10px;
-    background-color: #de1002;
-    color: #fff;
-    font-size: 20px;
-    text-decoration: none;
-    border-radius: 3px;
-    cursor: pointer;
-    text-align: center;
-    transition: background-color 0.3s, font-size 0.3s;
+.step-links a {
+  text-decoration: none;
+  color: #de1002;
+  border: 1px solid #de1002;
+  padding: 5px 10px;
+  border-radius: 5px;
 }
 
-.page:hover {
-    background-color: #27292d;
-    color: #fff;
-    font-size: 21px;
+.step-links a:hover {
+  background-color: #de1002;
+  color: #fff;
 }
 
-.card-space{
-    border: 5px solid #27292d;
+.current {
+  margin: 0 10px;
+  font-weight: bold;
 }

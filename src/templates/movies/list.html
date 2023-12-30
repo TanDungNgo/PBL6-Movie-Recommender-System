@@ -1,24 +1,83 @@
-<body hx-headers='{"X-CSRFToken": "csrf_token"}'>
-				<div id="carouselExampleCaptions1" class="carousel slide" data-bs-ride="carousel">
-					<div class="carousel-indicators">
-						<button type="button" data-bs-target="#carouselExampleCaptions1" data-bs-slide-to="0" class="active" aria-label="Slide 1"></button>
-						<button type="button" data-bs-target="#carouselExampleCaptions1" data-bs-slide-to="1" aria-label="Slide 2" class="" aria-current="true"></button>
-					</div>
-					<div class="carousel-inner">
-						<div class="carousel-item active">
-							<div class="trend_2i row">
-								{% for object in object_list|slice:"0:4" %}
-								{% include 'movies/snippet/card.html' with object=object current_rating=current_rating %}
-								{% endfor %}
-							</div>
-						</div>
-						<div class="carousel-item">
-							<div class="trend_2i row">
-								{% for object in object_list|slice:"5:9" %}
-								{% include 'movies/snippet/card.html' with object=object current_rating=current_rating %}
-								{% endfor %}
-							</div>
-						</div>
-					</div>
-				</div>
-</body>
+{% extends "layout/base.html" %}
+{% load static %}
+{% block title %}Movies{% endblock %}
+{% block content %}
+<link href="{% static 'movies/css/filter-bar.css' %}" rel="stylesheet" />
+<section id="center" class="center_o pt-2 pb-2">
+    <div class="container-xl">
+     <div class="row center_o1">
+      <div class="col-md-5">
+        <div class="center_o1l">
+         <h2 class="mb-0">Movies</h2>
+        </div>
+      </div>
+      <div class="col-md-7">
+        <div class="center_o1r text-end">
+         <h6 class="mb-0 col_red"><a href="#">Home</a> <span class="me-2 ms-2 text-light"><i class="fa fa-caret-right align-middle"></i></span> Movies</h6>
+        </div>
+      </div>
+     </div>
+    </div>
+</section>
+<section id="trend" class="pt-4 pb-2">
+  <div class="container" id="filter-bar">
+    <div class="filter-select">
+      <select id="genreSelect" name="genre">
+        <option value="all">All genre</option>
+        {% for genre in genre_list %}
+          <option value="{{ genre.name }}">{{ genre.name }}</option>
+        {% endfor %}
+      </select>
+      <select id="yearSelect" name="year">
+        <option value="all">All year</option>
+        <option value="2023">2023</option>
+        <option value="2022">2022</option>
+      </select>
+    </div>
+    <div class="filter-radios">
+        <input type="radio" id="featured" name="filter-radio" checked>
+        <label for="featured">Featured</label>
+        <input type="radio" id="popular" name="filter-radio">
+        <label for="popular">Popular</label>
+        <input type="radio" id="newest" name="filter-radio">
+        <label for="newest">Newest</label>
+        <div class="checked-radio-bg"></div>
+    </div>
+  </div>
+</section>
+<section class="pt-4 pb-5">
+    <div class="container">
+      {% if object_list|length > 0 %}
+      <div class="row trend_2 mt-4">
+        {% for object in object_list %}
+        {% include 'movies/snippet/card.html' with object=object current_rating=current_rating %}
+        {% endfor %}
+      </div>
+      <div class="pagination">
+        <span class="step-links">
+          {% if object_list.has_previous %}
+            <a href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">&laquo; first</a>
+            <a href="?page={{ object_list.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">previous</a>
+          {% endif %}
+      
+          <span class="current">
+            Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.
+          </span>
+      
+          {% if object_list.has_next %}
+            <a href="?page={{ object_list.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">next</a>
+            <a href="?page={{ object_list.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">last &raquo;</a>
+          {% endif %}
+        </span>
+      </div>  
+      {% else %}
+      <div class="row trend_2 mt-4">
+        <h5 class="mt-4">No results found for "{{ request.GET.search }}"</h5>
+      </div>
+      {% endif %}
+    </div>
+</section>
+<section>
+  <div class="card-space"></div>
+</section>
+{% endblock %}

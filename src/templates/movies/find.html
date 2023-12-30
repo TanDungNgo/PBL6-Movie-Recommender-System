@@ -1,39 +1,23 @@
 {% extends "layout/base.html" %}
 {% load static %}
-
 {% block title %}Find{% endblock %}
 {% block content %}
-<style>
-  .pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-  }
-
-  .step-links {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .step-links a {
-    text-decoration: none;
-    color: #de1002;
-    border: 1px solid #de1002;
-    padding: 5px 10px;
-    border-radius: 5px;
-  }
-
-  .step-links a:hover {
-    background-color: #de1002;
-    color: #fff;
-  }
-
-  .current {
-    margin: 0 10px;
-    font-weight: bold;
-  }
-</style>
+<section id="center" class="center_o pt-2 pb-2">
+  <div class="container-xl">
+   <div class="row center_o1">
+    <div class="col-md-5">
+      <div class="center_o1l">
+       <h2 class="mb-0">Movies</h2>
+      </div>
+    </div>
+    <div class="col-md-7">
+      <div class="center_o1r text-end">
+       <h6 class="mb-0 col_red"><a href="#">Home</a> <span class="me-2 ms-2 text-light"><i class="fa fa-caret-right align-middle"></i></span>Find Movies</h6>
+      </div>
+    </div>
+   </div>
+  </div>
+</section>
 <section id="trend" class="pt-4 pb-5">
     <div class="container">
       <div class="row trend_2 mt-4">
