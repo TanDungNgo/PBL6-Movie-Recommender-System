@@ -99,7 +99,6 @@
             <a href="">Show All</a>
           </div>
           <canvas id="myLineChart" width="400" height="200"></canvas>
-          <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
           <script>
               $(document).ready(function() {
                   var ctx = document.getElementById('myLineChart').getContext('2d');
@@ -129,41 +128,19 @@
                       options: options
                   });
 
-                  var actualData = {};
-
-                  $.ajax({
-                      url: '{% url "dashboard" %}',
-                      type: 'GET',
-                      dataType: 'json',
-                      success: function(data) {
-                          myLineChart.data.datasets[0].data = data.users_by_month.map(entry => entry.user_count);
-                          myLineChart.update();
-                          console.log(data);
-                      },
-                      error: function(error) {
-                          console.log("Error:", error);
-                      }
-                  });
+                  fetch('user_by_month/')
+                      .then(response => response.json())
+                      .then(data => {
+                        const userCounts = data.map(entry => entry.count);
+                        myLineChart.data.datasets[0].data = userCounts;
+                        myLineChart.update();
+                      })
+                      .catch(error => {
+                          console.error("Error:", error);
+                      });
+                      
               });
           </script>
-          <!-- <table
-            class="table text-start align-middle table-bordered table-hover mb-0"
-          >
-            <thead>
-              <tr class="text-white">
-                <th scope="col">Month</th>
-                <th scope="col">Number of users</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for entry in users_by_month %}
-              <tr>
-                <td>{{ entry.month }}</td>
-                <td>{{ entry.user_count }}</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table> -->
         </div>
       </div>
     </div>

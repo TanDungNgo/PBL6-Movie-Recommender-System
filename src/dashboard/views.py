@@ -26,35 +26,10 @@ class DashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateVie
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        end_date = now()
-        start_date = datetime(2023, 1, 1)
-
-        users_by_month = (
-            User.objects
-            .exclude(date_joined__isnull=True)
-            .filter(date_joined__gte=start_date, date_joined__lte=end_date)
-            .annotate(month=TruncMonth('date_joined'))
-            .values('month')
-            .annotate(user_count=Count('id'))
-            .order_by('-month')
-        )
-
-        # Tạo một từ điển để lưu số lượng người dùng theo tháng
-        users_by_month_dict = {entry['month'].strftime('%Y-%m'): entry['user_count'] for entry in users_by_month}
-
-        # Tạo danh sách các tháng từ tháng 1 đến tháng 12
-        month_list = [start_date.replace(day=1, month=i).strftime('%Y-%m') for i in range(1, 13)]
-
-        # Điền đầy thông tin cho những tháng không có dữ liệu
-        users_by_month_filled = [{'month': month, 'user_count': users_by_month_dict.get(month, 0)} for month in month_list]
-
-        context['users_by_month'] = users_by_month_filled
         context['total_movies'] = Movie.objects.count()
         context['total_users'] = User.objects.count()
         users_with_last_login = User.objects.exclude(last_login__isnull=True)
         context['users_with_last_login'] = users_with_last_login
-        if self.request.headers.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest':
-            return JsonResponse({'users_by_month': users_by_month_filled})
         return context
 
     def test_func(self):
@@ -287,3 +262,16 @@ def print_movies(request):
 def movie_detail_admin(request, movie_id):
     current_movie = Movie.objects.get(pk=movie_id)
     return render(request, 'dashboard/movie_detail.html', {'movie': current_movie})
+
+from django.db.models.functions import ExtractMonth, ExtractYear
+
+def users_by_month(request):
+    user_counts = User.objects.annotate(
+        year=ExtractYear('date_joined'),
+        month=ExtractMonth('date_joined')
+    ).values('year', 'month').annotate(count=Count('id'))
+
+    # Chuyển kết quả thành một danh sách để trả về dưới dạng JSON
+    result = list(user_counts)
+
+    return JsonResponse(result, safe=False)
