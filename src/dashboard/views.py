@@ -16,9 +16,8 @@ from reportlab.platypus import Table, TableStyle
 from io import BytesIO
 from datetime import datetime
 from profiles.models import CustomUser
-from django.db.models.functions import TruncMonth
 from django.db.models import Count
-from django.utils.timezone import now
+from django.db.models.functions import ExtractMonth, ExtractYear
 # Create your views here.
 User = get_user_model()
 class DashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateView):
@@ -263,8 +262,6 @@ def movie_detail_admin(request, movie_id):
     current_movie = Movie.objects.get(pk=movie_id)
     return render(request, 'dashboard/movie_detail.html', {'movie': current_movie})
 
-from django.db.models.functions import ExtractMonth, ExtractYear
-
 def users_by_month(request):
     user_counts = User.objects.annotate(
         year=ExtractYear('date_joined'),
@@ -275,3 +272,8 @@ def users_by_month(request):
     result = list(user_counts)
 
     return JsonResponse(result, safe=False)
+
+def movies_by_genre(request):
+    genre_counts = Movie.objects.count_genre_values()
+
+    return JsonResponse({'moviesCount': genre_counts})
