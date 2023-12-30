@@ -2,10 +2,10 @@ from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views import generic
 from movies.models import Movie
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from openpyxl import Workbook
 from django.contrib.auth import get_user_model
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -16,18 +16,23 @@ from reportlab.platypus import Table, TableStyle
 from io import BytesIO
 from datetime import datetime
 from profiles.models import CustomUser
+from django.db.models.functions import TruncMonth
+from django.db.models import Count
+from django.utils.timezone import now
 # Create your views here.
 User = get_user_model()
 class DashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateView):
     template_name = 'dashboard/dashboard.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
         context['total_movies'] = Movie.objects.count()
         context['total_users'] = User.objects.count()
+        users_with_last_login = User.objects.exclude(last_login__isnull=True)
+        context['users_with_last_login'] = users_with_last_login
         return context
 
     def test_func(self):
-        # Check if the user is a superuser
         return self.request.user.is_superuser
 
 dashboard_view = DashboardView.as_view()
@@ -257,3 +262,16 @@ def print_movies(request):
 def movie_detail_admin(request, movie_id):
     current_movie = Movie.objects.get(pk=movie_id)
     return render(request, 'dashboard/movie_detail.html', {'movie': current_movie})
+
+from django.db.models.functions import ExtractMonth, ExtractYear
+
+def users_by_month(request):
+    user_counts = User.objects.annotate(
+        year=ExtractYear('date_joined'),
+        month=ExtractMonth('date_joined')
+    ).values('year', 'month').annotate(count=Count('id'))
+
+    # Chuyển kết quả thành một danh sách để trả về dưới dạng JSON
+    result = list(user_counts)
+
+    return JsonResponse(result, safe=False)
