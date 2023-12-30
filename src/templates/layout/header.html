@@ -67,6 +67,9 @@
             >
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="{% url 'movies' %}">Movies</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="{% url 'about' %}">About</a>
           </li>
           <li class="nav-item dropdown">
@@ -115,7 +118,8 @@
                               <a href="{% url 'dashboard' %}" class="dropdown-item">Manage</a>
                           {% endif %}
                           <a href="{% url 'suggestion' %}" class="dropdown-item">Suggestion</a>
-                          <a href="{% url 'bookmarked_movies' %}" class="dropdown-item">Bookmark</a>
+                          <a href="{% url 'bookmarked_movies' %}" class="dropdown-item">My list</a>
+                          <a href="{% url 'myrating_movies' %}" class="dropdown-item">My rating</a>
                           <a href="{% url 'signout' %}" class="dropdown-item">Sign Out</a>
                       </div>
                   </div>

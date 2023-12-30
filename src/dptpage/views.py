@@ -40,7 +40,7 @@ class Home(generic.ListView):
             # Update fields in Movie model with API data
             movie.backdrop_path = data.get('backdrop_path', '')
             movie.runtime = data.get('runtime', 0)
-            movie.genres = ', '.join([genre['name'] for genre in data.get('genres', [])])
+            # movie.genres = ', '.join([genre['name'] for genre in data.get('genres', [])])
             movie.countries = ', '.join([country['name'] for country in data.get('production_countries', [])])
 
             movie.save()

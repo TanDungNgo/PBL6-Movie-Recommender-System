@@ -10,11 +10,11 @@ import pandas as pd
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
+from .models import Movie, Genre
+import requests
 
 User = get_user_model()
 
-from .models import Movie
-import requests
 # Create your views here.
 API_KEY = settings.API_KEY
 filename = str(settings.DATA_DIR) + '/model/nlp_model.pkl'
@@ -23,24 +23,37 @@ vectorizer = pickle.load(open(str(settings.DATA_DIR) + '/model/tranform.pkl', 'r
 
 class MovieListView(generic.ListView):
     template_name = 'movies/list.html'
-    paginate_by = 100
     # context -> object_list
     queryset = Movie.objects.all().order_by('-score')
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         requests = self.request
-        user = requests.user
-        if user.is_authenticated:
-            object_list = context['object_list']
-            object_ids = [x.id for x in object_list][:20]
-            my_ratings = user.rating_set.movies().as_object_dict(object_ids=object_ids)
-            context['my_ratings'] = my_ratings
+        # user = requests.user
+        # if user.is_authenticated:
+        #     object_list = context['object_list']
+        #     object_ids = [x.id for x in object_list][:20]
+        #     my_ratings = user.rating_set.movies().as_object_dict(object_ids=object_ids)
+        #     context['my_ratings'] = my_ratings
+        genre_list = Genre.objects.all()
+        context['genre_list'] = genre_list
+        object_list = context['object_list']
+        movies_per_page = 12
+        paginator = Paginator(object_list, movies_per_page)
+        if 'page' in requests.GET and requests.GET['page']:
+            page = requests.GET['page']
+        else:
+            page = 1
+        try:
+            object_list = paginator.page(page)
+        except PageNotAnInteger:
+            object_list = paginator.page(1)
+        except EmptyPage:
+            object_list = paginator.page(paginator.num_pages)
+        context['object_list'] = object_list
         return context
-
-
-
 movie_list_view = MovieListView.as_view()
+
 class MovieDetailView(generic.DetailView):
     template_name = 'movies/detail.html'
     # context -> object -> id
@@ -106,7 +119,6 @@ class MovieDetailView(generic.DetailView):
             'casts': casts,
             'first_row': first_row,
             'second_row': second_row,
-         
             'genres': genres,
             'countries': countries,
             'directors': directors,
@@ -129,8 +141,6 @@ class MovieDetailView(generic.DetailView):
         context['detailed_casts'] = detailed_casts
 
         return context
-
-
 movie_detail_view = MovieDetailView.as_view()
 
 class MovieVideoView(generic.DetailView):
@@ -159,9 +169,31 @@ class MovieVideoView(generic.DetailView):
             context['error'] = str(e)
             
         return context
-
-
 movie_video_view = MovieVideoView.as_view()
+
+def get_my_ratings(request):
+    context = {}
+    user = request.user
+    if user.is_authenticated:
+        ratings = user.rating_set.all().order_by('-timestamp')
+        movie_ids = ratings.values_list('object_id', flat=True)
+        movies = Movie.objects.by_id_order(movie_ids)
+        movies_per_page = 12
+        paginator = Paginator(movies, movies_per_page)
+        if 'page' in request.GET and request.GET['page']:
+            page = request.GET['page']
+        else:
+            page = 1
+        try:
+            movies = paginator.page(page)
+        except PageNotAnInteger:
+            movies = paginator.page(1)
+        except EmptyPage:
+            movies = paginator.page(paginator.num_pages)
+        context['object_list'] = movies
+    else:
+        context['not_login'] = True
+    return render(request, "movies/my_rating.html", context)
 
 def search_movie(request):
     context = {}
@@ -239,7 +271,7 @@ def get_recommendations(request, pk):
         else:
             print(f"Movie with title '{title}' does not exist.")
     
-    movie_html = render_to_string('movies/list.html', {'object_list': recommend_movies, 'request': request})
+    movie_html = render_to_string('movies/list_item.html', {'object_list': recommend_movies, 'request': request})
 
     response_data = {
         'status': 'success',

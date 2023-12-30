@@ -75,9 +75,10 @@ class Movie(models.Model):
     tmdb_id = models.IntegerField(blank=True, null=True)
     idx = models.IntegerField(help_text='Position IDs for ML', blank=True, null=True)
     reviews = GenericRelation(Review)
+    genres = models.ManyToManyField('Genre', blank=True)
+    runtime = models.IntegerField(blank=True, null=True)
 
     objects = MovieManager()
-
 
     def get_absolute_url(self):
         return f"/movies/{self.id}/"
@@ -127,3 +128,9 @@ def movie_post_delete(*args, **kwargs):
 
 
 post_delete.connect(movie_post_delete, sender=Movie)
+
+class Genre(models.Model):
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
