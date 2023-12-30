@@ -14,5 +14,6 @@ urlpatterns = [
     path('movie_list/edit/<int:movie_id>/', views.edit_movie, name='movie_edit'),
     path('movie_list/delete/<int:movie_id>/', views.delete_movie, name='delete_movie'),
     path('user_list/delete/<int:user_id>/', views.delete_user, name='delete_user'),
-    path('user_by_month/', views.users_by_month, name='users_by_month')
+    path('user_by_month/', views.users_by_month, name='users_by_month'),
+    path('movies_by_genre/', views.movies_by_genre, name='movies_by_genre'),
 ]

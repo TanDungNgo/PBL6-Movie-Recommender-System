@@ -57,6 +57,12 @@ class MovieManager(models.Manager):
         qs = self.get_queryset().filter(pk__in=movie_pks)
         maintain_order = Case(*[When(pk=pki, then=idx) for idx, pki in enumerate(movie_pks)])
         return qs.order_by(maintain_order)
+    
+    def count_genre_values(self):
+        genre_counts = self.get_queryset().values('genres__id').annotate(count=models.Count('genres__id'))
+        genre_counts = genre_counts.exclude(genres__id=None)
+        genre_counts_list = [item['count'] for item in genre_counts]
+        return genre_counts_list
 
 class Movie(models.Model):
     title = models.CharField(max_length=255, unique=True)
