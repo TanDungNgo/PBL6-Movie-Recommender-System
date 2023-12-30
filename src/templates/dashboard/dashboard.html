@@ -56,7 +56,7 @@
   <!-- Sales Chart Start -->
   <div class="container-fluid pt-4 px-4">
     <div class="row g-4">
-      <div class="col-sm-12">
+      <div class="col-sm-12 col-xl-6">
         <div class="bg-secondary text-center rounded p-4">
           <div class="d-flex align-items-center justify-content-between mb-4">
             <h6 class="mb-0">Movie genres available</h6>
@@ -64,12 +64,9 @@
           </div>
           <!-- <canvas id="worldwide-sales"></canvas> -->
           <canvas id="myBarChart"></canvas>
-
           <script>
-              // Lấy tham chiếu đến canvas
               var ctx = document.getElementById('myBarChart').getContext('2d');
 
-              // Dữ liệu mẫu cho biểu đồ
               var data = {
                   labels: ['Action', 'Fantasy', 'Adventure', 'Thriller', 'War', 'Science Fiction', 'Animation', 'Drama', 'Crime', 'Comedy', 'Romance'],
                   datasets: [{
@@ -79,7 +76,6 @@
                   }]
               };
 
-              // Cấu hình biểu đồ
               var options = {
                   scales: {
                       y: {
@@ -88,25 +84,88 @@
                   }
               };
 
-              // Tạo biểu đồ cột
               var myBarChart = new Chart(ctx, {
                   type: 'bar',
                   data: data,
                   options: options
               });
           </script>
-
         </div>
       </div>
-      <!-- <div class="col-sm-12 col-xl-6">
+      <div class="col-sm-12 col-xl-6">
         <div class="bg-secondary text-center rounded p-4">
           <div class="d-flex align-items-center justify-content-between mb-4">
-            <h6 class="mb-0">Salse & Revenue</h6>
+            <h6 class="mb-0">Registered users</h6>
             <a href="">Show All</a>
           </div>
-          <canvas id="salse-revenue"></canvas>
+          <canvas id="myLineChart" width="400" height="200"></canvas>
+          <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+          <script>
+              $(document).ready(function() {
+                  var ctx = document.getElementById('myLineChart').getContext('2d');
+
+                  var data = {
+                      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                      datasets: [{
+                          label: 'Number of users',
+                          borderColor: 'rgba(235, 22, 22, 1)',
+                          borderWidth: 2,
+                          fill: false,
+                          data: []
+                      }]
+                  };
+
+                  var options = {
+                      scales: {
+                          y: {
+                              beginAtZero: true
+                          }
+                      }
+                  };
+
+                  var myLineChart = new Chart(ctx, {
+                      type: 'line',
+                      data: data,
+                      options: options
+                  });
+
+                  var actualData = {};
+
+                  $.ajax({
+                      url: '{% url "dashboard" %}',
+                      type: 'GET',
+                      dataType: 'json',
+                      success: function(data) {
+                          myLineChart.data.datasets[0].data = data.users_by_month.map(entry => entry.user_count);
+                          myLineChart.update();
+                          console.log(data);
+                      },
+                      error: function(error) {
+                          console.log("Error:", error);
+                      }
+                  });
+              });
+          </script>
+          <!-- <table
+            class="table text-start align-middle table-bordered table-hover mb-0"
+          >
+            <thead>
+              <tr class="text-white">
+                <th scope="col">Month</th>
+                <th scope="col">Number of users</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for entry in users_by_month %}
+              <tr>
+                <td>{{ entry.month }}</td>
+                <td>{{ entry.user_count }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table> -->
         </div>
-      </div> -->
+      </div>
     </div>
   </div>
   <!-- Sales Chart End -->
@@ -131,7 +190,7 @@
               <th scope="col">Email</th>
               <th scope="col">Last Login</th>
               <th scope="col">Date Joined</th>
-              <th scope="col">Action</th>
+              <!-- <th scope="col">Action</th> -->
             </tr>
           </thead>
           <tbody>
@@ -142,45 +201,9 @@
               <td>{{ user.email}}</td>
               <td>{{ user.last_login}}</td>
               <td>{{ user.date_joined}}</td>
-              <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
+              <!-- <td><a class="btn btn-sm btn-primary" href="">Detail</a></td> -->
             </tr>
             {% endfor %}
-            <!-- <tr>
-              <td><input class="form-check-input" type="checkbox" /></td>
-              <td>01 Jan 2045</td>
-              <td>INV-0123</td>
-              <td>{{ request.session.user_username}}</td>
-              <td>$123</td>
-              <td>Paid</td>
-              <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-            </tr>
-            <tr>
-              <td><input class="form-check-input" type="checkbox" /></td>
-              <td>01 Jan 2045</td>
-              <td>INV-0123</td>
-              <td>{{ request.session.user_username}}</td>
-              <td>$123</td>
-              <td>Paid</td>
-              <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-            </tr>
-            <tr>
-              <td><input class="form-check-input" type="checkbox" /></td>
-              <td>01 Jan 2045</td>
-              <td>INV-0123</td>
-              <td>{{ request.session.user_username}}</td>
-              <td>$123</td>
-              <td>Paid</td>
-              <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-            </tr>
-            <tr>
-              <td><input class="form-check-input" type="checkbox" /></td>
-              <td>01 Jan 2045</td>
-              <td>INV-0123</td>
-              <td>{{ request.session.user_username}}</td>
-              <td>$123</td>
-              <td>Paid</td>
-              <td><a class="btn btn-sm btn-primary" href="">Detail</a></td>
-            </tr> -->
           </tbody>
         </table>
       </div>
