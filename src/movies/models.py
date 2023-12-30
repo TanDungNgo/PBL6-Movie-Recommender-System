@@ -86,6 +86,12 @@ class Movie(models.Model):
 
     objects = MovieManager()
 
+    def get_genres(self):
+        return self.genres.all()
+
+    def get_genres_names(self):
+        return ', '.join([genre.name for genre in self.genres.all()])
+
     def get_absolute_url(self):
         return f"/movies/{self.id}/"
     

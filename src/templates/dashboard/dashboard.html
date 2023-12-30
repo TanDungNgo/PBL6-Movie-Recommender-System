@@ -64,43 +64,6 @@
           </div>
           <!-- <canvas id="worldwide-sales"></canvas> -->
           <canvas id="myBarChart"></canvas>
-          <script>
-              var ctx = document.getElementById('myBarChart').getContext('2d');
-
-              var data = {
-                  labels: ['Action', 'Adventure', 'Animation', 'Comedy', 'Crime', 'Documentary', 'Drama', 'Family', 'Fantasy', 'History', 'Horror', 'Music', 'Mystery', 'Romance', 'Science Fiction', 'TV Movie', 'Thriller', 'War', 'Western'],
-                  datasets: [{
-                      label: 'Number of movies',
-                      backgroundColor: 'rgba(235, 22, 22, .5)',
-                      data: [65, 59, 80, 35, 56, 55, 40, 30, 18, 36, 61]
-                  }]
-              };
-
-              var options = {
-                  scales: {
-                      y: {
-                          beginAtZero: true
-                      }
-                  }
-              };
-
-              var myBarChart = new Chart(ctx, {
-                  type: 'bar',
-                  data: data,
-                  options: options
-              });
-
-              fetch('movies_by_genre/')
-                .then(response => response.json())
-                .then(data => {
-                  console.log(data.moviesCount);
-                  myBarChart.data.datasets[0].data = data.moviesCount;
-                  myBarChart.update();
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                });
-          </script>
         </div>
       </div>
     </div>
@@ -114,49 +77,6 @@
             <a href="">Show All</a>
           </div>
           <canvas id="myLineChart" width="400" height="200"></canvas>
-          <script>
-              $(document).ready(function() {
-                  var ctx = document.getElementById('myLineChart').getContext('2d');
-
-                  var data = {
-                      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-                      datasets: [{
-                          label: 'Number of users',
-                          borderColor: 'rgba(235, 22, 22, 1)',
-                          borderWidth: 2,
-                          fill: false,
-                          data: []
-                      }]
-                  };
-
-                  var options = {
-                      scales: {
-                          y: {
-                              beginAtZero: true
-                          }
-                      }
-                  };
-
-                  var myLineChart = new Chart(ctx, {
-                      type: 'line',
-                      data: data,
-                      options: options
-                  });
-
-                  fetch('user_by_month/')
-                      .then(response => response.json())
-                      .then(data => {
-                        console.log(data);
-                        const userCounts = data.map(entry => entry.count);
-                        myLineChart.data.datasets[0].data = userCounts;
-                        myLineChart.update();
-                      })
-                      .catch(error => {
-                          console.error("Error:", error);
-                      });
-                      
-              });
-          </script>
         </div>
       </div>
     </div>
@@ -202,6 +122,86 @@
       </div>
     </div>
   </div>
+  <script>
+    var ctx = document.getElementById('myBarChart').getContext('2d');
+
+    var data = {
+        labels: ['Action', 'Adventure', 'Animation', 'Comedy', 'Crime', 'Documentary', 'Drama', 'Family', 'Fantasy', 'History', 'Horror', 'Music', 'Mystery', 'Romance', 'Science Fiction', 'TV Movie', 'Thriller', 'War', 'Western'],
+        datasets: [{
+            label: 'Number of movies',
+            backgroundColor: 'rgba(235, 22, 22, .5)',
+            data: [65, 59, 80, 35, 56, 55, 40, 30, 18, 36, 61]
+        }]
+    };
+
+    var options = {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    };
+
+    var myBarChart = new Chart(ctx, {
+        type: 'bar',
+        data: data,
+        options: options
+    });
+
+    fetch('movies_by_genre/')
+      .then(response => response.json())
+      .then(data => {
+        console.log(data.moviesCount);
+        myBarChart.data.datasets[0].data = data.moviesCount;
+        myBarChart.update();
+      })
+      .catch(error => {
+          console.error("Error:", error);
+      });
+</script>
+<script>
+    $(document).ready(function() {
+        var ctx = document.getElementById('myLineChart').getContext('2d');
+
+        var data = {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            datasets: [{
+                label: 'Number of users',
+                borderColor: 'rgba(235, 22, 22, 1)',
+                borderWidth: 2,
+                fill: false,
+                data: []
+            }]
+        };
+
+        var options = {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        };
+
+        var myLineChart = new Chart(ctx, {
+            type: 'line',
+            data: data,
+            options: options
+        });
+
+        fetch('user_by_month/')
+            .then(response => response.json())
+            .then(data => {
+              console.log(data);
+              const userCounts = data.map(entry => entry.count);
+              myLineChart.data.datasets[0].data = userCounts;
+              myLineChart.update();
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+            
+    });
+</script>
   <!-- Recent Sales End -->
 
   <!-- Widgets Start -->
