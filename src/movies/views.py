@@ -10,11 +10,12 @@ import pandas as pd
 from django.template.loader import render_to_string
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
-from .models import Movie, Genre
+from .models import Movie, Genre, UserMovieHistory
 import requests
 from django.core.serializers import serialize
 from profiles.models import CustomUser as User
 from datetime import datetime
+import difflib
 
 # User = get_user_model()
 
@@ -102,6 +103,10 @@ def get_filtered_movies(request):
     }
     return JsonResponse(response_data)
 
+def get_movies_by_genre(request):
+    pass
+
+
 class MovieDetailView(generic.DetailView):
     template_name = 'movies/detail.html'
     # context -> object -> id
@@ -134,33 +139,50 @@ class MovieDetailView(generic.DetailView):
         # Retrieve the movie_id from URL parameters or self.kwargs
         movie_id = self.kwargs.get('pk')  # Assuming your URL pattern uses 'pk' for the movie ID
         movie = Movie.objects.get(pk=movie_id)
-        top_rated_movies = Movie.objects.all().order_by('-score')[:20]
-        related_movies = Movie.objects.filter(title__icontains=movie.title).exclude(id=movie.id)[:20]
+        top_rated_movies = Movie.objects.all().order_by('-score')[:10]
+        # related_movies = Movie.objects.filter(title__icontains=movie.title).exclude(id=movie.id)[:20]
+        history_movies = []
+        if user.is_authenticated:
+            custom_user = User.objects.get(pk=user.id)
+            user_movie_history = UserMovieHistory.objects.filter(user=custom_user).order_by('-updated')[:10]
+            for history in user_movie_history:
+                history_movies.append(history.movie)
+        context['history_movies'] = history_movies
 
         # Lấy danh sách diễn viên, đạo diễn
-        url_credits = f'https://api.themoviedb.org/3/movie/{movie.tmdb_id}/credits?api_key={API_KEY}&language=en-US'
-        response = requests.get(url_credits)
-        response.raise_for_status()
-        data = response.json()
-        casts = data.get('cast', [])[:8]
-        directors = [crew for crew in data.get('crew', []) if crew.get('job') == 'Director']
-        
+        try:
+            url_credits = f'https://api.themoviedb.org/3/movie/{movie.tmdb_id}/credits?api_key={API_KEY}&language=en-US'
+            response = requests.get(url_credits)
+            response.raise_for_status()
+            data = response.json()
+            casts = data.get('cast', [])[:8]
+            directors = [crew for crew in data.get('crew', []) if crew.get('job') == 'Director']
+        except requests.exceptions.RequestException as e:
+            print(str(e))
+            casts = []
+            directors = []
 
         num_casts_per_row = len(casts) // 2
         first_row = casts[:num_casts_per_row]
         second_row = casts[num_casts_per_row:]
 
         # Lấy danh sách thể loại
-        url_movie = f'https://api.themoviedb.org/3/movie/{movie.tmdb_id}?api_key={API_KEY}&language=en-US'
-        response = requests.get(url_movie)
-        response.raise_for_status()
-        data_movie = response.json()
-        genres = data_movie.get('genres', [])
-        countries = data_movie.get('production_countries', [])
-        backdrop_path = data_movie.get('backdrop_path', [])
+        try:
+            url_movie = f'https://api.themoviedb.org/3/movie/{movie.tmdb_id}?api_key={API_KEY}&language=en-US'
+            response = requests.get(url_movie)
+            response.raise_for_status()
+            data_movie = response.json()
+            genres = data_movie.get('genres', [])
+            countries = data_movie.get('production_countries', [])
+            backdrop_path = data_movie.get('backdrop_path', [])
+        except requests.exceptions.RequestException as e:
+            print(str(e))
+            genres = []
+            countries = []
+            backdrop_path = []
 
         context['top_rated_movies'] = top_rated_movies
-        context['related_movies'] = related_movies
+        # context['related_movies'] = related_movies
 
         context.update({
             'movie_id': movie_id,
@@ -172,9 +194,6 @@ class MovieDetailView(generic.DetailView):
             'directors': directors,
             'backdrop_path': backdrop_path,
         })
-        actor_id = self.kwargs.get('pk')
-        api_key = '8265bd1679663a7ea12ac168da84d2e8'  # Khóa API của bạn
-        url = f'https://api.themoviedb.org/3/person/{actor_id}?api_key={api_key}&language=en-US'
         reviews = movie.reviews.all()
         page = 5
         paginator = Paginator(reviews, page)
@@ -199,6 +218,23 @@ class MovieVideoView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        user = self.request.user
+        if user.is_authenticated:
+            movie_object = context['object']
+            custom_user = User.objects.get(pk=user.id)
+            user_movie_history = UserMovieHistory.objects.filter(user=custom_user, movie=movie_object).first()
+            if user_movie_history:
+                user_movie_history.updated = datetime.now()
+                user_movie_history.save()
+            else:
+                user_movie_history = UserMovieHistory.objects.create(user=custom_user, movie=movie_object)
+            object_ids = [movie_object.id]
+            my_ratings = user.rating_set.movies().as_object_dict(object_ids=object_ids)
+            if my_ratings:
+                movie_id = str(movie_object.id)
+                context['my_ratings'] = my_ratings.get(movie_id)
+            else:
+                context['my_ratings'] = 0
         movie_id = self.kwargs.get('pk')
         movie = Movie.objects.get(pk=movie_id)
         url_movie = f'https://api.themoviedb.org/3/movie/{movie.tmdb_id}/videos?api_key={API_KEY}&language=en-US'
@@ -215,6 +251,12 @@ class MovieVideoView(generic.DetailView):
                 context['keys'] = keys
         except requests.exceptions.RequestException as e:
             context['error'] = str(e)
+        
+        reviews = movie.reviews.all()
+        page = 5
+        paginator = Paginator(reviews, page)
+
+        context['reviews'] = paginator.get_page(1)
             
         return context
 movie_video_view = MovieVideoView.as_view()
@@ -276,17 +318,30 @@ def similarity(movie_name):
     rc = rcmd(movie_name)
     return rc
 
-def rcmd(m):
-    m = m.lower()
+def rcmd(movie_name):
+    movie_name = movie_name.lower()
     try:
-        data.head()
-        similarity.shape
+        data = pickle.load(open(str(settings.DATA_DIR) + '/model/movie_list.pkl','rb'))
+        similarity = pickle.load(open(str(settings.DATA_DIR) + '/model/similarity.pkl','rb'))
     except:
+        print("Error in pickel file")
         data, similarity = create_similarity()
-    if m not in data['movie_title'].unique():
-        return('Sorry! The movie you requested is not in our database. Please check the spelling or try with some other movies')
+    if movie_name not in data['movie_title'].unique():
+        list_of_all_titles = data['movie_title'].tolist()
+        find_close_match = difflib.get_close_matches(movie_name, list_of_all_titles)
+        if find_close_match:
+            close_match = find_close_match[0]
+            index = data[data['movie_title'] == close_match].index[0]
+            distances = sorted(list(enumerate(similarity[index])),reverse=True,key = lambda x: x[1])
+            recommended_movie_names = []
+            for i in distances[1:11]:
+                movie = data.iloc[i[0]].movie_title
+                recommended_movie_names.append(movie)
+            return recommended_movie_names
+        else:
+            return []
     else:
-        i = data.loc[data['movie_title']==m].index[0]
+        i = data.loc[data['movie_title']==movie_name].index[0]
         lst = list(enumerate(similarity[i]))
         lst = sorted(lst, key = lambda x:x[1] ,reverse=True)
         lst = lst[1:11]
