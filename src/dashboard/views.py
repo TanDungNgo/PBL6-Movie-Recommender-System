@@ -18,6 +18,8 @@ from datetime import datetime
 from profiles.models import CustomUser as User
 from django.db.models import Count
 from django.db.models.functions import ExtractMonth, ExtractYear
+
+from reviews.models import Review
 # Create your views here.
 # User = get_user_model()
 class DashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateView):
@@ -277,3 +279,57 @@ def movies_by_genre(request):
     genre_counts = Movie.objects.count_genre_values()
 
     return JsonResponse({'moviesCount': genre_counts})
+
+def get_movie_review_counts(request):
+    search_query = request.GET.get('search', '')
+    movies_info = (
+        Movie.objects
+        .values('id', 'title', 'rating_count', 'rating_avg')
+        .filter(title__icontains=search_query)
+    )
+    
+    review_counts = (
+        Review.objects
+        .values('object_id')
+        .annotate(review_count=Count('object_id'))
+        .exclude(object_id=None)
+    )
+
+    result_list = []
+    for movie_info in movies_info:
+        movie_id = movie_info['id']
+        movie_title = movie_info['title']
+        rating_count = movie_info['rating_count']
+        rating_avg = movie_info['rating_avg']
+
+        # Tìm số lượng review tương ứng cho mỗi phim
+        review_count = next(
+            (item['review_count'] for item in review_counts if item['object_id'] == movie_id),
+            0
+        )
+
+        result_list.append({
+            'id': movie_id,
+            'title': movie_title,
+            'review_count': review_count,
+            'rating_count': rating_count,
+            'rating_avg': rating_avg
+        })
+
+    # Phân trang
+    items_per_page = request.GET.get('item', 10)
+
+    # Paginate the list of results
+    paginator = Paginator(result_list, items_per_page)
+    page = request.GET.get('page', 1)
+
+    try:
+        paginated_result = paginator.page(page)
+    except PageNotAnInteger:
+        # If the page parameter is not an integer, show the first page
+        paginated_result = paginator.page(1)
+    except EmptyPage:
+        # If the page is out of range, deliver the last page
+        paginated_result = paginator.page(paginator.num_pages)
+
+    return render(request, 'dashboard/rating_review.html', {'movies': paginated_result})
