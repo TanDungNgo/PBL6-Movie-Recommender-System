@@ -1,0 +1,47 @@
+{% extends "layout/layout-admin/base-admin.html" %}
+{% load static %}
+{% block title %}List Movies{% endblock %}
+{% block content %}
+<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+<div class="container-fluid pt-4 px-4">
+  <div class="row g-4">
+    <div class="col-12">
+      <div class="bg-secondary rounded h-100 p-4">
+        <div class="table-responsive">
+            {% if title_movie %}
+                <h5>Reviews of <span style="color: #de1002;">{{ title_movie }}</span></h5>
+            {% else %}
+                <h5>No reviews</h5>
+            {% endif %}
+          <table id="example" class="table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Comment</th>
+                    <th scope="col" style="text-align: center;">User</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for result in results %}
+                  <tr>
+                    <td scope="col">
+                      <a href="#" style="color: #6C7293;">{{ result.id }}</a>
+                    </td>
+                    <td scope="col" style="max-width: 280px;">
+                      <a href="#" style="color: #6C7293;">{{ result.content }}</a>
+                    </td>
+                    <td scope="col" style="text-align: center;">
+                      <a href="#" style="color: #6C7293;">{{ result.username }}</a>
+                    </td>
+                  </tr>
+                  {% endfor %}
+            </tbody>
+          </table>            
+        </div>         
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -333,3 +333,46 @@ def get_movie_review_counts(request):
         paginated_result = paginator.page(paginator.num_pages)
 
     return render(request, 'dashboard/rating_review.html', {'movies': paginated_result})
+
+def get_movie_review_details(request, movie_id):
+    review_detail = (
+        Review.objects
+        .filter(object_id = movie_id)
+        .values('id', 'content', 'object_id', 'user_id')
+    )
+
+    # Kiểm tra nếu có ít nhất một đánh giá cho id_movie
+    if review_detail.exists():
+        movies_info = (
+            Movie.objects
+            .filter(id=movie_id)
+            .values('id', 'title')
+        )
+
+        users_info = (
+            User.objects
+            .filter(id__in=[item['user_id'] for item in review_detail])
+            .values('id', 'username')
+        )
+
+        result_list = []
+        for review_item in review_detail:
+            user_id = review_item['user_id']
+
+            # Tìm thông tin về movie (chỉ cần làm một lần vì chỉ có một id_movie)
+            title_movie = movies_info[0]['title']
+
+            # Tìm thông tin về user
+            user_info = next((item for item in users_info if item['id'] == user_id), None)
+            username = user_info['username'] if user_info else None
+
+            result_list.append({
+                'id': review_item['id'],
+                'content': review_item['content'],
+                'title_movie': title_movie,
+                'username': username,
+            })
+    
+        return render(request, 'dashboard/review_table.html', {'results': result_list})
+    else:
+        return render(request, 'dashboard/empty_page.html')

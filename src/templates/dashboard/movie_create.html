@@ -1,0 +1,77 @@
+{% extends "layout/layout-admin/base-admin.html" %} 
+{% load static %} 
+{% block title %}Create Movie{% endblock %} 
+{% block content %}
+<!-- Form Start -->
+<div class="container-fluid pt-4 px-4">
+  <form
+    action="#"
+    method="POST"
+    enctype="multipart/form-data"
+    class="card-create"
+  >
+    {% csrf_token %}
+    <h1>NEW MOVIE</h1>
+    <div class="card-content">
+      <div class="card-left" style="width: 60%;">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title"  /><br /><br />
+
+        <!-- <label for="genres">Genres:</label>
+                            <input type="text" id="genres" name="genres" required><br><br> -->
+
+        <label for="overview">Overview:</label>
+        <textarea
+          id="overview"
+          name="overview"
+          rows="4"
+          cols="50"
+          
+        ></textarea
+        ><br /><br />
+
+        <label for="release_date">Release Date:</label>
+        <input type="text" id="release_date" name="release_date" placeholder="MM/DD/YYYY" /><br /><br />
+
+        <label for="poster_path">URL Poster:</label>
+        <input type="text" id="poster_path" name="poster_path" placeholder="https://" /><br /><br />
+      </div>
+
+      <div class="card-right" style="width: 40%; text-align: center;">
+        <img 
+          id="image" 
+          src="{% if movie.poster_path %}{{ movie.poster_path }}{% else %}{% static 'dashboard/img/default-image.jpg' %}{% endif %}" 
+          style="height: 535px; width: 380px; margin-bottom: 20px; cursor: pointer; padding: 30px; justify-content: center; object-fit: cover;"
+        >
+        <input type="file" name="image" id="fileInput" accept="image/*" style="display: none;">
+        <br />
+        <script>
+          var posterPathInput = document.getElementById('poster_path');
+          var imageElement = document.getElementById('image');
+      
+          posterPathInput.addEventListener('input', function() {
+            var posterPath = posterPathInput.value;
+      
+            if (posterPath.trim() === '') {
+              imageElement.src = '{% static "dashboard/img/default-image.jpg" %}';
+            } else {
+              imageElement.src = posterPath;
+            }
+          });
+        </script>
+        <!-- <label for="status">Status:</label>
+        <select id="status" name="status">
+          <option value="Premiered">Premiered</option>
+          <option value="About to premiere">About to premiere</option>
+          <option value="Not yet released">Not yet released</option></select
+        ><br /><br /> -->
+      </div>
+    </div>
+    <div class="card-btn">
+      <input class="btn-cancel" type="submit" value="Cancel" />
+      <input class="btn-add" type="submit" id="submit_button" value="Add new" />
+    </div>
+  </form>
+</div>
+<!-- Form End -->
+{% endblock %}
