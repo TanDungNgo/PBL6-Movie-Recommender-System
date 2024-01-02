@@ -9,19 +9,37 @@ from profiles.models import CustomUser
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 import pytz
+from django.conf import settings
+import pickle
+import numpy as np
+
+filename = str(settings.DATA_DIR) + '/model/nlp_model.pkl'
+clf = pickle.load(open(filename, 'rb'))
+vectorizer = pickle.load(open(str(settings.DATA_DIR) + '/model/tranform.pkl', 'rb'))
 
 @require_http_methods(['POST'])
 def review_movie(request):
     if request.method == 'POST':
             object_id = request.POST.get('object_id', None)
             content = request.POST.get('content', None)
+            if content == '':
+                response_data = {
+                    'status': 'error',
+                    'message': 'You must enter a review',
+                }
+                return JsonResponse(response_data)
             user = request.user
-            customUser = CustomUser.objects.get(id=user.id)
-
             if user.is_authenticated:
+                movie_review_list = np.array([content])
+                movie_vector = vectorizer.transform(movie_review_list)
+                pred = clf.predict(movie_vector)
+                if pred:
+                    sentiment = 'Good'
+                else:
+                    sentiment = 'Bad'
+                customUser = CustomUser.objects.get(id=user.id)
                 ctype = ContentType.objects.get(app_label='movies', model='movie')
-                review_obj = Review.objects.create(content_type=ctype, object_id=object_id, content=content, user=customUser)
-                
+                review_obj = Review.objects.create(content_type=ctype, object_id=object_id, content=content, user=customUser, sentiment=sentiment)
                 if review_obj.content_object is not None:
                     review = render_to_string('reviews/snippet/review_item.html', {'review': review_obj, 'request': request})
                     response_data = {
@@ -101,10 +119,16 @@ def reply_review(request):
     review_id = request.POST.get('review_id')
     review = Review.objects.get(id=review_id)
     content = request.POST.get('content')
+    if content == '':
+        response_data = {
+            'status': 'error',
+            'message': 'You must enter a reply',
+        }
+        return JsonResponse(response_data)
     user = request.user
-    customUser = CustomUser.objects.get(id=user.id)
     ctype = ContentType.objects.get(app_label='reviews', model='review')
     if user.is_authenticated:
+        customUser = CustomUser.objects.get(id=user.id)
         review_obj = Review.objects.create(content_type=ctype, object_id=review_id, content=content, user=customUser)
         if review_obj.content_object is not None:
             review = render_to_string('reviews/snippet/review_item.html', {'review': review_obj, 'request': request})

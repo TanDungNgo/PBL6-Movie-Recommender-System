@@ -17,6 +17,8 @@ from django.conf import settings
 from tensorflow.keras.layers import Embedding, multiply, concatenate, Flatten, Input, Dense
 from tensorflow.keras import optimizers as opt
 from keras.models import Model
+import datetime
+from exports.models import ExportModelNCF
 
 
 
@@ -104,12 +106,24 @@ def train_model(n_epochs=10, batch_size=200, learning_rate=0.005,embedding_size=
         epochs=n_epochs,
         verbose=1,
         validation_data=([df_val.user.to_numpy(), df_val.movie.to_numpy()],df_val.rating.to_numpy()))
-    save_model(model)
+    print('Training complete.')
+    mean_absolute_error = [round(x, 2) for x in history.history['mean_absolute_error']]
+    filename = 'neural_collaborative_filtering_{}.h5'.format(mean_absolute_error[-1])
+    save_model(model, filename=filename, n_epochs=n_epochs, batch_size=batch_size, learning_rate=learning_rate, embedding_size=embedding_size)
 
 
-def save_model(model, filename='neural_collaborative_filtering.h5'):
+def save_model(model, filename='neural_collaborative_filtering.h5', n_epochs=10, batch_size=200, learning_rate=0.005, embedding_size=500):
     BASE_DIR = settings.BASE_DIR
-    filename = BASE_DIR / 'data' / 'model' / filename
+    date = datetime.datetime.now().strftime("%Y%m%d")
+    file = 'data' + '/model' + '/ncf' + '/' + date + '/' + filename
+    modelncf = ExportModelNCF.objects.create(
+        file=file,
+        n_epochs=n_epochs,
+        batch_size=batch_size,
+        learning_rate=learning_rate,
+        embedding_size=embedding_size
+    )
+    filename = BASE_DIR / 'data' / 'model' / 'ncf' / date / filename
     model.save(filename)
 
 

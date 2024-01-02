@@ -18,6 +18,7 @@
                     <th scope="col">Comment</th>
                     <th scope="col" style="text-align: center;">Reviewed date</th>
                     <th scope="col" style="text-align: center;">User</th>
+                    <th scope="col" style="text-align: center;">Setiment</th>
                 </tr>
             </thead>
             <tbody>
@@ -34,6 +35,15 @@
                     </td>
                     <td scope="col" style="text-align: center;">
                       <a href="#" style="color: #6C7293;">{{ result.username }}</a>
+                    </td>
+                    <td scope="col" style="text-align: center;">
+                      {% if result.sentiment == 'Good' %}
+                        <a href="#" style="color: #6C7293;">&#128515;</a>
+                      {% elif result.sentiment == 'Bad'  %}
+                        <a href="#" style="color: #6C7293;">&#128534;</a>
+                      {% else %}
+                        <a href="#" style="color: #6C7293;">{{ result.sentiment }}</a>
+                      {% endif %}
                     </td>
                   </tr>
                   {% endfor %}

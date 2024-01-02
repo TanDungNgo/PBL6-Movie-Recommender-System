@@ -342,7 +342,7 @@ def get_movie_review_details(request, movie_id):
     review_detail = (
         Review.objects
         .filter(object_id = movie_id)
-        .values('id', 'content', 'object_id', 'user_id', 'timestamp')
+        .values('id', 'content', 'object_id', 'user_id', 'timestamp', 'sentiment')
     )
 
     if review_detail.exists():
@@ -370,7 +370,8 @@ def get_movie_review_details(request, movie_id):
                 'content': review_item['content'],
                 'title_movie': title_movie,
                 'username': username,
-                'timestamp': review_item['timestamp'].strftime("%b. %d, %Y")
+                'timestamp': review_item['timestamp'].strftime("%b. %d, %Y"),
+                'sentiment':  review_item.get('sentiment', None)
             })
     
         return render(request, 'dashboard/review_table.html', {'results': result_list, 'title_movie': title_movie})
