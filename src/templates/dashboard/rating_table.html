@@ -188,7 +188,7 @@
     var ctx = document.getElementById('myPieChart').getContext('2d');
 
     var data = {
-        labels: ['5', '4', '3', '2', '1'],
+        labels: ['(5)', '(4)', '(3)', '(2)', '(1)'],
         datasets: [{
             backgroundColor: [
                 'rgba(247, 129, 138)',
@@ -197,7 +197,7 @@
                 'rgba(248, 203, 130)',
                 'rgba(178, 212, 216)',
             ],
-            data: [30, 10, 30, 20, 10],  
+            data: [],  
             borderWidth: 0,
         }]
     };
@@ -227,5 +227,22 @@
         options: options
     });
 
+    var movieId = window.location.pathname.split('/').slice(-2, -1)[0];
+    var url = '/dashboard/rating_review/ratings/' + movieId + '/rating_count/';
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            //console.log(data.percentage_count);
+            var dataArray = Object.values(data.percentage_count);
+            dataArray = dataArray.reverse();
+            const ratingsCounts = dataArray.map(value => parseFloat(value));
+
+            myPieChart.data.datasets[0].data = ratingsCounts;
+            myPieChart.update();
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
 </script>
 {% endblock %}

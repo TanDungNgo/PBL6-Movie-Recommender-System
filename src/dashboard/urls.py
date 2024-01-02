@@ -19,4 +19,5 @@ urlpatterns = [
     path('rating_review/', views.get_movie_review_counts, name='rating_review'),
     path('rating_review/reviews/<int:movie_id>/', views.get_movie_review_details, name='review_details'),
     path('rating_review/ratings/<int:movie_id>/', views.get_movie_rating_details, name='rating_details'),
+    path('rating_review/ratings/<int:movie_id>/rating_count/', views.get_rating_count, name='rating_count'),
 ]
