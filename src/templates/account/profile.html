@@ -4,148 +4,182 @@
 
 {% load static %}
 
-<body >
-    
-    <div class="container" style="color: #6c757d; max-width: 1320px;" >
+<body>
+
+    <div class="container" style="color: #6c757d; max-width: 1320px;">
         <div class="row">
             <div class="col-12">
                 <!-- Page title -->
                 <div class="my-5">
-                    <h4 class="mb-0" style="font-size: 30px; color: white;" ><i class="col_red me-1" ></i> My <span
-                        class="col_red">Profile</span></h4> <hr style="color: gray">
+                    <h4 class="mb-0" style="font-size: 30px; color: white;"><i class="col_red me-1"></i> My <span
+                            class="col_red">Profile</span></h4>
+                    <hr style="color: gray">
                 </div>
                 <!-- Form START -->
-                <form method="post" enctype="multipart/form-data" action="{% url 'update_profile' %}" class="file-upload" style="font-weight: bold;">
+                <form method="post" enctype="multipart/form-data" action="{% url 'update_profile' %}"
+                    class="file-upload" style="font-weight: bold;">
                     {% csrf_token %}
-                    <div class="row mb-5 gx-5" >
+                    <div class="row mb-5 gx-5">
                         <!-- Contact detail -->
-                        <div class="col-xxl-8 mb-5 mb-xxl-0"  style="background-color: #191a1d; border-radius: 0.25rem!important;">
+                        <div class="col-xxl-8 mb-5 mb-xxl-0"
+                            style="background-color: #191a1d; border-radius: 0.25rem!important;">
                             <div class="bg-secondary-soft px-4 py-5 rounded">
                                 <div class="row g-3">
                                     <h4 class="mb-4 mt-0" style="color: #de1002;">Contact detail</h4>
                                     <!-- User name -->
                                     <div class="col-md-6">
                                         <label class="form-label">User Name </label>
-                                        <input type="text" class="form-control" id="username-input" name="username" placeholder="" aria-label="User name"
-                                            value="{{ request.session.user_username }} " style="background-color: #010102; border-color: black;">
+                                        <input type="text" class="form-control" id="username-input" name="username"
+                                            placeholder="" aria-label="User name"
+                                            value="{{ request.session.user_username }} "
+                                            style="background-color: #010102; border-color: black;">
                                     </div>
                                     <!-- Email -->
                                     <div class="col-md-6">
                                         <label for="inputEmail4" class="form-label">Email</label>
                                         <input type="email" class="form-control" id="email-input" name="email"
-                                            value="{{ request.session.user_email }}" style="background-color: #010102; border-color: black;">
+                                            value="{{ request.session.user_email }}"
+                                            style="background-color: #010102; border-color: black;">
                                     </div>
                                     <!-- First Name -->
                                     <div class="col-md-6">
                                         <label class="form-label">First Name</label>
-                                        <input id="first-name-input" type="text" name="first_name" class="form-control" placeholder="" aria-label="First name"
-                                            value="{{ request.session.user_firstname }}" style="background-color: #010102; border-color: black;">
+                                        <input id="first-name-input" type="text" name="first_name" class="form-control"
+                                            placeholder="" aria-label="First name"
+                                            value="{{ request.session.user_firstname }}"
+                                            style="background-color: #010102; border-color: black;">
                                     </div>
 
                                     <!-- Last Name -->
                                     <div class="col-md-6">
                                         <label class="form-label">Last Name</label>
-                                        <input id="last-name-input" type="text" name="last_name" class="form-control" placeholder="" aria-label="Last name"
-                                            value="{{ request.session.user_lastname }}" style="background-color: #010102; border-color: black;">
+                                        <input id="last-name-input" type="text" name="last_name" class="form-control"
+                                            placeholder="" aria-label="Last name"
+                                            value="{{ request.session.user_lastname }}"
+                                            style="background-color: #010102; border-color: black;">
                                     </div>
 
-                                    <!-- Phone number -->
-                                    <!-- <div class="col-md-6">
-                                        <label class="form-label">Phone number</label>
-                                        <input id="phonenumber-input" name="phonenumber" type="text" class="form-control" placeholder="" aria-label="Phone number"
-                                            value="{{ request.session.user_phonenumber }}" style="background-color: #010102; border-color: black;">
-                                    </div> -->
 
-                                    <!-- Country -->
-                                    <!-- <div class="col-md-6">
-                                        <label class="form-label">Country</label>
-                                        <input id="country-input" name="country" type="text" class="form-control" placeholder="" aria-label="Country"
-                                            value="{{ request.session.user_country }}" style="background-color: #010102; border-color: black;">
-                                    </div> -->
 
-                                    <div class="gap-3 d-md-flex justify-content-md-end text-center" style="margin-top: 50px;">
-                                        <button type="button" class="btn btn-danger btn-lg" style="background-color: #de1002; border-color: black;">Cancel profile</button>
-                                        <button id = "update-profile-button" type="submit" class="btn btn-primary btn-lg">Update profile</button>
+                                    <div class="gap-3 d-md-flex justify-content-md-end text-center"
+                                        style="margin-top: 50px;">
+                                        <button type="button" class="btn btn-danger btn-lg"
+                                            style="background-color: #de1002; border-color: black;">Cancel
+                                            profile</button>
+                                        <button id="update-profile-button" type="submit"
+                                            class="btn btn-primary btn-lg">Update profile</button>
                                     </div>
                                 </div> <!-- Row END -->
                             </div>
                         </div>
-                        <!-- Upload profile -->
-                        <div class="col-xxl-4" >
-                            <div class="bg-secondary-soft px-4 py-5 rounded"  style="background-color: #191a1d; ">
+                        <div class="col-xxl-4">
+                            <div class="bg-secondary-soft px-4 py-5 rounded" style="background-color: #191a1d; ">
                                 <div class="row g-3">
                                     <h4 class="mb-4 mt-0" style="color: #de1002;">Upload avatar</h4>
                                     <div class="text-center">
                                         <!-- Image upload -->
                                         <!-- Hiển thị hình ảnh avatar -->
                                         <img id="avatar-image" src="{{ request.session.user_avatar }}" class="img-fluid"
-                                             alt="Avatar" style="width: 300px; height: 300px; object-fit: cover;">
+                                            alt="Avatar" style="width: 300px; height: 300px; object-fit: cover;">
 
                                         <!-- Button -->
-                                        <input type="file" id="avatar-input" style="display: none;">
+                                        <input type="file" id="avatar-input" style="display: none;" accept="image/*">
                                         <label for="avatar-input" class="btn btn-success-soft btn-block"
                                             style="color: #28a745; background-color: rgba(40, 167, 69, 0.1); margin-top: 20px;">Upload</label>
 
                                         <button type="button" id="remove-button" class="btn btn-danger-soft"
                                             style="color: #dc3545; background-color: rgba(220, 53, 69, 0.1); margin-top: 20px;">Remove</button>
-
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div> <!-- Row END -->
-                </form> 
-                    <!-- Social media detail -->
-                    <div class="row mb-5 gx-5">
-                        <div class="col-xxl-6 mb-5 mb-xxl-0"  style="background-color: #191a1d; border-radius: 0.25rem!important;">
-                            <div class="bg-secondary-soft px-4 py-5 rounded" >
-                                <div class="row g-3">
-                                    <h4 class="mb-4 mt-0" style="color: #de1002;">Social media detail</h4>
-                                    <!-- Facebook -->
-                                    <div class="col-md-6">
-                                        <label class="form-label"><i
-                                                class="fab fa fa-facebook me-2 text-facebook"></i>Facebook </label>
-                                        <input type="text" class="form-control" placeholder="" aria-label="Facebook"
-                                            value="http://www.facebook.com" style="background-color: #010102; border-color: black;">
-                                    </div>
-                                    <!-- Twitter -->
-                                    <div class="col-md-6">
-                                        <label class="form-label"><i
-                                                class="fab fa-fw fa fa-twitter text-twitter me-2"></i>Twitter </label>
-                                        <input type="text" class="form-control" placeholder="" aria-label="Twitter"
-                                            value="http://www.twitter.com" style="background-color: #010102; border-color: black;">
-                                    </div>
-                                    <!-- Linkedin -->
-                                    <div class="col-md-6">
-                                        <label class="form-label"><i
-                                                class="fab fa-fw fa fa-linkedin text-linkedin me-2"></i>Linkedin </label>
-                                        <input type="text" class="form-control" placeholder="" aria-label="Linkedin"
-                                            value="http://www.linkedin.com" style="background-color: #010102; border-color: black;">
-                                    </div>
-                                    <!-- Instragram -->
-                                    <div class="col-md-6">
-                                        <label class="form-label"><i
-                                                class="fab fa-fw fa fa-instagram text-instagram me-2"></i>Instagram </label>
-                                        <input type="text" class="form-control" placeholder="" aria-label="Instragram"
-                                            value="http://www.instragram.com" style="background-color: #010102; border-color: black;">
-                                    </div>
-                                    
-                                </div> <!-- Row END -->
-                            </div>
-                        </div>
+                </form>
+                <!-- Social media detail -->
+                <div class="row mb-5 gx-5">
+                    <div class="col-xxl-6 mb-5 mb-xxl-0"
+                        style="background-color: #191a1d; border-radius: 0.25rem!important;">
+                        <div class="bg-secondary-soft px-4 py-5 rounded">
+                            <div class="row g-3">
+                                <h4 class="mb-4 mt-0" style="color: #de1002;">Social media detail</h4>
+                                <!-- Facebook -->
+                                <div class="col-md-6">
+                                    <label class="form-label"><i
+                                            class="fab fa fa-facebook me-2 text-facebook"></i>Facebook </label>
+                                    <input type="text" class="form-control" placeholder="" aria-label="Facebook"
+                                        value="http://www.facebook.com"
+                                        style="background-color: #010102; border-color: black;">
+                                </div>
+                                <!-- Twitter -->
+                                <div class="col-md-6">
+                                    <label class="form-label"><i
+                                            class="fab fa-fw fa fa-twitter text-twitter me-2"></i>Twitter </label>
+                                    <input type="text" class="form-control" placeholder="" aria-label="Twitter"
+                                        value="http://www.twitter.com"
+                                        style="background-color: #010102; border-color: black;">
+                                </div>
+                                <!-- Linkedin -->
+                                <div class="col-md-6">
+                                    <label class="form-label"><i
+                                            class="fab fa-fw fa fa-linkedin text-linkedin me-2"></i>Linkedin </label>
+                                    <input type="text" class="form-control" placeholder="" aria-label="Linkedin"
+                                        value="http://www.linkedin.com"
+                                        style="background-color: #010102; border-color: black;">
+                                </div>
+                                <!-- Instragram -->
+                                <div class="col-md-6">
+                                    <label class="form-label"><i
+                                            class="fab fa-fw fa fa-instagram text-instagram me-2"></i>Instagram </label>
+                                    <input type="text" class="form-control" placeholder="" aria-label="Instragram"
+                                        value="http://www.instragram.com"
+                                        style="background-color: #010102; border-color: black;">
+                                </div>
 
-                        {%include "account/change_pass.html"%}
+                            </div> <!-- Row END -->
+                        </div>
+                    </div>
+
+                    {%include "account/change_pass.html"%}
                     <!-- button -->
                     <!-- <div class="gap-3 d-md-flex justify-content-md-end text-center">
                         <button type="button" class="btn btn-danger btn-lg" style="background-color: #de1002; border-color: black;">Cancel profile</button>
                         <button id = "update-profile-button" type="submit" class="btn btn-primary btn-lg">Update profile</button>
                     </div> -->
-                <!-- Form END -->
+                    <!-- Form END -->
+                </div>
             </div>
+            <hr style="color: gray">
         </div>
-        <hr style="color: gray">
-    </div>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                // Handle file input change
+                $("#avatar-input").change(function () {
+                    readURL(this);
+                });
+
+                // Handle remove button click
+                $("#remove-button").click(function () {
+                    // Remove the current image
+                    $("#avatar-image").attr("src", "");
+                    // Clear the file input
+                    $("#avatar-input").val("");
+                });
+
+                // Function to read and display the selected image
+                function readURL(input) {
+                    if (input.files && input.files[0]) {
+                        var reader = new FileReader();
+
+                        reader.onload = function (e) {
+                            $("#avatar-image").attr("src", e.target.result);
+                        };
+
+                        reader.readAsDataURL(input.files[0]);
+                    }
+                }
+            });
+        </script>
 </body>
 
 
