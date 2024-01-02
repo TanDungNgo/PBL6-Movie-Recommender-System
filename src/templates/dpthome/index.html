@@ -33,9 +33,11 @@
 					</h6>
 					<p class="mt-3">{{ movie.overview }}</p>
 					<p class="mb-2"><span class="col_red me-1 fw-bold">Country</span> {{ movie.countries }}</p>
-					<p class="mb-2"><span class="col_red me-1 fw-bold">Genres:</span> 
+					<p class="mb-2"><span class="col_red me-1 fw-bold">Genres:</span>
 						{% for genre in movie.get_genres %}
-						<span style="margin-right: 5px; margin-bottom: 5px;"> <a class="bg_red p-2 pe-4 ps-4 ms-3 text-white d-inline-block" href="#" style="text-align: center;">{{genre.name}}</a> </span>
+						<span style="margin-right: 5px; margin-bottom: 5px;"> <a
+								class="bg_red p-2 pe-4 ps-4 ms-3 text-white d-inline-block" href="#"
+								style="text-align: center;">{{genre.name}}</a> </span>
 						{% endfor %}
 					</p>
 					<p><span class="col_red me-1 fw-bold">Runtime:</span> {{ movie.runtime }} (minutes)</p>
@@ -78,7 +80,7 @@
 						aria-label="Slide 2" class="" aria-current="true"></button>
 				</div>
 				<div class="carousel-inner">
-					{% include 'movies/list.html' with object_list=latest_movies %}
+					{% include 'movies/list_item.html' with object_list=latest_movies %}
 				</div>
 			</div>
 		</div>
@@ -103,7 +105,7 @@
 						aria-label="Slide 2" class="" aria-current="true"></button>
 				</div>
 				<div class="carousel-inner">
-					{% include 'movies/list.html' with object_list=top_rated_movies %}
+					{% include 'movies/list_item.html' with object_list=top_rated_movies %}
 				</div>
 
 			</div>
