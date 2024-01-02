@@ -30,8 +30,9 @@
       </select>
       <select id="yearSelect" name="year">
         <option value="all">All year</option>
-        <option value="2023">2023</option>
-        <option value="2022">2022</option>
+        {% for year in year_list %}
+          <option value="{{ year }}">{{ year }}</option>
+        {% endfor %}
       </select>
     </div>
     <div class="filter-radios">
@@ -45,39 +46,45 @@
     </div>
   </div>
 </section>
-<section class="pt-4 pb-5">
-    <div class="container">
-      {% if object_list|length > 0 %}
-      <div class="row trend_2 mt-4">
-        {% for object in object_list %}
-        {% include 'movies/snippet/card.html' with object=object current_rating=current_rating %}
-        {% endfor %}
-      </div>
-      <div class="pagination">
-        <span class="step-links">
-          {% if object_list.has_previous %}
-            <a href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">&laquo; first</a>
-            <a href="?page={{ object_list.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">previous</a>
-          {% endif %}
-      
-          <span class="current">
-            Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.
-          </span>
-      
-          {% if object_list.has_next %}
-            <a href="?page={{ object_list.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">next</a>
-            <a href="?page={{ object_list.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">last &raquo;</a>
-          {% endif %}
-        </span>
-      </div>  
-      {% else %}
-      <div class="row trend_2 mt-4">
-        <h5 class="mt-4">No results found for "{{ request.GET.search }}"</h5>
-      </div>
-      {% endif %}
-    </div>
+<section class="pt-4 pb-5" id="movies-list">
 </section>
+<div id="spinner" class="w-100 d-flex align-items-center justify-content-center" style="height: 500px;">
+  <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+      <span class="sr-only">Loading...</span>
+  </div>
+</div>
 <section>
   <div class="card-space"></div>
 </section>
+<script>
+  $(document).ready(function () {
+      function updateMovies() {
+          var selectedGenre = $("#genreSelect").val();
+          var selectedYear = $("#yearSelect").val();
+          var selectedFilter = $("input[name='filter-radio']:checked").attr('id');
+          $.ajax({
+              type: "GET",
+              url: "/filter/movies/",
+              data: {
+                  genre: selectedGenre,
+                  year: selectedYear,
+                  filter: selectedFilter
+              },
+              success: function (data) {
+                $("#spinner").addClass("d-none");
+                $("#movies-list").html(data.movie_html);
+              },
+              error: function () {
+                  console.error("Error fetching movies");
+              }
+          });
+      }
+  
+      $("#genreSelect, #yearSelect, input[name='filter-radio']").change(function () {
+          updateMovies();
+      });
+  
+      updateMovies();
+  });
+  </script>
 {% endblock %}

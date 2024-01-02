@@ -30,11 +30,14 @@
 						{{ movie.rating_avg }} <span class="col_red me-3">
 							<i class="fa fa-star"></i>
 						</span>Year: {{ movie.release_date.year }}
-
 					</h6>
 					<p class="mt-3">{{ movie.overview }}</p>
 					<p class="mb-2"><span class="col_red me-1 fw-bold">Country</span> {{ movie.countries }}</p>
-					<p class="mb-2"><span class="col_red me-1 fw-bold">Genres:</span> {{ movie.genres }}</p>
+					<p class="mb-2"><span class="col_red me-1 fw-bold">Genres:</span> 
+						{% for genre in movie.get_genres %}
+						<span style="margin-right: 5px; margin-bottom: 5px;"> <a class="bg_red p-2 pe-4 ps-4 ms-3 text-white d-inline-block" href="#" style="text-align: center;">{{genre.name}}</a> </span>
+						{% endfor %}
+					</p>
 					<p><span class="col_red me-1 fw-bold">Runtime:</span> {{ movie.runtime }} (minutes)</p>
 					<h6 class="mt-4"><a class="button" href="{{ movie.get_absolute_url }}"><i
 								class="fa fa-play-circle align-middle me-1"></i>

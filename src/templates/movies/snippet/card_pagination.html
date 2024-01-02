@@ -1,0 +1,30 @@
+<div class="container">
+    {% if object_list|length > 0 %}
+    <div class="row trend_2 mt-4">
+      {% for object in object_list %}
+      {% include 'movies/snippet/card.html' with object=object current_rating=current_rating %}
+      {% endfor %}
+    </div>
+    <div class="pagination">
+      <span class="step-links">
+        {% if object_list.has_previous %}
+          <a href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">&laquo; first</a>
+          <a href="?page={{ object_list.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">previous</a>
+        {% endif %}
+    
+        <span class="current">
+          Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.
+        </span>
+    
+        {% if object_list.has_next %}
+          <a href="?page={{ object_list.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">next</a>
+          <a href="?page={{ object_list.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}">last &raquo;</a>
+        {% endif %}
+      </span>
+    </div>  
+    {% else %}
+    <div class="row trend_2 mt-4">
+      <h5 class="mt-4">No movies</h5>
+    </div>
+    {% endif %}
+</div>

@@ -15,11 +15,11 @@ from reportlab.lib.pagesizes import letter
 from reportlab.platypus import Table, TableStyle
 from io import BytesIO
 from datetime import datetime
-from profiles.models import CustomUser
+from profiles.models import CustomUser as User
 from django.db.models import Count
 from django.db.models.functions import ExtractMonth, ExtractYear
 # Create your views here.
-User = get_user_model()
+# User = get_user_model()
 class DashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateView):
     template_name = 'dashboard/dashboard.html'
     def get_context_data(self, **kwargs):
@@ -101,7 +101,7 @@ def movie_list(request):
     return render(request, 'dashboard/movie_list.html', {'movies': movies})
 
 def get_list_users(request):
-    users = CustomUser.objects.all()
+    users = User.objects.all()
     return render(request, 'dashboard/user_list.html', {'users': users})
     
 def edit_movie(request, movie_id):
