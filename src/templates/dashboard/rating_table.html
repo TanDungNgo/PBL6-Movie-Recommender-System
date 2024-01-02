@@ -71,30 +71,31 @@
             <thead>
                 <tr>
                     <th scope="col">ID</th>
-                    <th scope="col">Movie</th>
-                    <th scope="col" style="text-align: center;">Number of reviews</th>
-                    <th scope="col" style="text-align: center;">Number of ratings</th>
+                    <th scope="col">User</th>
                     <th scope="col" style="text-align: center;">Rating point</th>
+                    <th scope="col" style="text-align: center;">Rated date</th>
                 </tr>
             </thead>
             <tbody>
-                {% for movie in movies %}
+                {% for result in results %}
                   <tr>
                     <td scope="col">
-                      <a href="#" style="color: #6C7293;">{{ movie.id }}</a>
+                      <a href="#" style="color: #6C7293;">{{ result.id }}</a>
                     </td>
                     <td scope="col">
-                      <a href="#" style="color: #6C7293;">{{ movie.title }}</a>
+                      <a href="#" style="color: #6C7293;">{{ result.username }}</a>
                     </td>
                     <td scope="col" style="text-align: center;">
-                      <a href="{% url 'review_details' movie.id %}" style="color: #6C7293;">{{ movie.review_count }}</a>
+                        <a href="#" style="color: #6C7293;">
+                            {{ result.value }}
+                            <span>
+                                <i class="fas fa-star" style="color: #f3c100;"></i>
+                            </span>
+                        </a>
                     </td>
                     <td scope="col" style="text-align: center;">
-                      <a href="{% url 'rating_details' movie.id %}" style="color: #6C7293;">{{ movie.rating_count }}</a>
+                      <a href="#" style="color: #6C7293;">{{ result.timestamp }}</a>
                     </td>
-                    <td scope="col" style="text-align: center;">
-                        <a href="#" style="color: #6C7293;">{{ movie.rating_avg }}</a>
-                      </td>
                   </tr>
                   {% endfor %}
             </tbody>
@@ -102,18 +103,18 @@
         </div>
         <div class="pagination">
           <span class="step-links">
-            {% if movies.has_previous %}
+            {% if results.has_previous %}
               <a href="?page=1{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.item %}&items={{request.GET.item}}{% endif %}">&laquo; first</a>
-              <a href="?page={{ movies.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.item %}&item={{request.GET.item}}{% endif %}">previous</a>
+              <a href="?page={{ results.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.item %}&item={{request.GET.item}}{% endif %}">previous</a>
             {% endif %}
         
             <span class="current">
-              Page {{ movies.number }} of {{ movies.paginator.num_pages }}.
+              Page {{ results.number }} of {{ results.paginator.num_pages }}.
             </span>
         
-            {% if movies.has_next %}
-              <a href="?page={{ movies.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.item %}&item={{request.GET.item}}{% endif %}">next</a>
-              <a href="?page={{ movies.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.item %}&item={{request.GET.item}}{% endif %}">last &raquo;</a>
+            {% if results.has_next %}
+              <a href="?page={{ results.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.item %}&item={{request.GET.item}}{% endif %}">next</a>
+              <a href="?page={{ results.paginator.num_pages }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.item %}&item={{request.GET.item}}{% endif %}">last &raquo;</a>
             {% endif %}
           </span>
         </div>               
@@ -138,5 +139,93 @@
 
     window.location.href = `?page=1&search=${searchValue}&item=${itemsPerPage}`;
   }
+</script>
+
+
+<div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+      <div class="col-sm-12 col-xl-6">
+        <div class="bg-secondary text-center rounded p-4" style="height: 346px;">
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">Total ratings</h6>
+            <a href="">Show All</a>
+          </div>
+          <table style="border-color: #6C7293;" class="table text-start align-middle table-bordered table-hover mb-0">
+            <thead>
+                <tr style="color: #6C7293;">
+                    <th scope="col">Rating ponit</th>
+                    <th scope="col">Number of ratings</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for value, count in rating_count.items %}
+                    <tr>
+                        <td>
+                            {{ value }}
+                            <span>
+                                <i class="fas fa-star" style="color: #f3c100;"></i>
+                            </span>
+                        </td>
+                        <td>{{ count }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col-sm-12 col-xl-6">
+        <div class="bg-secondary text-center rounded p-4">
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0">Rating Statistics</h6>
+            <a href="">Show All</a>
+          </div>
+          <canvas id="myPieChart" style="height: 250px;"></canvas>
+        </div>
+      </div>
+    </div>
+</div>
+<script>
+    var ctx = document.getElementById('myPieChart').getContext('2d');
+
+    var data = {
+        labels: ['5', '4', '3', '2', '1'],
+        datasets: [{
+            backgroundColor: [
+                'rgba(247, 129, 138)',
+                'rgba(253, 217, 190)',
+                'rgba(163, 203, 243)',
+                'rgba(248, 203, 130)',
+                'rgba(178, 212, 216)',
+            ],
+            data: [30, 10, 30, 20, 10],  
+            borderWidth: 0,
+        }]
+    };
+
+    var options = {
+        responsive: false,
+        maintainAspectRatio: false,
+        width: 100,
+        height: 100,
+        plugins: {
+          legend: {
+              position: 'right',
+              align: 'center',
+              labels: {
+                  boxWidth: 35,
+                  fontSize: 18,
+                  fontColor: '#333',
+                  padding: 10
+              }
+          }
+      }
+    };
+
+    var myPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: data,
+        options: options
+    });
+
 </script>
 {% endblock %}

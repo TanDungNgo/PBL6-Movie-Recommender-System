@@ -17,5 +17,6 @@ urlpatterns = [
     path('user_by_month/', views.users_by_month, name='users_by_month'),
     path('movies_by_genre/', views.movies_by_genre, name='movies_by_genre'),
     path('rating_review/', views.get_movie_review_counts, name='rating_review'),
-    path('rating_review/review/<int:movie_id>/', views.get_movie_review_details, name='review_details'),
+    path('rating_review/reviews/<int:movie_id>/', views.get_movie_review_details, name='review_details'),
+    path('rating_review/ratings/<int:movie_id>/', views.get_movie_rating_details, name='rating_details'),
 ]

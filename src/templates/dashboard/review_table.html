@@ -10,16 +10,13 @@
     <div class="col-12">
       <div class="bg-secondary rounded h-100 p-4">
         <div class="table-responsive">
-            {% if title_movie %}
-                <h5>Reviews of <span style="color: #de1002;">{{ title_movie }}</span></h5>
-            {% else %}
-                <h5>No reviews</h5>
-            {% endif %}
+            <h5>Reviews of <span style="color: #de1002;">{{ title_movie }}</span></h5>
           <table id="example" class="table">
             <thead>
                 <tr>
                     <th scope="col">ID</th>
                     <th scope="col">Comment</th>
+                    <th scope="col" style="text-align: center;">Reviewed date</th>
                     <th scope="col" style="text-align: center;">User</th>
                 </tr>
             </thead>
@@ -31,6 +28,9 @@
                     </td>
                     <td scope="col" style="max-width: 280px;">
                       <a href="#" style="color: #6C7293;">{{ result.content }}</a>
+                    </td>
+                    <td scope="col" style="text-align: center;">
+                      <a href="#" style="color: #6C7293;">{{ result.timestamp }}</a>
                     </td>
                     <td scope="col" style="text-align: center;">
                       <a href="#" style="color: #6C7293;">{{ result.username }}</a>
