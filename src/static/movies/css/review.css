@@ -72,7 +72,7 @@
     border: none;
 }
 
-.editBtn, .saveBtn{
+.editBtn, .saveBtn, .saveReplyBtn{
     background-color: #13b413;
     color: #fff;
     padding: 8px 10px;
@@ -85,7 +85,7 @@
     border: none;
 }
 
-.deleteBtn, .cancelEditBtn {
+.deleteBtn, .cancelEditBtn, .cancelReplyBtn {
     background-color: #c51919;
     color: #fff;
     padding: 8px 10px;
@@ -97,6 +97,7 @@
     border: none;
 }
 
-.replyBtn:hover, .saveBtn:hover, .editBtn:hover, .deleteBtn:hover, .cancelEditBtn:hover {
+.replyBtn:hover, .saveBtn:hover, .editBtn:hover, .deleteBtn:hover, 
+.cancelEditBtn:hover, .saveReplyBtn:hover, .cancelReplyBtn:hover {
     opacity: 0.8;
 }

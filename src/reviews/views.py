@@ -7,6 +7,8 @@ from django.http import HttpResponse, JsonResponse
 from django.template.loader import render_to_string
 from profiles.models import CustomUser
 from django.shortcuts import get_object_or_404
+from django.utils import timezone
+import pytz
 
 @require_http_methods(['POST'])
 def review_movie(request):
@@ -21,16 +23,11 @@ def review_movie(request):
                 review_obj = Review.objects.create(content_type=ctype, object_id=object_id, content=content, user=customUser)
                 
                 if review_obj.content_object is not None:
+                    review = render_to_string('reviews/snippet/review_item.html', {'review': review_obj, 'request': request})
                     response_data = {
                         'status': 'success',
                         'message': 'Review submitted successfully!',
-                        'review': {
-                            'id': review_obj.id,
-                            'content': review_obj.content,
-                            'user': review_obj.user.first_name + ' ' + review_obj.user.last_name,
-                            'avatar': review_obj.user.avatar,
-                            'timestamp': review_obj.timestamp.strftime("%b. %d, %Y, %I:%M %p"),
-                        },
+                        'review': review,
                     }
                     return JsonResponse(response_data)
                 else:
@@ -84,6 +81,8 @@ def update_review(request):
     review_id = request.POST.get('review_id')
     review = get_object_or_404(Review, id=review_id)
     review.content = request.POST.get('content')
+    VN_TZ = pytz.timezone('Asia/Ho_Chi_Minh')
+    review.active_update_timestamp = timezone.now().astimezone(VN_TZ)
     review.save()
     response_data = {
         'status': 'success',
@@ -93,7 +92,44 @@ def update_review(request):
             'content': review.content,
             'user': review.user.first_name + ' ' + review.user.last_name,
             'avatar': review.user.avatar,
-            'timestamp': review.timestamp.strftime("%b. %d, %Y, %I:%M %p"),
+            'timestamp': review.active_update_timestamp.strftime("%b. %d, %Y, %I:%M %p"),
         },
     }
     return JsonResponse(response_data)
+
+def reply_review(request):
+    review_id = request.POST.get('review_id')
+    review = Review.objects.get(id=review_id)
+    content = request.POST.get('content')
+    user = request.user
+    customUser = CustomUser.objects.get(id=user.id)
+    ctype = ContentType.objects.get(app_label='reviews', model='review')
+    if user.is_authenticated:
+        review_obj = Review.objects.create(content_type=ctype, object_id=review_id, content=content, user=customUser)
+        if review_obj.content_object is not None:
+            review = render_to_string('reviews/snippet/review_item.html', {'review': review_obj, 'request': request})
+            response_data = {
+                'status': 'success',
+                'message': 'Review replied successfully!',
+                'review': review,
+            }
+            return JsonResponse(response_data)
+        else:
+            response_data = {
+                'status': 'error',
+                'message': 'An error occurred',
+            }
+            return JsonResponse(response_data)
+    else:
+        response_data = {
+            'status': 'error',
+            'message': 'You must log in to reply',
+        }
+        return JsonResponse(response_data)
+
+def get_reply_reviews(request):
+    review_id = request.GET.get('review_id')
+    ctype = ContentType.objects.get(app_label='reviews', model='review')
+    reply_reviews = Review.objects.filter(content_type=ctype, object_id=review_id)
+    reply_reviews_html = render_to_string('reviews/snippet/review_list.html', {'reviews': reply_reviews, 'request': request})
+    return JsonResponse({'reply_reviews_html': reply_reviews_html})
