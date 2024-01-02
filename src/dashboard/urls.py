@@ -16,4 +16,8 @@ urlpatterns = [
     path('user_list/delete/<int:user_id>/', views.delete_user, name='delete_user'),
     path('user_by_month/', views.users_by_month, name='users_by_month'),
     path('movies_by_genre/', views.movies_by_genre, name='movies_by_genre'),
+    path('rating_review/', views.get_movie_review_counts, name='rating_review'),
+    path('rating_review/reviews/<int:movie_id>/', views.get_movie_review_details, name='review_details'),
+    path('rating_review/ratings/<int:movie_id>/', views.get_movie_rating_details, name='rating_details'),
+    path('rating_review/ratings/<int:movie_id>/rating_count/', views.get_rating_count, name='rating_count'),
 ]

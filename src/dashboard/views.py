@@ -1,3 +1,4 @@
+from collections import defaultdict
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views import generic
@@ -16,8 +17,11 @@ from reportlab.platypus import Table, TableStyle
 from io import BytesIO
 from datetime import datetime
 from profiles.models import CustomUser as User
-from django.db.models import Count
+from django.db.models import Count, Value
 from django.db.models.functions import ExtractMonth, ExtractYear
+from ratings.models import Rating
+from django.db.models.functions import Coalesce
+from reviews.models import Review
 # Create your views here.
 # User = get_user_model()
 class DashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateView):
@@ -277,3 +281,186 @@ def movies_by_genre(request):
     genre_counts = Movie.objects.count_genre_values()
 
     return JsonResponse({'moviesCount': genre_counts})
+
+def get_movie_review_counts(request):
+    search_query = request.GET.get('search', '')
+    movies_info = (
+        Movie.objects
+        .values('id', 'title', 'rating_count', 'rating_avg')
+        .filter(title__icontains=search_query)
+    )
+    
+    review_counts = (
+        Review.objects
+        .values('object_id')
+        .annotate(review_count=Count('object_id'))
+        .exclude(object_id=None)
+    )
+
+    result_list = []
+    for movie_info in movies_info:
+        movie_id = movie_info['id']
+        movie_title = movie_info['title']
+        rating_count = movie_info['rating_count']
+        rating_avg = movie_info['rating_avg']
+
+        rating_count = 0 if rating_count is None else rating_count
+        rating_avg = 0 if rating_avg is None else rating_avg
+
+        review_count = next(
+            (item['review_count'] for item in review_counts if item['object_id'] == movie_id),
+            0
+        )
+
+        result_list.append({
+            'id': movie_id,
+            'title': movie_title,
+            'review_count': review_count,
+            'rating_count': rating_count,
+            'rating_avg': rating_avg
+        })
+
+    # Phân trang
+    items_per_page = request.GET.get('item', 10)
+
+    # Paginate the list of results
+    paginator = Paginator(result_list, items_per_page)
+    page = request.GET.get('page', 1)
+
+    try:
+        paginated_result = paginator.page(page)
+    except PageNotAnInteger:
+        # If the page parameter is not an integer, show the first page
+        paginated_result = paginator.page(1)
+    except EmptyPage:
+        # If the page is out of range, deliver the last page
+        paginated_result = paginator.page(paginator.num_pages)
+
+    return render(request, 'dashboard/rating_review.html', {'movies': paginated_result})
+
+def get_movie_review_details(request, movie_id):
+    review_detail = (
+        Review.objects
+        .filter(object_id = movie_id)
+        .values('id', 'content', 'object_id', 'user_id', 'timestamp')
+    )
+
+    if review_detail.exists():
+        movies_info = (
+            Movie.objects
+            .filter(id=movie_id)
+            .values('id', 'title')
+        )
+
+        users_info = (
+            User.objects
+            .filter(id__in=[item['user_id'] for item in review_detail])
+            .values('id', 'username')
+        )
+
+        result_list = []
+        for review_item in review_detail:
+            user_id = review_item['user_id']
+            title_movie = movies_info[0]['title']
+            user_info = next((item for item in users_info if item['id'] == user_id), None)
+            username = user_info['username'] if user_info else None
+
+            result_list.append({
+                'id': review_item['id'],
+                'content': review_item['content'],
+                'title_movie': title_movie,
+                'username': username,
+                'timestamp': review_item['timestamp'].strftime("%b. %d, %Y")
+            })
+    
+        return render(request, 'dashboard/review_table.html', {'results': result_list, 'title_movie': title_movie})
+    else:
+        return render(request, 'dashboard/empty_page.html')
+    
+def get_movie_rating_details(request, movie_id):
+    rating_detail = (
+        Rating.objects
+        .filter(object_id = movie_id)
+        .values('id', 'value', 'object_id', 'user_id', 'timestamp')
+    )
+
+    if rating_detail.exists():
+        movies_info = (
+            Movie.objects
+            .filter(id=movie_id)
+            .values('id', 'title')
+        )
+
+        users_info = (
+            User.objects
+            .filter(id__in=[item['user_id'] for item in rating_detail])
+            .values('id', 'username')
+        )
+
+        result_list = []
+        for review_item in rating_detail:
+            user_id = review_item['user_id']
+            title_movie = movies_info[0]['title']
+            user_info = next((item for item in users_info if item['id'] == user_id), None)
+            username = user_info['username'] if user_info else None
+
+            result_list.append({
+                'id': review_item['id'],
+                'value': review_item['value'],
+                'title_movie': title_movie,
+                'username': username,
+                'timestamp': review_item['timestamp'].strftime("%b. %d, %Y")
+            })
+
+        # Phân trang
+        items_per_page = request.GET.get('item', 10)
+        paginator = Paginator(result_list, items_per_page)
+        page = request.GET.get('page', 1)
+
+        try:
+            paginated_result = paginator.page(page)
+        except PageNotAnInteger:
+            paginated_result = paginator.page(1)
+        except EmptyPage:
+            paginated_result = paginator.page(paginator.num_pages)
+
+
+        rating_count = defaultdict(int)  
+        for review_item in rating_detail:
+            value = review_item['value']
+            rating_count[value] += 1
+    
+        sorted_rating_count = dict(sorted(rating_count.items(), key=lambda item: item[0], reverse=True))  
+        
+        return render(request, 'dashboard/rating_table.html', {'results': paginated_result, 'title_movie': title_movie, 'rating_count': sorted_rating_count})
+    else:
+        return render(request, 'dashboard/empty_page.html')
+    
+def get_rating_count(request, movie_id):
+    rating_counts = (
+        Rating.objects
+        .filter(object_id = movie_id)
+        .values('value')
+        .annotate(count=Count('value'))
+    )
+
+    # Tính tổng số đánh giá
+    total_ratings = sum(entry['count'] for entry in rating_counts)
+
+    # Tạo dictionary để lưu trữ phần trăm cho mỗi giá trị
+    percentage_count = defaultdict(float)
+
+    # Tính phần trăm và lưu vào dictionary
+    for entry in rating_counts:
+        value = entry['value']
+        count = entry['count']
+        percentage = (count / total_ratings) * 100
+        percentage_count[value] = round(percentage, 2) 
+
+    for value in [1, 2, 3, 4, 5]:
+        if value not in percentage_count:
+            percentage_count[value] = 0.0
+
+    print(percentage_count)
+    result = {'total_ratings': total_ratings, 'percentage_count': dict(percentage_count)}
+    return JsonResponse(result, safe=False)
