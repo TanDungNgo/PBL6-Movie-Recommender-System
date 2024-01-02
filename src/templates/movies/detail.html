@@ -1,6 +1,5 @@
 {% extends "layout/base.html" %}
 {% load static %}
-
 {% block title %}{{ object.title }}{% endblock %}
 {% block content %}
 <!DOCTYPE html>
@@ -129,9 +128,7 @@
         </div>
       </div>
       {% endfor %}
-        
       </div>
-      
     </div>
   </div>
 </section>
@@ -139,7 +136,7 @@
 <section class="pt-4 pb-5">
   <div class="card-container">
     <h2>Write a Review for {{ movie.title }}</h2>
-    {% include 'reviews/snippet/review.html' with object_id=object.id reviews=reviews%}
+    {% include 'reviews/snippet/review.html' with object_id=object.id reviews=reviews request=request%}
   </div>
 </section>
 
@@ -208,6 +205,7 @@
 				</div>
 			</div>
 		</div>
+    {% if history_movies|length >= 5  %}
 		<div class="row trend_2 mt-4">
 			<div id="carouselExampleCaptions3" class="carousel slide" data-bs-ride="carousel">
 				<div class="carousel-indicators">
@@ -221,12 +219,19 @@
 				</div>
 			</div>
 		</div>
+    {% else %}
+    <div class="row trend_2 mt-4">
+        {% for object in history_movies %}
+					{% include 'movies/snippet/card.html' with object=object current_rating=current_rating %}
+				{% endfor %}
+    </div>
+    {% endif %}
 	</div>
 </section>
 {% endif %}
 <script>
 $(document).ready(function () {
-    var movie_id = {{ movie.id }};
+    var movie_id = "{{ movie.id }}";
     $.ajax({
         url: '/movies/recommend/' + movie_id + '/',
         type: 'GET',

@@ -9,10 +9,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 import pandas as pd
 from django.template.loader import render_to_string
 from django.http import JsonResponse
-from django.views.decorators.http import require_http_methods
 from .models import Movie, Genre, UserMovieHistory
 import requests
-from django.core.serializers import serialize
 from profiles.models import CustomUser as User
 from datetime import datetime
 import difflib
@@ -21,9 +19,6 @@ import difflib
 
 # Create your views here.
 API_KEY = settings.API_KEY
-filename = str(settings.DATA_DIR) + '/model/nlp_model.pkl'
-clf = pickle.load(open(filename, 'rb'))
-vectorizer = pickle.load(open(str(settings.DATA_DIR) + '/model/tranform.pkl', 'rb'))
 
 class MovieListView(generic.ListView):
     template_name = 'movies/list.html'
@@ -39,20 +34,6 @@ class MovieListView(generic.ListView):
         #     object_ids = [x.id for x in object_list][:20]
         #     my_ratings = user.rating_set.movies().as_object_dict(object_ids=object_ids)
         #     context['my_ratings'] = my_ratings
-        # object_list = context['object_list']
-        # movies_per_page = 12
-        # paginator = Paginator(object_list, movies_per_page)
-        # if 'page' in requests.GET and requests.GET['page']:
-        #     page = requests.GET['page']
-        # else:
-        #     page = 1
-        # try:
-        #     object_list = paginator.page(page)
-        # except PageNotAnInteger:
-        #     object_list = paginator.page(1)
-        # except EmptyPage:
-        #     object_list = paginator.page(paginator.num_pages)
-        # context['object_list'] = object_list
         genre_list = Genre.objects.all()
         context['genre_list'] = genre_list
         current_year = datetime.now().year
@@ -257,6 +238,17 @@ class MovieVideoView(generic.DetailView):
         paginator = Paginator(reviews, page)
 
         context['reviews'] = paginator.get_page(1)
+
+        top_rated_movies = Movie.objects.all().order_by('-score')[:10]
+        context['top_rated_movies'] = top_rated_movies
+
+        history_movies = []
+        if user.is_authenticated:
+            custom_user = User.objects.get(pk=user.id)
+            user_movie_history = UserMovieHistory.objects.filter(user=custom_user).order_by('-updated')[:10]
+            for history in user_movie_history:
+                history_movies.append(history.movie)
+        context['history_movies'] = history_movies
             
         return context
 movie_video_view = MovieVideoView.as_view()

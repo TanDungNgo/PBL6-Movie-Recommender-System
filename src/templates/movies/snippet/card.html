@@ -42,12 +42,29 @@
   </div>
 </div>
 <script>
+function getbookmarkedMoviesIds() {
+  $.ajax({
+    url: "/bookmark/get_bookmarked_user_ids/",
+    type: "GET",
+    dataType: 'json',
+    success: function (data) {
+      const bookmarked_movies = {};
+      for (const movie of data.bookmarked_movies) {
+        bookmarked_movies[movie.id] = true;
+      }
+      const bookmarkedMovies = JSON.parse(localStorage.getItem('bookmarkedMovies')) || {};
+      if (JSON.stringify(bookmarkedMovies) !== JSON.stringify(bookmarked_movies)) {
+        localStorage.setItem('bookmarkedMovies', JSON.stringify(bookmarked_movies));
+        restoreBookmarkState();
+      }
+    }
+  });
+}
 function toggleBookmark(bookmarkElement) {
   const movieId = bookmarkElement.dataset.movieId;
   const isBookmarked = bookmarkElement.classList.toggle('bookmarked');
   saveBookmarkState(movieId, isBookmarked);
 }
-
 function saveBookmarkState(movieId, isBookmarked) {
   const bookmarkedMovies = JSON.parse(localStorage.getItem('bookmarkedMovies')) || {};
   bookmarkedMovies[movieId] = isBookmarked;
@@ -63,7 +80,6 @@ function saveBookmarkState(movieId, isBookmarked) {
     dataType: 'json',
     success: function (data) {
       if(data.status == 'success') {
-        console.log(data.message);
         $.toast({
           heading: "Success",
           text: data.message,
@@ -72,14 +88,13 @@ function saveBookmarkState(movieId, isBookmarked) {
           position: "top-right",
           loaderBg: "#5ba035",
         });
+        getbookmarkedMoviesIds();
       } else {
         console.log("Error: " + data.message);
       }
     }
   });
 }
-
-
 function restoreBookmarkState() {
   const bookmarkedMovies = JSON.parse(localStorage.getItem('bookmarkedMovies')) || {};
   for (const movieId in bookmarkedMovies) {

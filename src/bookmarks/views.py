@@ -60,3 +60,14 @@ def bookmarked_movies(request):
     else:
         movies = None
     return render(request, "movies/bookmark.html", context)
+
+def get_bookmarked_user_ids(request):
+    user = request.user
+    if user.is_authenticated:
+        custom_user = CustomUser.objects.get(id=user.id)
+        bookmarked_movies = Bookmark.objects.filter(user=custom_user, active=True).values_list('movie_id', flat=True).distinct()
+        qs = Movie.objects.filter(id__in=bookmarked_movies)
+        movie_data = [{"id": movie.id, "title": movie.title} for movie in qs]
+        return JsonResponse({"bookmarked_movies": movie_data})
+    else:
+        return JsonResponse({})
