@@ -23,28 +23,28 @@
 
 <script type="text/javascript">
   $(document).ready(function () {
-      var current_rating = {{ current_rating }};
-      if (current_rating == 5) {
+      var rating = "{{ current_rating }}";
+      if (rating == 5) {
           $("#choice_5").prop("selected", true);
           $(".label_ratings").text("Excellent");
           // $(".label_ratings").css("background-color", "#efc909");
           // $(".label_ratings::before").css("border-color", "transparent #efc909 transparent transparent");
-        } else if (current_rating == 4) {
+        } else if (rating == 4) {
             $("#choice_4").prop("selected", true);
             $(".label_ratings").text("Good");
             // $(".label_ratings").css("background-color", "#f3a106");
             // $(".label_ratings::before").css("border-color", "transparent #f3a106 transparent transparent");
-        } else if (current_rating == 3) {
+        } else if (rating == 3) {
             $("#choice_3").prop("selected", true);
             $(".label_ratings").text("Average");
             // $(".label_ratings").css("background-color", "#f06a06");
             // $(".label_ratings::before").css("border-color", "transparent #f06a06 transparent transparent");
-        } else if (current_rating == 2) {
+        } else if (rating == 2) {
             $("#choice_2").prop("selected", true);
             $(".label_ratings").text("Poor");
             // $(".label_ratings").css("background-color", "#ef4604");
             // $(".label_ratings::before").css("border-color", "transparent #ef4604 transparent transparent");
-        } else if (current_rating == 1) {
+        } else if (rating == 1) {
             $("#choice_1").prop("selected", true);
             $(".label_ratings").text("Very Poor");
             // $(".label_ratings").css("background-color", "#ff4105");

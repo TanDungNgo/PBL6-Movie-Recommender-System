@@ -1,0 +1,320 @@
+{% load static %}
+<link href="{% static 'movies/css/modal.css' %}" rel="stylesheet" />
+<link href="{% static 'movies/css/review.css' %}" rel="stylesheet" />
+<div id="review-container" data-review-id="{{ review.id }}">
+  <div id="card-review-item{{ review.id }}" class="card-review-item" data-review-id="{{ review.id }}">
+    <img
+      class="card-review-item__avatar"
+      src="{{ review.user.avatar }}"
+      alt="{{ review.user.first_name }} {{ review.user.last_name }}"
+    />
+    <div class="card-review-item__content">
+      <div class="card-review-item__info">
+        <span class="card-review-item__user"
+          >{{ review.user.first_name }} {{ review.user.last_name }}
+        </span>
+        <span class="card-review-item__content-text">{{ review.content }}</span>
+        {% if review.active_update_timestamp %}
+        <span class="card-review-item__timestamp"
+          >{{ review.active_update_timestamp|date:"M. d, Y, h:i A" }}</span
+        >
+        {% else %}
+        <span class="card-review-item__timestamp"
+          >{{ review.timestamp|date:"M. d, Y, h:i A" }}</span
+        >
+        {% endif %}
+      </div>
+      <div
+        class="editReviewForm"
+        data-review-id="{{ review.id }}"
+        style="display: none; width: 100%"
+      >
+        <textarea
+          name="content"
+          placeholder="Enter your edited review here..."
+          style="width: 100%"
+        >
+{{ review.content }}</textarea
+        >
+        <div style="display: flex">
+          <div class="saveBtn" id="saveBtn{{ review.id }}">Save changes</div>
+          <div class="cancelEditBtn" id="cancelEditBtn{{ review.id }}">Cancel</div>
+        </div>
+      </div>
+      <div class="card-review-item__actions">
+        <div class="replyBtn" id="replyBtn{{ review.id }}">Reply</div>
+        {% if request.session.user_id == review.user.id %}
+        <div
+          class="editBtn"
+          id="editBtn{{ review.id }}"
+          data-review-id="{{ review.id }}"
+        >
+          Edit
+        </div>
+        <div
+          class="deleteBtn"
+          id="deleteBtn{{ review.id }}"
+          data-review-id="{{ review.id }}"
+        >
+          Delete
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  <div
+    class="replies-container"
+    id="replies-container{{ review.id }}"
+    style="margin-left: 50px"
+    data-review-id="{{ review.id }}"
+  ></div>
+  <div
+    class="replyForm"
+    id="replyForm{{ review.id }}"
+    data-review-id="{{ review.id }}"
+    style="display: none; width: 67%; margin-bottom: 10px; margin-left: 50px"
+  >
+    <textarea
+      name="replyContent"
+      id="replyContent{{ review.id }}"
+      placeholder="Enter your reply here..."
+      style="width: 100%"
+    ></textarea>
+    <div style="display: flex">
+      <div
+        id="saveReplyBtn{{ review.id }}"
+        class="editBtn"
+        data-review-id="{{ review.id }}"
+      >
+        Save reply
+      </div>
+      <div
+        id="cancelReplyBtn{{ review.id }}"
+        class="deleteBtn"
+        data-review-id="{{ review.id }}"
+      >
+        Cancel
+      </div>
+    </div>
+  </div>
+</div>
+<div id="confirmModal{{ review.id }}" class="confirmModal">
+  <div class="confirmModal-content">
+    <p style="color: black; font-weight: bold">
+      Are you sure you want to delete this review?
+    </p>
+    <div>
+      <button id="confirmDeleteBtn{{ review.id }}" class="confirmDeleteBtn">
+        Yes
+      </button>
+      <button id="cancelDeleteBtn{{ review.id }}" class="cancelDeleteBtn">
+        No
+      </button>
+    </div>
+  </div>
+</div>
+<script>
+    $("#replyBtn{{ review.id }}").click(function () {
+      $("#replyForm{{review.id}}").show();
+      var repliesContainer = $(`#replies-container{{review.id}}`);
+      if (repliesContainer.children().length > 0) {
+        repliesContainer.empty();
+        repliesContainer.hide();
+      } else {
+        repliesContainer.show();
+        $.ajax({
+          url: "/review/load_replies/",
+          type: "GET",
+          data: {
+            review_id: "{{ review.id }}",
+          },
+          success: function (data) {
+            var repliesHtml = data.reply_reviews_html;
+            repliesContainer.append(repliesHtml);
+          },
+          error: function (error) {
+            console.log(error);
+          },
+        });
+      }
+    });
+    $("#saveReplyBtn{{ review.id }}").click(function () {
+      var replyContent = $("#replyContent{{review.id}}").val();
+      $.ajax({
+        url: "/review/reply/",
+        type: "POST",
+        data: {
+          csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val(),
+          review_id: "{{ review.id }}",
+          content: replyContent,
+        },
+        success: function (data) {
+          if (data.status == "success") {
+            $.toast({
+              heading: "Success",
+              text: data.message,
+              showHideTransition: "slide",
+              icon: "success",
+              position: "top-right",
+              loaderBg: "#05BD11",
+            });
+            var replyHtml = data.review;
+            var repliesContainer = $(`#replies-container{{review.id}}`);
+            repliesContainer.append(replyHtml);
+            $("#replyContent{{review.id}}").val("");
+          } else {
+            $.toast({
+              heading: "Error",
+              text: data.message,
+              showHideTransition: "slide",
+              icon: "error",
+              position: "top-right",
+              loaderBg: "#FF5B5E",
+            });
+          }
+        },
+        error: function (error) {
+          $.toast({
+            heading: "Error",
+            text: "An error occurred while processing your request.",
+            showHideTransition: "slide",
+            icon: "error",
+            position: "top-right",
+            loaderBg: "#FF5B5E",
+          });
+        },
+      });
+    });
+    $("#cancelReplyBtn{{ review.id }}").click(function () {
+      $("#replyForm{{review.id}}").hide();
+    });
+    $("#deleteBtn{{ review.id }}").click(function () {
+      $("#confirmModal{{ review.id }}").show();
+    });
+    $("#confirmDeleteBtn{{ review.id }}").click(function () {
+      var reviewId = "{{ review.id }}";
+      $.ajax({
+        url: "/review/delete/",
+        type: "POST",
+        data: {
+          csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val(),
+          review_id: reviewId,
+        },
+        success: function (data) {
+          if (data.status == "error") {
+            $.toast({
+              heading: "Error",
+              text: data.message,
+              showHideTransition: "slide",
+              icon: "error",
+              position: "top-right",
+              loaderBg: "#FF0000",
+            });
+          } else {
+            $.toast({
+              heading: "Success",
+              text: data.message,
+              showHideTransition: "slide",
+              icon: "success",
+              position: "top-right",
+              loaderBg: "#05BD11",
+            });
+            $("#review-container").html(data.reviews);
+            $("#confirmModal{{ review.id }}").hide();
+            $(`#card-review-item{{ review.id }}`).remove();
+          }
+        },
+      });
+    });
+    $("#cancelDeleteBtn{{ review.id }}").click(function () {
+        $("#confirmModal{{ review.id }}").hide();
+    });
+    $("#editBtn{{ review.id }}").click(function () {
+      var reviewId = "{{ review.id }}";
+      $(
+        `#card-review-item{{ review.id }} .card-review-item__content-text`
+      ).hide();
+      $(
+        `#card-review-item{{ review.id }} .card-review-item__timestamp`
+      ).hide();
+      $(
+        `#card-review-item{{ review.id }} .card-review-item__actions`
+      ).hide();
+      $(`#card-review-item{{ review.id }} .editReviewForm`).show();
+    });
+    $("#cancelEditBtn{{ review.id }}").click(function () {
+        var reviewId = "{{ review.id }}";
+      $(
+        `#card-review-item{{ review.id }} .card-review-item__content-text`
+      ).show();
+      $(
+        `#card-review-item{{ review.id }} .card-review-item__timestamp`
+      ).show();
+      $(
+        `#card-review-item{{ review.id }} .card-review-item__actions`
+      ).show();
+      $(`#card-review-item{{ review.id }} .editReviewForm`).hide();
+    });
+    $("#saveBtn{{ review.id }}").click(function () {
+    var reviewId = "{{ review.id }}";
+    var content = $(
+      `#card-review-item{{ review.id }} textarea[name=content]`
+    ).val();
+    $.ajax({
+      type: "POST",
+      url: "/review/update/",
+      data: {
+        csrfmiddlewaretoken: $("[name=csrfmiddlewaretoken]").val(),
+        review_id: reviewId,
+        content: content,
+      },
+      success: function (data) {
+        if (data.status === "success") {
+          $.toast({
+            heading: "Success",
+            text: data.message,
+            showHideTransition: "slide",
+            icon: "success",
+            position: "top-right",
+            loaderBg: "#05BD11",
+          });
+          $(
+            `#card-review-item{{ review.id }} .card-review-item__content-text`
+          )
+            .text(data.review.content)
+            .show();
+          $(
+            `#card-review-item{{ review.id }} .editReviewForm`
+          ).hide();
+          $(
+            `#card-review-item{{ review.id }} .card-review-item__timestamp`
+          )
+            .text(data.review.timestamp)
+            .show();
+          $(
+            `#card-review-item{{ review.id }} .card-review-item__actions`
+          ).show();
+        } else {
+          $.toast({
+            heading: "Error",
+            text: "Something went wrong",
+            showHideTransition: "slide",
+            icon: "error",
+            position: "top-right",
+            loaderBg: "#FF0000",
+          });
+        }
+      },
+      error: function (error) {
+        $.toast({
+          heading: "Error",
+          text: "Something went wrong",
+          showHideTransition: "slide",
+          icon: "error",
+          position: "top-right",
+          loaderBg: "#FF0000",
+        });
+      },
+    });
+  });
+</script>
