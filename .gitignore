@@ -133,3 +133,4 @@ src/data/credits.csv
 src/data/model/neural_collaborative_filtering.h5
 src/data/model/similarity.pkl
 src/data/model/movie_list.pkl
+src/data/model/ncf/*

@@ -36,3 +36,12 @@ class Export(models.Model):
             exports_storages.save(path, file, overwrite=True)
             qs = Export.objects.filter(type=self.type).exclude(pk=self.pk)
             qs.update(latest=False)
+
+class ExportModelNCF(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    file = models.CharField(max_length=200, default='model')
+    n_epochs = models.IntegerField(default=10)
+    batch_size = models.IntegerField(default=200)
+    learning_rate = models.FloatField(default=0.005)
+    embedding_size = models.IntegerField(default=500)
+    timestamp = models.DateTimeField(auto_now_add=True)
