@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Movie, Genre
+from .models import Movie, Genre, UserMovieHistory
 
 class MovieAdmin(admin.ModelAdmin):
     list_display = ['__str__', 'tmdb_id','display_genres','rating_count', 'rating_avg', 'score',
@@ -17,5 +17,10 @@ class GenreAdmin(admin.ModelAdmin):
     list_display = ['__str__']
     search_fields = ['name']
 
+class UserMovieHistoryAdmin(admin.ModelAdmin):
+    list_display = ['movie', 'user', 'timestamp', 'updated']
+    search_fields = ['user__username', 'movie__title']
+
 admin.site.register(Movie, MovieAdmin)
 admin.site.register(Genre, GenreAdmin)
+admin.site.register(UserMovieHistory, UserMovieHistoryAdmin)

@@ -1,20 +1,19 @@
 {% extends "layout/base.html" %}
 {% load static %}
-
-{% block title %}{{ object.title }}{% endblock %}
+{% block title %}Trailer: {{ object.title }}{% endblock %}
 {% block content %}
-<div class="card-container" >
+<section class="card-container" >
     <div class="trend_1l" style="margin-bottom: 30px; margin-top: 20px;">
         <h2 class="mb-0"><i class="fa fa-youtube-play align-middle col_red me-1"></i> Watch  <span
                 class="col_red">Trailer</span></h2>
     </div>
     <div class="card-top" style="display:flex;  justify-content: space-between;">
         <div class="card-top-video">
-            <iframe width="800" height="450" src="https://www.youtube.com/embed/{{keys.0}}" frameborder="0"
+            <iframe width="800" height="450" src="https://www.youtube.com/embed/{{keys.0}}" frameborder="0" style="border-radius: 20px;"
                 allowfullscreen>
             </iframe>
         </div>
-        <div class="card-top-info" style="background-color: #121212;">
+        <div class="card-top-info" style="background-color: #121212; margin-left: 10px; border-radius: 20px;">
             <div class="card-top-img" >
                 <img src={{movie.poster_path}} alt="{{ movie.title }} Poster" style="width: 150px; height: 200px; " />
             </div>
@@ -25,8 +24,8 @@
                 <i class="fa fa-star align-middle"></i>
             </div>
             <div>
-                {% include 'ratings/snippet/rating-choices.html' with object_id=object.id current_rating=current_rating %}
-              </div>
+                {% include 'ratings/snippet/rating-choices.html' with object_id=object.id current_rating=my_ratings %}
+            </div>
         </div>
     </div>
     <div class="trend_1l" style="margin-bottom: 30px; margin-top: 20px; display: flex; align-items: center; gap: 10px;">
@@ -35,17 +34,20 @@
             <h3 class="mb-0">Featured <span class="col_red">Videos</span></h3>
         </hgroup>
     </div>
-
     {% if keys|length > 1 %}
     <div class="featured-videos" style="display: flex; flex-wrap: wrap; gap: 10px;">
-        {% for key in keys|slice:"1:5" %}
+        {% for key in keys|slice:"1:7" %}
             <div class="featured-video" style="flex: 0 0 calc(33.33% - 10px); box-sizing: border-box;">
-                <iframe width="400" height="225" src="https://www.youtube.com/embed/{{ key }}" frameborder="0" allowfullscreen></iframe>
+                <iframe width="400" height="225" src="https://www.youtube.com/embed/{{ key }}" frameborder="0" allowfullscreen style="border-radius: 10px;"></iframe>
             </div>
         {% endfor %}
     </div>
     {% endif %}
-
-</div>
-
+</section>
+<section class="pt-4 pb-5">
+    <div class="card-container">
+      <h2>Write a Review for {{ movie.title }}</h2>
+      {% include 'reviews/snippet/review.html' with object_id=object.id reviews=reviews%}
+    </div>
+</section>
 {% endblock %}
