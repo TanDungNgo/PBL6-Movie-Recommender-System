@@ -2,7 +2,8 @@ from collections import defaultdict
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views import generic
-from movies.models import Movie
+from exports.models import ExportModelNCF
+from movies.models import Genre, Movie
 from datetime import datetime, timedelta
 from django.shortcuts import render, redirect
 from django.contrib import messages
@@ -31,6 +32,7 @@ class DashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateVie
 
         context['total_movies'] = Movie.objects.count()
         context['total_users'] = User.objects.count()
+        context['total_genres'] = Genre.objects.count()
         users_with_last_login = User.objects.exclude(last_login__isnull=True)
         context['users_with_last_login'] = users_with_last_login
         return context
@@ -465,3 +467,21 @@ def get_rating_count(request, movie_id):
     print(percentage_count)
     result = {'total_ratings': total_ratings, 'percentage_count': dict(percentage_count)}
     return JsonResponse(result, safe=False)
+
+def get_export_model_list(request):
+    models = ExportModelNCF.objects.all()
+
+    items_per_page = request.GET.get('item', 10)
+    paginator = Paginator(models, items_per_page)
+    page = request.GET.get('page', 1)
+
+    try:
+        paginated_result = paginator.page(page)
+    except PageNotAnInteger:
+        paginated_result = paginator.page(1)
+    except EmptyPage:
+        paginated_result = paginator.page(paginator.num_pages)
+
+    return render(request, 'dashboard/model.html', {'models': paginated_result})
+
+    
