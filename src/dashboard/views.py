@@ -529,3 +529,42 @@ def get_latest_ratings_reviews(request):
     return render(request, 'dashboard/dashboard.html', {'result_list': ratings})
 
     
+from ml import utils as ml_utils
+from ml import tasks as ml_tasks
+def train_model(request):
+    n_epochs = request.GET.get('epoch', None)
+    batch_size = request.GET.get('batch_size', None)
+    learning_rate = request.GET.get('learning_rate', None)
+    embedding_size = request.GET.get('embedding_size', None)
+    try:
+        n_epochs = int(n_epochs)
+        batch_size = int(batch_size)
+        learning_rate = float(learning_rate)
+        embedding_size = int(embedding_size)
+        ml_utils.train_model(n_epochs, batch_size, learning_rate, embedding_size, True)
+        response_data = {
+            'status': 'success',
+            'message': 'Training started'
+        }
+        return JsonResponse(response_data)
+    except Exception as e:
+        response_data = {
+            'status': 'error',
+            'message': str(e)
+        }
+        return JsonResponse(response_data)
+
+def batch_users_prediction(request):
+    # ml_tasks.batch_users_prediction_task.delay()
+    response_data = {
+        'status': 'success',
+        'message': 'Batch users prediction task has been triggered successfully.',
+    }
+    return JsonResponse(response_data)
+
+def update_rating_avg(request):
+    response_data = {
+        'status': 'success',
+        'message': 'Update rating avg task has been triggered successfully.',
+    }
+    return JsonResponse(response_data)

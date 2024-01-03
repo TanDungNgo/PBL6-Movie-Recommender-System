@@ -2,9 +2,6 @@
 {% load static %}
 {% block title %}List Movies{% endblock %}
 {% block content %}
-<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
 <style>
   .pagination {
     display: flex;
@@ -39,13 +36,20 @@
     color: #de1002 !important;
   } */
 </style>
+<link href="{% static 'dashboard/css/modal.css' %}" rel="stylesheet" />
+<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 <div class="container-fluid pt-4 px-4">
   <div class="row g-4">
     <div class="col-12">
       <div class="bg-secondary rounded h-100 p-4">
         <div class="parent-node">
-          <a href="#" class="child-node" style="width: 120px;">Train model</a>
-          <a href="#" class="child-node" style="width: 120px;">Predict</a>
+          <div class="child-node" id="train_model_btn" style="width: 120px; cursor: pointer;">Train model</div>
+          <div class="child-node" id="predict_model_btn" style="width: 120px; cursor: pointer;">Predict</div>
         </div>
         <div class="table-responsive">
           <div class="dataTables_length" id="example_length" style="display: flex; justify-content: space-between;">
@@ -77,7 +81,6 @@
                 <tr>
                     <th scope="col">ID</th>
                     <th scope="col">File</th>
-                    <th scope="col" style="text-align: center;">Learning Rate</th>
                     <th scope="col" style="text-align: center;">Export Time</th>
                 </tr>
             </thead>
@@ -89,9 +92,6 @@
                     </td>
                     <td scope="col" style="max-width: 280px;">
                       <a href="#" style="color: #6C7293;">{{ model.file }}</a>
-                    </td>
-                    <td scope="col" style="text-align: center;">
-                      <a href="#" class="item_click" style="color: #6C7293;">{{ model.learning_rate }}</a>
                     </td>
                     <td scope="col" style="text-align: center;">
                       <a href="#" class="item_click" style="color: #6C7293;">{{ model.timestamp }}</a>
@@ -123,6 +123,47 @@
   </div>
 </div>
 
+<div id="confirmModalTrain" class="confirmModal">
+  <div class="confirmModal-content">
+    <p style="color: black; font-weight: bold">
+      Train model
+    </p>
+    <div id="confirmModalTrain-content-input">
+      <div>
+        <label for="epochInput" style="margin-bottom: 2px; font-size: 13px;">Number of Epochs:</label>
+        <input type="number" id="epochInput" name="epochInput" min="1" value="10">
+      </div>
+      <div>
+        <label for="batchSizeInput" style="margin-bottom: 2px; font-size: 13px;">Batch Size:</label>
+        <input type="number" id="batchSizeInput" name="batchSizeInput" min="1" value="200">
+      </div>
+      <div>
+        <label for="learningRateInput" style="margin-bottom: 2px; font-size: 13px;">Learning Rate:</label>
+        <input type="number" id="learningRateInput" name="learningRateInput" min="0.0001" step="0.0001" value="0.005">
+      </div>
+      <div>
+        <label for="embeddingSizeInput" style="margin-bottom: 2px; font-size: 13px;">Embedding Size:</label>
+        <input type="number" id="embeddingSizeInput" name="embeddingSizeInput" min="1" value="500">
+      </div>
+      <div>
+        <button class="confirmBtn" id="confirmTrainBtn">
+          Yes
+        </button>
+        <button class="cancelBtn" id="cancelTrainBtn">
+          No
+        </button>
+      </div>
+    </div>
+    <div id="progress-container">
+      <div id="progress-bar"></div>
+      <div id="progress-label">0%
+    </div>
+  </div>
+  <button class="confirmBtn" id="OkBtn" style="margin-top: 5px;">
+    Ok
+  </button>
+</div>
+</div>
 <script>
   function changeItemsPerPage(value) {
     const searchValue = document.getElementById('search').value;
@@ -139,5 +180,115 @@
 
     window.location.href = `?page=1&search=${searchValue}&item=${itemsPerPage}`;
   }
+  function startTraining() {
+    const progressBar = $('#progress-bar');
+    const progressLabel = $('#progress-label');
+
+    // Reset progress bar
+    progressBar.width('0%');
+    progressLabel.text('0%');
+    handleAsyncOperation($('#epochInput').val());
+    $.ajax({
+        url: "{% url 'train_model' %}",
+        type: "GET",
+        data: {
+            'epoch': $('#epochInput').val(),
+            'batch_size': $('#batchSizeInput').val(),
+            'learning_rate': $('#learningRateInput').val(),
+            'embedding_size': $('#embeddingSizeInput').val(),
+        },
+        success: function (response) {
+            if (response.status === 'success') {
+                progressBar.width('100%');
+                progressLabel.text('100%');
+                toastr.success(response.message, 'Success')
+                $('#OkBtn').show();
+            } else {
+                toastr.error(response.message, 'Error')
+            }
+        },
+        error: function (error) {
+            console.log(error);
+            toastr.error('Something went wrong', 'Error')
+        },
+        xhrFields: {
+            onprogress: function (e) {
+                // Handle progress updates
+                if (e.lengthComputable) {
+                    const percentComplete = (e.loaded / e.total) * 100;
+                    progressBar.width(percentComplete + '%');
+                    progressLabel.text(percentComplete.toFixed(2) + '%');
+                }
+            }
+        }
+    });
+}
+function simulateAsyncOperation(epoch) {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve(`Epoch ${epoch} complete.`);
+        }, 60000);
+    });
+}
+async function handleAsyncOperation(totalEpochs) {
+    const progressBar = document.getElementById('progress-bar');
+    const progressLabel = document.getElementById('progress-label');
+
+    try {
+        console.log('Start of the async function');
+        for (let epoch = 1; epoch <= totalEpochs; epoch++) {
+            const result = await simulateAsyncOperation(epoch);
+            if (epoch === totalEpochs) {
+                progressBar.style.width = '99%';
+                progressLabel.innerText = '99%';
+            }
+            else {
+              const progress = (epoch / totalEpochs) * 100;
+              progressBar.style.width = `${progress}%`;
+              progressLabel.innerText = `${progress.toFixed(2)}%`;
+              console.log('Async operation result:', result);
+            }
+        }
+    } catch (error) {
+        console.error('Error during asynchronous operation:', error);
+    }
+}
+
+  $(document).ready(function () {
+    $('#train_model_btn').click(function () {
+      $("#confirmModalTrain").show();
+      $('#progress-container').hide();
+      $('#OkBtn').hide();
+    });
+    $('#cancelTrainBtn').click(function () {
+      $("#confirmModalTrain").hide();
+    });
+    $('#confirmTrainBtn').click(function () {
+      $('#confirmModalTrain-content-input').hide();
+      $('#progress-container').show();
+      startTraining();
+    });
+    $('#OkBtn').click(function () {
+      $("#confirmModalTrain").hide();
+    });
+
+    $('#predict_model_btn').click(function () {
+      $.ajax({
+        url: "{% url 'predict_model' %}",
+        type: "GET",
+        success: function (response) {
+          if (response.status === 'success') {
+            toastr.success(response.message, 'Success')
+          } else {
+            toastr.error(response.message, 'Error')
+          }
+        },
+        error: function (error) {
+          console.log(error);
+          toastr.error('Something went wrong', 'Error')
+        },
+      });
+    });
+  });
 </script>
 {% endblock %}
