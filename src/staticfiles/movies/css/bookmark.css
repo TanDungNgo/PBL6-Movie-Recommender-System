@@ -1,0 +1,33 @@
+.bookmark {
+  position: relative;
+  height: 25px;
+  width: 20px;
+  padding: 0px;
+  border-left: 10px solid red;
+  border-right: 10px solid red;
+  border-bottom: 7px solid transparent;
+  cursor: pointer;
+}
+
+.bookmark.bookmarked {
+  border-left: 10px solid #ffcc00;
+  border-right: 10px solid #ffcc00;
+}
+
+.bookmark .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #c0c0c0;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  left: -140px;
+  top: -10px;
+}
+
+.bookmark:hover .tooltiptext {
+  visibility: visible;
+}

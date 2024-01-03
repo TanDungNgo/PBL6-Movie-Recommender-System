@@ -74,7 +74,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_htmx.middleware.HtmxMiddleware', # request.htmx
+    
+    'dptpage.middleware.Handle404Middleware',
 ]
+
 
 ROOT_URLCONF = 'dpthome.urls'
 

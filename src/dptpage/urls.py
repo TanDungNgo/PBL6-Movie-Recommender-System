@@ -10,4 +10,5 @@ urlpatterns = [
     path('services/', views.services, name='services'),
     path('contact/', views.contact, name='contact'),
     path('search_page/', views.search_page, name='search_page'),
+    path('page_not_found/', views.page_not_found, name='page_not_found'),
 ]

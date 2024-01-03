@@ -1,0 +1,103 @@
+.card-review-item {
+    display: flex;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    background-color: #ffffff;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    width: 70%;
+}
+
+.card-review-item__info {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 5px;
+}
+
+.card-review-item__avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 10px;
+    border: 1px solid #ddd;
+}
+
+.card-review-item__content {
+    width: 100%;
+}
+
+.card-review-item__user {
+    font-weight: 800;
+    font-size: 20px;
+    color: #49494b;
+    font-weight: 800;
+}
+
+.card-review-item__content-text {
+    display: block;
+    margin-bottom: 10px;
+    color: #343434;
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.card-review-item__timestamp {
+    color: #686868;
+    font-size: 13px;
+}
+
+.card-review-item__actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.replyBtn{
+    background-color: #1569e6;
+    color: #fff;
+    padding: 8px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    font-weight: bolder;
+    margin-right: 5px;
+    font-size: 12px;
+    border: none;
+}
+
+.editBtn, .saveBtn, .saveReplyBtn{
+    background-color: #13b413;
+    color: #fff;
+    padding: 8px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    font-weight: bolder;
+    margin-right: 5px;
+    font-size: 12px;
+    border: none;
+}
+
+.deleteBtn, .cancelEditBtn, .cancelReplyBtn {
+    background-color: #c51919;
+    color: #fff;
+    padding: 8px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    font-weight: bolder;
+    font-size: 12px;
+    border: none;
+}
+
+.replyBtn:hover, .saveBtn:hover, .editBtn:hover, .deleteBtn:hover, 
+.cancelEditBtn:hover, .saveReplyBtn:hover, .cancelReplyBtn:hover {
+    opacity: 0.8;
+}
