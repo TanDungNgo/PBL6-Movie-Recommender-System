@@ -12,3 +12,4 @@ selenium
 openpyxl
 djangorestframework
 reportlab
+whitenoise

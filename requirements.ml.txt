@@ -2,5 +2,4 @@ jupyter
 pandas
 tensorflow==2.13.0
 matplotlib
-tensorflow
-sklearn
+scikit-learn
