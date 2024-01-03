@@ -1,0 +1,10 @@
+#autoComplete {
+  background-position: 98% ;
+} 
+
+
+#movie_list {
+    position: absolute;
+    z-index: 1000;
+    margin-top: 50px;
+}

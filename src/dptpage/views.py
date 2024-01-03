@@ -55,3 +55,5 @@ def contact(request):
     return render(request, 'dpthome/contact.html')
 def search_page(request):
     return render(request, 'dpthome/search_page.html')
+def page_not_found(request, exception=None):
+    return render(request, 'dpthome/page_not_found.html', status=404)
