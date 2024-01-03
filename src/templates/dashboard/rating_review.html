@@ -5,6 +5,9 @@
 <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 <style>
   .pagination {
     display: flex;
@@ -44,7 +47,7 @@
     <div class="col-12">
       <div class="bg-secondary rounded h-100 p-4">
         <div class="parent-node">
-          <a href="#" class="child-node" style="width: fit-content;">Calculate ratings</a>
+          <div class="child-node" style="width: fit-content; cursor: pointer;" id="caculate_rating">Calculate ratings</div>
         </div>
         <div class="table-responsive">
           <div class="dataTables_length" id="example_length" style="display: flex; justify-content: space-between;">
@@ -142,5 +145,27 @@
 
     window.location.href = `?page=1&search=${searchValue}&item=${itemsPerPage}`;
   }
+
+  $(document).ready(function () {
+    $('#caculate_rating').click(function () {
+      console.log('caculate_rating');
+      $.ajax({
+        url: "{% url 'update_rating_avg' %}",
+        type: "GET",
+        success: function (response) {
+          if (response.status === 'success') {
+            console.log(response);
+            toastr.success(response.message, 'Success')
+          } else {
+            toastr.error(response.message, 'Error')
+          }
+        },
+        error: function (error) {
+          console.log(error);
+          toastr.error('Something went wrong', 'Error')
+        },
+      });
+    });
+  });
 </script>
 {% endblock %}

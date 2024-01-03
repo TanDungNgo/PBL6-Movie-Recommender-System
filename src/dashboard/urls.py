@@ -21,4 +21,7 @@ urlpatterns = [
     path('rating_review/ratings/<int:movie_id>/', views.get_movie_rating_details, name='rating_details'),
     path('rating_review/ratings/<int:movie_id>/rating_count/', views.get_rating_count, name='rating_count'),
     path('export_models/', views.get_export_model_list, name='export_models'),
+    path('train_model/', views.train_model, name='train_model'),
+    path('trigger_batch_users_prediction/', views.batch_users_prediction, name='predict_model'),
+    path('update_rating_avg/', views.update_rating_avg, name='update_rating_avg'),
 ]
