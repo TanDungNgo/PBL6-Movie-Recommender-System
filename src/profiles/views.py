@@ -108,9 +108,6 @@ def profile(request):
                 'first_name': request.session.get('user_firstname'),
                 'last_name': request.session.get('user_lastname'),
             }
-
-            print(user_session_data)
-
             return render(request, 'account/profile.html', user_session_data)
         else:
             messages.error(request, 'Please login')
