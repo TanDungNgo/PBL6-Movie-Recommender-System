@@ -18,10 +18,9 @@ from reportlab.platypus import Table, TableStyle
 from io import BytesIO
 from datetime import datetime
 from profiles.models import CustomUser as User
-from django.db.models import Count, Value
+from django.db.models import Count
 from django.db.models.functions import ExtractMonth, ExtractYear
 from ratings.models import Rating
-from django.db.models.functions import Coalesce
 from reviews.models import Review
 # Create your views here.
 # User = get_user_model()
@@ -30,9 +29,34 @@ class DashboardView(LoginRequiredMixin, UserPassesTestMixin, generic.TemplateVie
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        latest_ratings = Rating.objects.order_by('-timestamp')[:5]
+        ratings=  []
+        for rating in latest_ratings:
+            movie = Movie.objects.get(pk=rating.object_id)
+            rating = {
+                'user': rating.user.last_name,
+                'value': rating.value,
+                'title': movie.title
+            }
+            ratings.append(rating)
+
+        latest_reviews = Review.objects.order_by('-timestamp')[:5]
+        reviews=  []
+        for review in latest_reviews:
+            movie = Movie.objects.get(pk=review.object_id)
+            rating = {
+                'user': review.user.last_name,
+                'content': review.content,
+                'title': movie.title
+            }
+            reviews.append(rating)
+
+        context['ratings_list'] = ratings
+        context['reviews_list'] = reviews
         context['total_movies'] = Movie.objects.count()
         context['total_users'] = User.objects.count()
         context['total_genres'] = Genre.objects.count()
+        context['total_reviews'] = Review.objects.count()
         users_with_last_login = User.objects.exclude(last_login__isnull=True)
         context['users_with_last_login'] = users_with_last_login
         return context
@@ -464,7 +488,6 @@ def get_rating_count(request, movie_id):
         if value not in percentage_count:
             percentage_count[value] = 0.0
 
-    print(percentage_count)
     result = {'total_ratings': total_ratings, 'percentage_count': dict(percentage_count)}
     return JsonResponse(result, safe=False)
 
@@ -483,5 +506,26 @@ def get_export_model_list(request):
         paginated_result = paginator.page(paginator.num_pages)
 
     return render(request, 'dashboard/model.html', {'models': paginated_result})
+
+def get_latest_ratings_reviews(request):
+    # Lấy 5 rating mới nhất và liên kết với thông tin phim
+    latest_ratings = (
+        Rating.objects
+        .order_by('-timestamp')[:5]
+        .values('value', 'object_id')
+    )
+    print("latest_ratings", latest_ratings)
+    ratings=  []
+    for rating in latest_ratings:
+        movie = Movie.objects.get(pk=rating['object_id'])
+        rating = {
+            'user': rating.user.last_name,
+            'value': rating['value'],
+            'title': movie.title
+        }
+        ratings.append(rating)
+
+    print("ratings", ratings)
+    return render(request, 'dashboard/dashboard.html', {'result_list': ratings})
 
     

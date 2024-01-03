@@ -44,8 +44,8 @@
         >
           <i class="fa fa-chart-pie fa-3x text-primary"></i>
           <div class="ms-3">
-            <p class="mb-2">Total Revenue</p>
-            <h6 class="mb-0">$1234</h6>
+            <p class="mb-2">Total Reviews</p>
+            <h6 class="mb-0">{{ total_reviews }}</h6>
           </div>
         </div>
       </div>
@@ -60,7 +60,7 @@
         <div class="bg-secondary text-center rounded p-4">
           <div class="d-flex align-items-center justify-content-between mb-4">
             <h6 class="mb-0">Movie genres available</h6>
-            <a href="">Show All</a>
+            <!-- <a href="">Show All</a> -->
           </div>
           <!-- <canvas id="worldwide-sales"></canvas> -->
           <canvas id="myBarChart"></canvas>
@@ -74,7 +74,7 @@
         <div class="bg-secondary text-center rounded p-4">
           <div class="d-flex align-items-center justify-content-between mb-4">
             <h6 class="mb-0">Registered users</h6>
-            <a href="">Show All</a>
+            <!-- <a href="">Show All</a> -->
           </div>
           <canvas id="myLineChart" width="400" height="200"></canvas>
         </div>
@@ -87,12 +87,13 @@
   <div class="container-fluid pt-4 px-4">
     <div class="bg-secondary text-center rounded p-4">
       <div class="d-flex align-items-center justify-content-between mb-4">
-        <h6 class="mb-0">Active accounts</h6>
-        <a href="">Show All</a>
+        <h6 class="mb-0" style="color: #de1002;">Active accounts</h6>
+        <!-- <a href="">Show All</a> -->
       </div>
       <div class="table-responsive">
         <table
           class="table text-start align-middle table-bordered table-hover mb-0"
+          style="border-color: #6C7293;"
         >
           <thead>
             <tr class="text-white">
@@ -151,7 +152,7 @@
     fetch('movies_by_genre/')
       .then(response => response.json())
       .then(data => {
-        console.log(data.moviesCount);
+        // console.log(data.moviesCount);
         myBarChart.data.datasets[0].data = data.moviesCount;
         myBarChart.update();
       })
@@ -191,7 +192,7 @@
         fetch('user_by_month/')
             .then(response => response.json())
             .then(data => {
-              console.log(data);
+              // console.log(data);
               const userCounts = data.map(entry => entry.count);
               myLineChart.data.datasets[0].data = userCounts;
               myLineChart.update();
@@ -204,6 +205,65 @@
 </script>
   <!-- Recent Sales End -->
 
+  <!-- Latest Ratings Reviews Start -->
+  <div class="container-fluid pt-4 px-4">
+    <div class="row g-4">
+      <div class="col-sm-12 col-xl-6">
+        <div class="bg-secondary text-center rounded p-4">
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0" style="color: #de1002;">Latest Ratings</h6>
+            <!-- <a href="">Show All</a> -->
+          </div>
+          <table style="border-color: #6C7293;" class="table text-start align-middle table-bordered table-hover mb-0">
+            <thead>
+                <tr style="color: #6C7293;" class="text-white">
+                    <th scope="col">Movie</th>
+                    <th scope="col">Rating Point</th>
+                    <th scope="col">User</th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for item in ratings_list %}
+              <tr>
+                  <td>{{ item.title }}</td>
+                  <td>{{ item.value }} <span><i class="fas fa-star" style="color: #f3c100;"></i></span></td>
+                  <td>{{ item.user }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="col-sm-12 col-xl-6">
+        <div class="bg-secondary text-center rounded p-4">
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <h6 class="mb-0" style="color: #de1002;">Latest Reviews</h6>
+            <!-- <a href="">Show All</a> -->
+          </div>
+          <table style="border-color: #6C7293;" class="table text-start align-middle table-bordered table-hover mb-0">
+            <thead>
+                <tr style="color: #6C7293;" class="text-white">
+                    <th scope="col">Movie</th>
+                    <th scope="col">Review</th>
+                    <th scope="col">User</th>
+                </tr>
+            </thead>
+            <tbody>
+              {% for item in reviews_list %}
+              <tr>
+                <td>{{ item.title }}</td>
+                <td>{{ item.content|truncatechars:30 }}</td>
+                <td>{{ item.user }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+</div>
+  <!-- Latest Ratings Reviews End -->
+  
   <!-- Widgets Start -->
   <!-- <div class="container-fluid pt-4 px-4">
     <div class="row g-4">
