@@ -247,7 +247,7 @@
 {% endif %}
 <script>
   $(document).ready(function () {
-    var movie_id = "{{ movie.id }"
+    var movie_id ="{{ movie.id }}";
     $.ajax({
       url: '/movies/recommend/' + movie_id + '/',
       type: 'GET',

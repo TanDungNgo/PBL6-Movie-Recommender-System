@@ -11,5 +11,4 @@ urlpatterns = [
     path('myrating/movies/', views.get_my_ratings, name='myrating_movies'),
     path('filter/movies/', views.get_filtered_movies, name='filter_movies'),
     path('movies/cast/', views.get_movies_by_cast, name='get_movies_by_cast'),
-
 ]
