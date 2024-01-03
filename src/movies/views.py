@@ -14,6 +14,7 @@ import requests
 from profiles.models import CustomUser as User
 from datetime import datetime
 import difflib
+from django.core.serializers import serialize
 
 # User = get_user_model()
 
@@ -87,6 +88,44 @@ def get_filtered_movies(request):
 def get_movies_by_genre(request):
     pass
 
+def get_movies_by_cast(request):
+    cast_id = request.GET.get('cast_id')
+    filmography_url = f'https://api.themoviedb.org/3/person/{cast_id}/movie_credits?api_key={API_KEY}&language=en-US'
+    response = requests.get(filmography_url)
+    response.raise_for_status()
+    filmography = response.json().get('cast', [])
+    
+    moviesofcast = []
+    movie_count = 0  # Biến đếm số lượng phim đã lấy
+    
+    for object in filmography:
+        matching_movies = Movie.objects.filter(title__iexact=object['title'])
+        
+        if matching_movies.exists():
+            movie = {
+                'id': matching_movies.first().id,
+                'title': matching_movies.first().title,
+                'poster_path': matching_movies.first().poster_path,
+                'release_date': matching_movies.first().release_date,
+                'rating_avg': matching_movies.first().rating_avg,
+            }
+            moviesofcast.append(movie)
+            movie_count += 1
+            
+            if movie_count == 6:
+                break
+        else:
+            print(f"Movie with title '{object['title']}' does not exist.")
+
+        
+    
+    response_data = {
+        'status': 'success',
+        'message': 'Movies retrieved successfully!',
+        'filmography': moviesofcast,
+    }
+    return JsonResponse(response_data)
+
 
 class MovieDetailView(generic.DetailView):
     template_name = 'movies/detail.html'
@@ -95,11 +134,13 @@ class MovieDetailView(generic.DetailView):
 
     def get_actor_details(self, actor_id):
         """Hàm này lấy thông tin chi tiết của diễn viên từ The Movie DB API."""
-        api_key = '8265bd1679663a7ea12ac168da84d2e8'  # Thay 'your_api_key' bằng API key thực tế của bạn
+        api_key = '8265bd1679663a7ea12ac168da84d2e8'
         url = f'https://api.themoviedb.org/3/person/{actor_id}?api_key={api_key}&language=en-US'
         response = requests.get(url)
-        response.raise_for_status()  # Nếu API trả về lỗi, một exception sẽ được ném ra
-        return response.json()
+        response.raise_for_status()
+        actor_details = response.json()
+        return actor_details
+    
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -180,14 +221,14 @@ class MovieDetailView(generic.DetailView):
         paginator = Paginator(reviews, page)
 
         context['reviews'] = paginator.get_page(1)
-
+        
         detailed_casts = []
         for cast in context['casts']:
-            actor_details = self.get_actor_details(cast['id'])
+            actor_id = cast['id']
+            actor_details = self.get_actor_details(actor_id)
             detailed_casts.append(actor_details)
 
         context['detailed_casts'] = detailed_casts
-
         return context
 movie_detail_view = MovieDetailView.as_view()
 

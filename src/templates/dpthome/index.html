@@ -17,12 +17,12 @@
 			{% for movie in top_score_movies|slice:":3" %}
 			<div class="carousel-item {% if forloop.first %}active{% endif %}">
 				{% if movie.backdrop_path %}
-					<img src="https://image.tmdb.org/t/p/original/{{ movie.backdrop_path }}" height="650px"
-						style="object-fit: cover;" class="d-block w-100" alt="{{ movie.title }}">
+				<img src="https://image.tmdb.org/t/p/original/{{ movie.backdrop_path }}" height="650px"
+					style="object-fit: cover;" class="d-block w-100" alt="{{ movie.title }}">
 				{% else %}
 
-					<img src="{% static 'movies/img/default-image.jpg' %}" height="650px" style="object-fit: cover;"
-						class="d-block w-100" alt="{{ movie.title }}">
+				<img src="{% static 'movies/img/default-image.jpg' %}" height="650px" style="object-fit: cover;"
+					class="d-block w-100" alt="{{ movie.title }}">
 				{% endif %}
 				<div class="carousel-caption d-md-block">
 					<h1 class="font_60">{{ movie.title }}</h1>
@@ -33,9 +33,11 @@
 					</h6>
 					<p class="mt-3">{{ movie.overview }}</p>
 					<p class="mb-2"><span class="col_red me-1 fw-bold">Country</span> {{ movie.countries }}</p>
-					<p class="mb-2"><span class="col_red me-1 fw-bold">Genres:</span> 
+					<p class="mb-2"><span class="col_red me-1 fw-bold">Genres:</span>
 						{% for genre in movie.get_genres %}
-						<span style="margin-right: 5px; margin-bottom: 5px;"> <a class="bg_red p-2 pe-4 ps-4 ms-3 text-white d-inline-block" href="#" style="text-align: center;">{{genre.name}}</a> </span>
+						<span style="margin-right: 5px; margin-bottom: 5px;"> <a
+								class="bg_red p-2 pe-4 ps-4 ms-3 text-white d-inline-block" href="#"
+								style="text-align: center;">{{genre.name}}</a> </span>
 						{% endfor %}
 					</p>
 					<p><span class="col_red me-1 fw-bold">Runtime:</span> {{ movie.runtime }} (minutes)</p>
@@ -156,142 +158,143 @@
 													{% if movie.poster_path %}
 													<img src="{{ movie.poster_path }}" class="d-block w-100"
 														alt="{{ movie.title }} Poster" width="550"
-														style="object-fit: cover;" >
-														{% else %}
-															<p>No poster available.</p>
-														{% endif %}
-													</figure>
-												</div>
-											</div>
-											<div class=" popular_2i1lm2 position-absolute top-0 w-100 text-center clearfix">
-													<ul>
-														<li class="d-inline-block"><a href="#"><i
-																	class="fa fa-link col_red"></i></a></li>
-														<li class="d-inline-block"><a href="#"><i
-																	class="fa fa-search col_red"></i></a></li>
-													</ul>
+														style="object-fit: cover;">
+													{% else %}
+													<p>No poster available.</p>
+													{% endif %}
+												</figure>
 											</div>
 										</div>
-									</div>
-									<div class="col-md-8 col-8">
-										<div class="popular_2i1r">
-											<h5><a class="col_red" href="{{ movie.get_absolute_url }}" id="title"> {{movie.title }}</a></h5>
-											<h6>{{ movie.genre }}</h6>
-											<h6> Imdb : {{ movie.rating_avg }} <span class="ms-2"><i
-														class="fa fa-star col_red me-1"></i></span>
-												Year : {{ movie.release_date }} </h6>
-											<p class="mb-2">{{ movie.overview|slice:":80" }}</p>
-											<h6 class="mb-0"><a class="button" href="{{ movie.get_absolute_url }}"> More
-													Info - Trailer</a></h6>
+										<div class=" popular_2i1lm2 position-absolute top-0 w-100 text-center clearfix">
+											<ul>
+												<li class="d-inline-block"><a href="#"><i
+															class="fa fa-link col_red"></i></a></li>
+												<li class="d-inline-block"><a href="#"><i
+															class="fa fa-search col_red"></i></a></li>
+											</ul>
 										</div>
 									</div>
 								</div>
+								<div class="col-md-8 col-8">
+									<div class="popular_2i1r">
+										<h5><a class="col_red" href="{{ movie.get_absolute_url }}" id="title">
+												{{movie.title }}</a></h5>
+										<h6>{{ movie.genre }}</h6>
+										<h6> Imdb : {{ movie.rating_avg }} <span class="ms-2"><i
+													class="fa fa-star col_red me-1"></i></span>
+											Year : {{ movie.release_date }} </h6>
+										<p class="mb-2">{{ movie.overview|slice:":80" }}</p>
+										<h6 class="mb-0"><a class="button" href="{{ movie.get_absolute_url }}"> More
+												Info - Trailer</a></h6>
+									</div>
+								</div>
 							</div>
-							{% endfor %}
 						</div>
+						{% endfor %}
 					</div>
-					<div class="tab-pane" id="profile">
-						<div class="popular_2i row">
-							{% for movie in top_score_movies|slice:":4" %}
-							<div class="col-md-6 mb-4">
-								<div class="popular_2i1 row">
-									<div class="col-md-4 col-4">
-										<div class="popular_2i1lm position-relative clearfix">
-											<div class="popular_2i1lm1 clearfix">
-												<div class="grid">
-													<figure class="effect-jazz mb-0">
-														{% if movie.poster_path %}
-														<img src="{{ movie.poster_path }}" class="d-block w-100"
-															alt="{{ movie.title }} Poster" style="object-fit: cover;">
-														{% else %}
-														<p>No poster available.</p>
-														{% endif %}
-													</figure>
-												</div>
-											</div>
-											<div
-												class="popular_2i1lm2 position-absolute top-0 w-100 text-center clearfix">
-												<ul>
-													<li class="d-inline-block"><a href="#"><i
-																class="fa fa-link col_red"></i></a></li>
-													<li class="d-inline-block"><a href="#"><i
-																class="fa fa-search col_red"></i></a></li>
-												</ul>
+				</div>
+				<div class="tab-pane" id="profile">
+					<div class="popular_2i row">
+						{% for movie in top_score_movies|slice:":4" %}
+						<div class="col-md-6 mb-4">
+							<div class="popular_2i1 row">
+								<div class="col-md-4 col-4">
+									<div class="popular_2i1lm position-relative clearfix">
+										<div class="popular_2i1lm1 clearfix">
+											<div class="grid">
+												<figure class="effect-jazz mb-0">
+													{% if movie.poster_path %}
+													<img src="{{ movie.poster_path }}" class="d-block w-100"
+														alt="{{ movie.title }} Poster" style="object-fit: cover;">
+													{% else %}
+													<p>No poster available.</p>
+													{% endif %}
+												</figure>
 											</div>
 										</div>
-									</div>
-									<div class="col-md-8 col-8">
-										<div class="popular_2i1r">
-											<h5><a class="col_red" href="{{ movie.get_absolute_url }}" id="title"> {{movie.title }}</a></h5>
-											<h6>{{ movie.genre }}</h6>
-											<h6> Imdb : {{ movie.rating_avg }} <span class="ms-2"><i
-														class="fa fa-star col_red me-1"></i></span>
-												Year : {{ movie.release_date }} </h6>
-											<p class="mb-2">{{ movie.overview|slice:":80" }}</p>
-											<h6 class="mb-0"><a class="button" href="{{ movie.get_absolute_url }}"> More
-													Info - Trailer</a></h6>
+										<div class="popular_2i1lm2 position-absolute top-0 w-100 text-center clearfix">
+											<ul>
+												<li class="d-inline-block"><a href="#"><i
+															class="fa fa-link col_red"></i></a></li>
+												<li class="d-inline-block"><a href="#"><i
+															class="fa fa-search col_red"></i></a></li>
+											</ul>
 										</div>
 									</div>
 								</div>
-							</div>
-							{% endfor %}
-						</div>
-
-					</div>
-
-					<div class="tab-pane" id="settings_o">
-						<div class="popular_2i row">
-							{% for movie in top_rated_movies|slice:":4" %}
-							<div class="col-md-6 mb-4">
-								<div class="popular_2i1 row">
-									<div class="col-md-4 col-4">
-										<div class="popular_2i1lm position-relative clearfix">
-											<div class="popular_2i1lm1 clearfix">
-												<div class="grid">
-													<figure class="effect-jazz mb-0">
-														{% if movie.poster_path %}
-														<img src="{{ movie.poster_path }}" class="d-block w-100"
-															alt="{{ movie.title }} Poster" width="550"
-															style="object-fit: cover;">
-														{% else %}
-														<p>No poster available.</p>
-														{% endif %}
-													</figure>
-												</div>
-											</div>
-											<div
-												class="popular_2i1lm2 position-absolute top-0 w-100 text-center clearfix">
-												<ul>
-													<li class="d-inline-block"><a href="#"><i
-																class="fa fa-link col_red"></i></a></li>
-													<li class="d-inline-block"><a href="#"><i
-																class="fa fa-search col_red"></i></a></li>
-												</ul>
-											</div>
-										</div>
-									</div>
-									<div class="col-md-8 col-8">
-										<div class="popular_2i1r">
-											<h5><a class="col_red" href="{{ movie.get_absolute_url }}" id="title"> {{movie.title }}</a></h5>
-											<h6>{{ movie.genre }}</h6>
-											<h6> Imdb : {{ movie.rating_avg }} <span class="ms-2"><i
-														class="fa fa-star col_red me-1"></i></span>
-												Year : {{ movie.release_date }} </h6>
-											<p class="mb-2">{{ movie.overview|slice:":80" }}</p>
-											<h6 class="mb-0"><a class="button" href="{{ movie.get_absolute_url }}"> More
-													Info - Trailer</a></h6>
-										</div>
+								<div class="col-md-8 col-8">
+									<div class="popular_2i1r">
+										<h5><a class="col_red" href="{{ movie.get_absolute_url }}" id="title">
+												{{movie.title }}</a></h5>
+										<h6>{{ movie.genre }}</h6>
+										<h6> Imdb : {{ movie.rating_avg }} <span class="ms-2"><i
+													class="fa fa-star col_red me-1"></i></span>
+											Year : {{ movie.release_date }} </h6>
+										<p class="mb-2">{{ movie.overview|slice:":80" }}</p>
+										<h6 class="mb-0"><a class="button" href="{{ movie.get_absolute_url }}"> More
+												Info - Trailer</a></h6>
 									</div>
 								</div>
 							</div>
-							{% endfor %}
 						</div>
-
+						{% endfor %}
 					</div>
 
 				</div>
+
+				<div class="tab-pane" id="settings_o">
+					<div class="popular_2i row">
+						{% for movie in top_rated_movies|slice:":4" %}
+						<div class="col-md-6 mb-4">
+							<div class="popular_2i1 row">
+								<div class="col-md-4 col-4">
+									<div class="popular_2i1lm position-relative clearfix">
+										<div class="popular_2i1lm1 clearfix">
+											<div class="grid">
+												<figure class="effect-jazz mb-0">
+													{% if movie.poster_path %}
+													<img src="{{ movie.poster_path }}" class="d-block w-100"
+														alt="{{ movie.title }} Poster" width="550"
+														style="object-fit: cover;">
+													{% else %}
+													<p>No poster available.</p>
+													{% endif %}
+												</figure>
+											</div>
+										</div>
+										<div class="popular_2i1lm2 position-absolute top-0 w-100 text-center clearfix">
+											<ul>
+												<li class="d-inline-block"><a href="#"><i
+															class="fa fa-link col_red"></i></a></li>
+												<li class="d-inline-block"><a href="#"><i
+															class="fa fa-search col_red"></i></a></li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="col-md-8 col-8">
+									<div class="popular_2i1r">
+										<h5><a class="col_red" href="{{ movie.get_absolute_url }}" id="title">
+												{{movie.title }}</a></h5>
+										<h6>{{ movie.genre }}</h6>
+										<h6> Imdb : {{ movie.rating_avg }} <span class="ms-2"><i
+													class="fa fa-star col_red me-1"></i></span>
+											Year : {{ movie.release_date }} </h6>
+										<p class="mb-2">{{ movie.overview|slice:":80" }}</p>
+										<h6 class="mb-0"><a class="button" href="{{ movie.get_absolute_url }}"> More
+												Info - Trailer</a></h6>
+									</div>
+								</div>
+							</div>
+						</div>
+						{% endfor %}
+					</div>
+
+				</div>
+
 			</div>
 		</div>
+	</div>
 </section>
 
 
