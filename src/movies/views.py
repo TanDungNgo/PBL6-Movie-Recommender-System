@@ -114,11 +114,20 @@ class MovieDetailView(generic.DetailView):
 
     def get_actor_details(self, actor_id):
         """Hàm này lấy thông tin chi tiết của diễn viên từ The Movie DB API."""
-        api_key = '8265bd1679663a7ea12ac168da84d2e8'  # Thay 'your_api_key' bằng API key thực tế của bạn
+        api_key = '8265bd1679663a7ea12ac168da84d2e8'
         url = f'https://api.themoviedb.org/3/person/{actor_id}?api_key={api_key}&language=en-US'
         response = requests.get(url)
-        response.raise_for_status()  # Nếu API trả về lỗi, một exception sẽ được ném ra
-        return response.json()
+        response.raise_for_status()
+        actor_details = response.json()
+
+        # Lấy danh sách phim mà diễn viên đã đóng
+        filmography_url = f'https://api.themoviedb.org/3/person/{actor_id}/movie_credits?api_key={api_key}&language=en-US'
+        response = requests.get(filmography_url)
+        response.raise_for_status()
+        filmography = response.json().get('cast', [])
+
+        actor_details['filmography'] = filmography
+        return actor_details
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -200,10 +209,25 @@ class MovieDetailView(generic.DetailView):
 
         context['reviews'] = paginator.get_page(1)
 
+        actor_id = context['casts'][0]['id']  # Lấy ID của diễn viên từ danh sách casts
+        actor_details = self.get_actor_details(actor_id)
+        filmography = actor_details.get('filmography', [])
+
+        context['actor_details'] = actor_details
+        context['filmography'] = filmography
+        
         detailed_casts = []
         for cast in context['casts']:
             actor_details = self.get_actor_details(cast['id'])
             detailed_casts.append(actor_details)
+            movie = Movie.objects.get(pk=pk)
+            title = movie.title  
+            matching_movies = Movie.objects.filter(title__iexact=title)
+            if matching_movies.exists():
+                actor_details = self.get_actor_details(cast['id'])
+                detailed_casts.append(actor_details)
+            else:
+                print(f"Movie with title '{title}' does not exist.")
 
         context['detailed_casts'] = detailed_casts
 

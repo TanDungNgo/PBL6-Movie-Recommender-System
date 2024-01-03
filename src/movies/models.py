@@ -88,6 +88,9 @@ class Movie(models.Model):
 
     objects = MovieManager()
 
+
+    
+
     def get_genres(self):
         return self.genres.all()
 
