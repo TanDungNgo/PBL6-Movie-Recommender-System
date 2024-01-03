@@ -1,27 +1,14 @@
 import pandas as pd
 import numpy as np
-from zipfile import ZipFile
-import tensorflow as tf
-from tensorflow import keras
-from tensorflow.keras import layers
-import pathlib
-from pathlib import Path
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.models import load_model
-from django.core.files.base import File
-from django.contrib.contenttypes.models import ContentType
-from django.db.models import F
 from django.conf import settings
-from tensorflow.keras.layers import Embedding, multiply, concatenate, Flatten, Input, Dense
+from tensorflow.keras.layers import Embedding, multiply, Flatten, Input, Dense
 from tensorflow.keras import optimizers as opt
 from keras.models import Model
 import datetime
 from exports.models import ExportModelNCF
-
-
-
-from ratings.models import Rating
 
 import pandas as pd
 

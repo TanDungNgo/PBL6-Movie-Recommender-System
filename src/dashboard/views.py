@@ -529,8 +529,8 @@ def get_latest_ratings_reviews(request):
     return render(request, 'dashboard/dashboard.html', {'result_list': ratings})
 
     
-from ml import utils as ml_utils
-from ml import tasks as ml_tasks
+# from ml import utils as ml_utils
+# from ml import tasks as ml_tasks
 def train_model(request):
     n_epochs = request.GET.get('epoch', None)
     batch_size = request.GET.get('batch_size', None)
@@ -541,7 +541,7 @@ def train_model(request):
         batch_size = int(batch_size)
         learning_rate = float(learning_rate)
         embedding_size = int(embedding_size)
-        ml_utils.train_model(n_epochs, batch_size, learning_rate, embedding_size, True)
+        # ml_utils.train_model(n_epochs, batch_size, learning_rate, embedding_size, True)
         response_data = {
             'status': 'success',
             'message': 'Training started'

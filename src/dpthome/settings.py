@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 from decouple import config # python-dotenv
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,14 +28,28 @@ SECRET_KEY = config('SECRET_KEY', default=None)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DJANGO_DEBUG', default=0, cast=bool)
 
-ALLOWED_HOSTS = ['*', 'https://dptmovie.me', 'http://dptmovie.me']
+ALLOWED_HOSTS = ['3.0.104.13', 'recommender.dptmovie.me']
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 USE_X_FORWARDED_HOST = True
 
 CSRF_COOKIE_SECURE = True
 
-CSRF_COOKIE_DOMAIN = 'dptmovie.me'
+CSRF_USE_SESSIONS = True
+
+CSRF_COOKIE_DOMAIN = 'recommender.dptmovie.me'
+
+SESSION_COOKIE_SECURE = True
+
+SESSION_COOKIE_DOMAIN = 'recommender.dptmovie.me'
+
+SECURE_HSTS_SECONDS = 3600
+
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
+CSRF_COOKIE_AGE = None
+
+CSRF_TRUSTED_ORIGINS = ['http://recommender.dptmovie.me', 'https://recommender.dptmovie.me', 'http://3.0.104.13', 'https://3.0.104.13']
 # Application definition
 
 INSTALLED_APPS = [
@@ -74,8 +89,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django_htmx.middleware.HtmxMiddleware', # request.htmx
-    
     'dptpage.middleware.Handle404Middleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 
@@ -153,6 +168,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATIC_ROOT= os.path.join(BASE_DIR,'productionfiles/')
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
@@ -163,6 +181,7 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_ROOT = DATA_DIR / 'local-cdn' / 'media'
+
 
 LANGUAGE_CODE = 'en-us'
 
