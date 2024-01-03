@@ -229,6 +229,7 @@
       </div>
     </div>
   </div>
+  {% if history_movies|length > 5 %}
   <div class="row trend_2 mt-4">
     <div id="carouselExampleCaptions3" class="carousel slide" data-bs-ride="carousel">
       <div class="carousel-indicators">
@@ -242,12 +243,19 @@
       </div>
     </div>
   </div>
+  {% else %}
+  <div class="row trend_2 mt-4">
+    {% for movie in history_movies %}
+    {% include 'movies/snippet/card.html' with object=movie current_rating=current_rating %}
+    {% endfor %}
+  </div>
+  {% endif %}
 </div>
 </section>
 {% endif %}
 <script>
   $(document).ready(function () {
-    var movie_id = "{{ movie.id }"
+    var movie_id ="{{ movie.id }}";
     $.ajax({
       url: '/movies/recommend/' + movie_id + '/',
       type: 'GET',

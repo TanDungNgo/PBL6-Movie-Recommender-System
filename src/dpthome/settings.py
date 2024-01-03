@@ -28,7 +28,7 @@ SECRET_KEY = config('SECRET_KEY', default=None)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DJANGO_DEBUG', default=0, cast=bool)
 
-ALLOWED_HOSTS = ['3.0.104.13', 'recommender.dptmovie.me']
+ALLOWED_HOSTS = ['3.0.104.13', 'recommender.dptmovie.me', 'localhost', '127.0.0.1']
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 USE_X_FORWARDED_HOST = True
