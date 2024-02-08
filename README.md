@@ -6,8 +6,8 @@ Build a recommendation engine using Django &amp; a Machine Learning technique ca
 
 1. Clone the project and make it your own. Use branch `start` initially so we can all start in the same place.
 ```bash
-git clone https://github.com/codingforentrepreneurs/recommender
-cd recommender
+git clone https://github.com/TanDungNgo/PBL6-Movie-Recommender-System.git
+cd PBL6-Movie-Recommender-System
 git checkout start
 rm -rf .git
 git init .
@@ -18,7 +18,7 @@ git commit -m "My recommender project"
 2. Create virtual environment and activate it.
 
 ```bash
-python3.8 -m venv venv
+python -m venv venv
 source venv/bin/activate
 ```
 Use `.\venv\Scripts\activate` if on windows
